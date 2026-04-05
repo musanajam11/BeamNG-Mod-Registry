@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="logo.png" alt="BeamNG Mod Registry" width="300">
+</p>
+
 # BeamNG Mod Registry
 
 A CKAN-inspired mod metadata repository for BeamNG.drive and BeamMP mods.
