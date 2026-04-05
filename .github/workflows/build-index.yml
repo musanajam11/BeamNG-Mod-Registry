@@ -1,0 +1,59 @@
+name: Validate & Build Registry Index
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Validate .beammod files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install ajv ajv-formats
+
+      - name: Validate metadata
+        run: node scripts/validate.mjs
+
+  build-and-release:
+    name: Build & Release Index
+    needs: validate
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build index
+        run: node scripts/build-index.mjs
+
+      - name: Generate release tag
+        id: tag
+        run: echo "tag=index-$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: "Registry Index ${{ steps.tag.outputs.tag }}"
+          body: |
+            Automated registry index build.
+            - Mods: see `registry-index.json` for full listing
+            - Clients should download `registry-index.json.gz`
+          files: |
+            dist/registry-index.json
+            dist/registry-index.json.gz
+          make_latest: true

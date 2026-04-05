@@ -1,0 +1,274 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/BeamMP/BeamNG-Mod-Registry/main/schema/beammod.schema.json",
+  "title": "BeamMod Metadata",
+  "description": "Metadata schema for BeamNG.drive / BeamMP mod packages",
+  "type": "object",
+  "required": ["spec_version", "identifier", "name", "abstract", "author", "version", "license"],
+  "properties": {
+    "spec_version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Spec version. Currently 1."
+    },
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+      "minLength": 2,
+      "maxLength": 128,
+      "description": "Globally unique mod identifier (ASCII letters, digits, hyphens, underscores)."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "Human-readable mod name."
+    },
+    "abstract": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "description": "One-line description."
+    },
+    "author": {
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+      ],
+      "description": "Author or list of authors."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^([0-9]+:)?[A-Za-z0-9][A-Za-z0-9.+_-]*$",
+      "description": "Mod version. Optional epoch prefix (e.g. '2:1.0')."
+    },
+    "license": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+      ],
+      "description": "SPDX license identifier(s)."
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["package", "metapackage", "dlc"],
+      "default": "package"
+    },
+    "download": {
+      "oneOf": [
+        { "type": "string", "format": "uri" },
+        { "type": "array", "items": { "type": "string", "format": "uri" }, "minItems": 1 }
+      ]
+    },
+    "download_hash": {
+      "type": "object",
+      "properties": {
+        "sha256": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" }
+      },
+      "required": ["sha256"]
+    },
+    "download_size": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "install_size": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "mod_type": {
+      "type": "string",
+      "enum": ["vehicle", "map", "skin", "ui_app", "sound", "license_plate", "scenario", "automation", "other"]
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 64 },
+      "uniqueItems": true
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 16384,
+      "description": "Long-form description (Markdown)."
+    },
+    "release_status": {
+      "type": "string",
+      "enum": ["stable", "testing", "development"],
+      "default": "stable"
+    },
+    "release_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "beamng_version": {
+      "type": "string"
+    },
+    "beamng_version_min": {
+      "type": "string"
+    },
+    "beamng_version_max": {
+      "type": "string"
+    },
+    "beammp_version_min": {
+      "type": "string"
+    },
+    "install": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "file": { "type": "string" },
+          "find": { "type": "string" },
+          "find_regexp": { "type": "string" },
+          "install_to": { "type": "string" },
+          "as": { "type": "string" },
+          "filter": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "array", "items": { "type": "string" } }
+            ]
+          },
+          "filter_regexp": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "array", "items": { "type": "string" } }
+            ]
+          },
+          "include_only": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "array", "items": { "type": "string" } }
+            ],
+            "description": "Whitelist: only install files matching these names (inverse of filter)."
+          },
+          "include_only_regexp": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "array", "items": { "type": "string" } }
+            ],
+            "description": "Whitelist: only install files matching these regex patterns."
+          },
+          "find_matches_files": {
+            "type": "boolean",
+            "default": false,
+            "description": "When true, find/find_regexp can match individual files, not just directories."
+          }
+        },
+        "required": ["install_to"],
+        "oneOf": [
+          { "required": ["file"] },
+          { "required": ["find"] },
+          { "required": ["find_regexp"] }
+        ]
+      }
+    },
+    "depends": { "$ref": "#/definitions/relationship_list" },
+    "recommends": { "$ref": "#/definitions/relationship_list" },
+    "suggests": { "$ref": "#/definitions/relationship_list" },
+    "supports": { "$ref": "#/definitions/relationship_list", "description": "Mods this enhances when present (reverse-suggests). Informational only." },
+    "conflicts": { "$ref": "#/definitions/relationship_list" },
+    "provides": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$" },
+      "uniqueItems": true
+    },
+    "replaced_by": { "$ref": "#/definitions/relationship" },
+    "resources": {
+      "type": "object",
+      "properties": {
+        "homepage": { "type": "string", "format": "uri" },
+        "repository": { "type": "string", "format": "uri" },
+        "bugtracker": { "type": "string", "format": "uri" },
+        "beamng_resource": { "type": "string", "format": "uri" },
+        "beammp_forum": { "type": "string", "format": "uri" }
+      },
+      "additionalProperties": false
+    },
+    "thumbnail": {
+      "type": "string",
+      "format": "uri"
+    },
+    "comment": {
+      "type": "string",
+      "maxLength": 4096,
+      "description": "Free-form comment or note for the mod entry — not displayed to users."
+    },
+    "localizations": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "abstract": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "description": "Localized strings keyed by locale code (e.g. 'de', 'fr')."
+    },
+    "multiplayer_scope": {
+      "type": "string",
+      "enum": ["client", "server", "both"],
+      "default": "client",
+      "description": "Component scope: client = BeamNG client mod (mods/repo), server = BeamMP server plugin (Resources/Server/), both = has separate client and server components."
+    },
+    "server_download": {
+      "oneOf": [
+        { "type": "string", "format": "uri" },
+        { "type": "array", "items": { "type": "string", "format": "uri" }, "minItems": 1 }
+      ],
+      "description": "URL(s) to the server plugin archive. Used when multiplayer_scope is 'server' or 'both' and the server component is distributed separately from the client mod."
+    },
+    "server_download_hash": {
+      "type": "object",
+      "properties": {
+        "sha256": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" }
+      },
+      "required": ["sha256"],
+      "description": "SHA256 hash of the server_download archive."
+    }
+  },
+  "if": {
+    "properties": { "kind": { "const": "package" } }
+  },
+  "then": {
+    "required": ["download"]
+  },
+  "definitions": {
+    "relationship": {
+      "type": "object",
+      "properties": {
+        "identifier": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$" },
+        "min_version": { "type": "string" },
+        "max_version": { "type": "string" },
+        "version": { "type": "string" }
+      },
+      "required": ["identifier"]
+    },
+    "any_of_relationship": {
+      "type": "object",
+      "properties": {
+        "any_of": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/relationship" },
+          "minItems": 1
+        },
+        "choice_help_text": { "type": "string" }
+      },
+      "required": ["any_of"]
+    },
+    "relationship_list": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "$ref": "#/definitions/relationship" },
+          { "$ref": "#/definitions/any_of_relationship" }
+        ]
+      }
+    }
+  },
+  "patternProperties": {
+    "^x_": {
+      "description": "Extension fields prefixed with x_ are allowed for third-party tooling."
+    }
+  },
+  "additionalProperties": false
+}
