@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "4-rotor-etk-sounds",
+  "$kref": "#/beamng/35753",
+  "name": "4 Rotor ETK sounds",
+  "abstract": "loud 4 rotor sounds straight from assetto corsa",
+  "author": "burntnugget1223offical",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": []
+}

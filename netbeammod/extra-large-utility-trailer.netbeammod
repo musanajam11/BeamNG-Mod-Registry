@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "extra-large-utility-trailer",
+  "$kref": "#/beamng/26936",
+  "name": "Extra Large Utility Trailer",
+  "abstract": "longer and wider version of the large utility trailer",
+  "author": "hipal01",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "better-6-0-powerstroke-sounds",
+  "name": "Better 6.0 Powerstroke sounds",
+  "abstract": "recorded from a real 6.0 powerstroke",
+  "author": "JungKooK Gaming",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": [],
+  "version": "0.3",
+  "download": "https://www.beamng.com/resources/33972/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/33972/"
+  }
+}

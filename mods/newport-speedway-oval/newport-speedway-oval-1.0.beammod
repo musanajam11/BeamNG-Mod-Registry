@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "newport-speedway-oval",
+  "name": "Newport Speedway (Oval)",
+  "abstract": "Nestled in the hills of Tennessee this track is known as little Bristol due to its 20+ degree banks.",
+  "author": "Track Broseff",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/35954/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/35954/"
+  }
+}

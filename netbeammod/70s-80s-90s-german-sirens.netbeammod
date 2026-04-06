@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "70s-80s-90s-german-sirens",
+  "$kref": "#/beamng/20304",
+  "name": "70s, 80s, 90s German Sirens",
+  "abstract": "german sirens of the good old days",
+  "author": "90s Freak",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "testing",
+  "tags": []
+}

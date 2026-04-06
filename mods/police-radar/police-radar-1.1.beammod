@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "police-radar",
+  "name": "Police Radar",
+  "abstract": "Time to catch speeders!",
+  "author": "angelo234",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.1",
+  "download": "https://www.beamng.com/resources/18559/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/18559/"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "dixie-horn-general-lee",
+  "$kref": "#/beamng/22582",
+  "name": "Dixie horn General Lee",
+  "abstract": "Dixie horn General Lee",
+  "author": "_GWR_YT_",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": []
+}

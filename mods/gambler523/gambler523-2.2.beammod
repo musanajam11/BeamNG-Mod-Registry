@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "gambler523",
+  "name": "Gambler523",
+  "abstract": "173 scenarios w\\story and plenty; offroad trails, hillclimbs, rally stages, gymkhana, & race tracks!",
+  "author": "23Terrabytes",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.2",
+  "download": "https://www.beamng.com/resources/27320/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/27320/"
+  }
+}

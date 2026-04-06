@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "sierra-summit-raceway",
+  "$kref": "#/beamng/34950",
+  "name": "Sierra Summit Raceway",
+  "abstract": "Motorsports complex with multiple road course layouts, RX track, and a working 1/4 mile drag strip",
+  "author": "scrbb",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

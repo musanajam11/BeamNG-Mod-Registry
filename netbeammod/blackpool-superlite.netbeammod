@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "blackpool-superlite",
+  "$kref": "#/beamng/10011",
+  "name": "Blackpool Superlite",
+  "abstract": "Lightweight british roadster",
+  "author": "TrackpadUser",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

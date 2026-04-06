@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "freedom-factory-derby-edition",
+  "$kref": "#/beamng/31670",
+  "name": "Freedom Factory Derby Edition",
+  "abstract": "Freedom Factory's 3/8th mile oval and 1/4 mile drag strip along with 3 Derby Arenas!",
+  "author": "FknPlank",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "central-stalburg-alleys-infra",
+  "$kref": "#/beamng/32401",
+  "name": "Central Stalburg Alleys (INFRA)",
+  "abstract": "A series of side roads located deep in the centre of the city.",
+  "author": "AgentMooshroom5",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "working-lights",
+  "$kref": "#/beamng/36773",
+  "name": "Working Lights",
+  "abstract": "Advanced dynamic headlights with brightness, color control, and damage support",
+  "author": "Mohin",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

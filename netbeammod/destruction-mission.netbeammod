@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "destruction-mission",
+  "$kref": "#/beamng/24072",
+  "name": "Destruction Mission",
+  "abstract": "This mod adds new mission type 'Destruction Mission'.",
+  "author": "ますくろ",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

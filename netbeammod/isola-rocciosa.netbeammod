@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "isola-rocciosa",
+  "$kref": "#/beamng/24863",
+  "name": "Isola Rocciosa",
+  "abstract": "A peaceful italian island",
+  "author": "Bifdro",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

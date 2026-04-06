@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "datboi-s-career-mode-mission-expansion-pack",
+  "$kref": "#/beamng/34061",
+  "name": "DatBoi’s Career Mode Mission Expansion Pack",
+  "abstract": "Adds 27 New Career Mode Enable Evade Mission (freeroam enable)",
+  "author": "DatBoiJericho",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": []
+}

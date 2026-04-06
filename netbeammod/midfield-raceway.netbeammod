@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "midfield-raceway",
+  "$kref": "#/beamng/30868",
+  "name": "Midfield Raceway",
+  "abstract": "The long expected in gt series beloved midfield track, remaked with passion for beamng",
+  "author": "Dsden",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

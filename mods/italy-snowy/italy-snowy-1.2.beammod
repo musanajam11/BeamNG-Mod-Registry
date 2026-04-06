@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "italy-snowy",
+  "name": "Italy snowy",
+  "abstract": "Snow skin for Italy 0.26 + scenarios",
+  "author": "Stuntman PS2",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.2",
+  "download": "https://www.beamng.com/resources/24125/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/24125/"
+  }
+}

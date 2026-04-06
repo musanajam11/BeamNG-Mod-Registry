@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "formula-bee",
+  "name": "Formula Bee",
+  "abstract": "Entry level single seater with interesting handling",
+  "author": "TrackpadUser",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.0",
+  "download": "https://www.beamng.com/resources/17409/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/17409/"
+  }
+}

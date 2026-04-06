@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "birmingham-learn2drift-skidpad-2022",
+  "$kref": "#/beamng/30225",
+  "name": "Birmingham Learn2drift Skidpad 2022",
+  "abstract": "Track I have originaly made for ac and ported to beamng.",
+  "author": "AKF_FPV",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

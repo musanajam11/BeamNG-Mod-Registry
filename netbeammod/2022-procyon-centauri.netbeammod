@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "2022-procyon-centauri",
+  "$kref": "#/beamng/24393",
+  "name": "2022 Procyon Centauri",
+  "abstract": "A versatile full-size SUV capable of lots of things.",
+  "author": "Finn Wilkinson",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

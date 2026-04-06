@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "flood",
+  "name": "Flood",
+  "abstract": "Ever wanted to flood a map without using the level editor? Now you can with this script",
+  "author": "daniel-w",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.4.1",
+  "download": "https://www.beamng.com/resources/23313/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/23313/"
+  }
+}

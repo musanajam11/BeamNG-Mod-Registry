@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "autodrom-pomorze-pbr-fps-friendly-not-the-4k-ver",
+  "$kref": "#/beamng/18995",
+  "name": "Autodrom Pomorze PBR (fps friendly, not the 4k ver.)",
+  "abstract": "Drift, Time Attack, Rallycross",
+  "author": "BlackMetal",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

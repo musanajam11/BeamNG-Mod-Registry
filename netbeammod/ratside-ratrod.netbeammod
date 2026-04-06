@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "ratside-ratrod",
+  "$kref": "#/beamng/2423",
+  "name": "RatSide(RatRod)",
+  "abstract": "Very early staged RatRod. Built from the burnside.",
+  "author": "RELYT2012",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "development",
+  "tags": []
+}

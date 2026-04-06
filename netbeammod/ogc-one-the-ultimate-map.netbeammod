@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "ogc-one-the-ultimate-map",
+  "$kref": "#/beamng/22814",
+  "name": "OGC ONE - The Ultimate Map",
+  "abstract": "WCUSA, Derby, Industrial, GridmapV2 / combined in the OGC Map!",
+  "author": "Online90",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

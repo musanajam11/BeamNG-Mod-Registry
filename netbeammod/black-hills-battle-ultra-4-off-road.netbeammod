@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "black-hills-battle-ultra-4-off-road",
+  "$kref": "#/beamng/34808",
+  "name": "Black Hills Battle Ultra 4 Off Road",
+  "abstract": "Hope you like rocks! Blast up and down fire roads, mud, and rock faces set in the Black Hills!",
+  "author": "ATypicalWhiteGuy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

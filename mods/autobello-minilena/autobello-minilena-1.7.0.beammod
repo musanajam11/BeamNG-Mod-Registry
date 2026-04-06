@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "autobello-minilena",
+  "name": "Autobello Minilena",
+  "abstract": "Italian car for Italian roads.",
+  "author": "azshtx253",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "development",
+  "tags": [],
+  "version": "1.7.0",
+  "download": "https://www.beamng.com/resources/27413/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/27413/"
+  }
+}

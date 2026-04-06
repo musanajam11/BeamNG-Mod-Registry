@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "long-expressway",
+  "$kref": "#/beamng/22740",
+  "name": "Long Expressway",
+  "abstract": "Speedy as ever!",
+  "author": "justaguy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

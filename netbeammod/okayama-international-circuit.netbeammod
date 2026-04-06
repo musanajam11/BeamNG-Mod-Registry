@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "okayama-international-circuit",
+  "$kref": "#/beamng/31294",
+  "name": "Okayama International Circuit",
+  "abstract": "Race in the one of the most famous japanese track",
+  "author": "Ender34 #SaveTF2",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

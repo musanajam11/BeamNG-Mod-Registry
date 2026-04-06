@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "a-1-car-trailer",
+  "$kref": "#/beamng/19621",
+  "name": "A-1-CAR-TRAILER",
+  "abstract": "I made this trailer for the MFD challenge",
+  "author": "demolitionderbyA1",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

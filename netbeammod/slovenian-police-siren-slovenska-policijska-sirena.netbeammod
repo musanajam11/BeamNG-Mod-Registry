@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "slovenian-police-siren-slovenska-policijska-sirena",
+  "$kref": "#/beamng/15114",
+  "name": "Slovenian police siren / Slovenska policijska sirena",
+  "abstract": "Slovenian police siren for true Slovenian patriots in BeamNG",
+  "author": "jordaniwick",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

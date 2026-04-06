@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "barbents-homerange",
+  "$kref": "#/beamng/33614",
+  "name": "Barbent's Homerange",
+  "abstract": "~70km² of realistic and funny action for all kind of vehicles",
+  "author": "Barbent Servo GT",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "development",
+  "tags": []
+}

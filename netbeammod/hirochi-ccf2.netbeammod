@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "hirochi-ccf2",
+  "$kref": "#/beamng/21012",
+  "name": "Hirochi CCF2",
+  "abstract": "Pre-Rework version of a small compact roadster.",
+  "author": "Theo Wilkinson",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

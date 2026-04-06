@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "large-enclosed-cargo-trailer",
+  "name": "Large Enclosed Cargo Trailer",
+  "abstract": "Large version of the \"Enclosed Cargo Trailer\", now capable of vehicle transport, and much more",
+  "author": "Youngblood",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/36163/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/36163/"
+  }
+}

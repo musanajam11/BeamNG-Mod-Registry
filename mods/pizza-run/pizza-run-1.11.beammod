@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "pizza-run",
+  "name": "Pizza Run",
+  "abstract": "Deliver pizzas as fast as you can before the timer runs out!",
+  "author": "angelo234",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.11",
+  "download": "https://www.beamng.com/resources/21801/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/21801/"
+  }
+}

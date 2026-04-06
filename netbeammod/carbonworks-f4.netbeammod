@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "carbonworks-f4",
+  "$kref": "#/beamng/27561",
+  "name": "Carbonworks F4",
+  "abstract": "A fun to drive open-wheeler made for entry-level racing.",
+  "author": "LucasBE",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

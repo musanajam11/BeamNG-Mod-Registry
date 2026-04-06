@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "1976-ibishu-claria",
+  "$kref": "#/beamng/23101",
+  "name": "1976 Ibishu Claria",
+  "abstract": "A Japanese luxobarge from the 70's",
+  "author": "LJ74",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "ryls-fm4-inspired-tachometer",
+  "$kref": "#/beamng/32225",
+  "name": "RyL's FM4 Inspired Tachometer",
+  "abstract": "Inspired by Forza Motorsport 4",
+  "author": "Ryan Lanz",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": []
+}

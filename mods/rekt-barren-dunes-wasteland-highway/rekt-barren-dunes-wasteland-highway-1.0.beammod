@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "rekt-barren-dunes-wasteland-highway",
+  "name": "REKT Barren Dunes Wasteland Highway",
+  "abstract": "A massive 16K Map full of massive dunes and a 9 mile highway to do passing challenges",
+  "author": "Randy Kelly Jr (REK)",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/35148/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/35148/"
+  }
+}

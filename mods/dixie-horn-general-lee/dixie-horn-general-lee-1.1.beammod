@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "dixie-horn-general-lee",
+  "name": "Dixie horn General Lee",
+  "abstract": "Dixie horn General Lee",
+  "author": "_GWR_YT_",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": [],
+  "version": "1.1",
+  "download": "https://www.beamng.com/resources/22582/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/22582/"
+  }
+}

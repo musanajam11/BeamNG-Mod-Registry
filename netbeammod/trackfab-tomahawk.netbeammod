@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "trackfab-tomahawk",
+  "$kref": "#/beamng/31871",
+  "name": "Trackfab Tomahawk",
+  "abstract": "High powered V8 desert racing buggy",
+  "author": "TrackpadUser",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

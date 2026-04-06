@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "crash-hard-map-final-version-maybe",
+  "$kref": "#/beamng/325",
+  "name": "Crash Hard Map (Final Version) (Maybe)",
+  "abstract": "A nice place to Jump, Race or Crash your cars",
+  "author": "CrashHard",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

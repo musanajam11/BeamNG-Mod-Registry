@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "1944-stryder-propeller",
+  "$kref": "#/beamng/26604",
+  "name": "1944 Stryder Propeller",
+  "abstract": "A steampunk inspired rear-engine, front wheel drive car.",
+  "author": "Atlas",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

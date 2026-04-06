@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "foothills-off-road-park",
+  "name": "Foothills Off-Road Park",
+  "abstract": "Foothills Park v2",
+  "author": "Hushaboom",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "2.9",
+  "download": "https://www.beamng.com/resources/33786/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/33786/"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "gavril-gpv",
+  "$kref": "#/beamng/24974",
+  "name": "Gavril GPV",
+  "abstract": "General purpose offroad vehicle",
+  "author": "TrackpadUser",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

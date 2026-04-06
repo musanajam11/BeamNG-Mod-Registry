@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "tracks-rallycross-mod",
+  "$kref": "#/beamng/36687",
+  "name": "Track's Rallycross Mod",
+  "abstract": "A collection of 3 maps, 6 tracks and 20 rallycross configs.",
+  "author": "Track Broseff",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

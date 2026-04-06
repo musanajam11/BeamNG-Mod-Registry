@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "gears-app",
+  "$kref": "#/beamng/28171",
+  "name": "Gears App",
+  "abstract": "Now with transparent background!",
+  "author": "BBaggy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

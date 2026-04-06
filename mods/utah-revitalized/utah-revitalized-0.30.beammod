@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "utah-revitalized",
+  "name": "Utah Revitalized",
+  "abstract": "Utah's Future: Enhanced Roads, Endless Adventure",
+  "author": "Tjackjesus",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "development",
+  "tags": [],
+  "version": "0.30",
+  "download": "https://www.beamng.com/resources/28697/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/28697/"
+  }
+}

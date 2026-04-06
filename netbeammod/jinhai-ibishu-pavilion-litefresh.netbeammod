@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "jinhai-ibishu-pavilion-litefresh",
+  "$kref": "#/beamng/32021",
+  "name": "JinHai-Ibishu Pavilion (Litefresh)",
+  "abstract": "Chinese version of Pessima produced in 1998 to 2007",
+  "author": "JustRobertOFF",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

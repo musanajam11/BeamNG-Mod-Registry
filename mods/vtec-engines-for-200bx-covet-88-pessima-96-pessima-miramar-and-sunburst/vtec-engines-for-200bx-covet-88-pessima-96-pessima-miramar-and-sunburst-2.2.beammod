@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "vtec-engines-for-200bx-covet-88-pessima-96-pessima-miramar-and-sunburst",
+  "name": "VTEC Engines for 200BX, Covet, '88 Pessima, '96 Pessima, Miramar, and Sunburst",
+  "abstract": "VTEC JUST KICKED IN YO! (For real this time)",
+  "author": "KingTurkeySub",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.2",
+  "download": "https://www.beamng.com/resources/13813/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/13813/"
+  }
+}

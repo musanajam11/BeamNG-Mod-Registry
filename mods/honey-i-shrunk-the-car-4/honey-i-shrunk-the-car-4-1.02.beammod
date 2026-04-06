@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "honey-i-shrunk-the-car-4",
+  "name": "Honey, I Shrunk The Car 4",
+  "abstract": "The Neighborhood Never Looked So Big",
+  "author": "Spencer Johnson",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.02",
+  "download": "https://www.beamng.com/resources/35703/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/35703/"
+  }
+}

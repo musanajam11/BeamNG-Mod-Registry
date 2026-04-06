@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "1973-ibishu-signia-bx-demo",
+  "name": "1973 Ibishu Signia/BX Demo",
+  "abstract": "Demo version of the Ibishu Signia/BX",
+  "author": "LJ74",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.6",
+  "download": "https://www.beamng.com/resources/24994/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/24994/"
+  }
+}

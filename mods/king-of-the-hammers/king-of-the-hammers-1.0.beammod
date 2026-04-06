@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "king-of-the-hammers",
+  "name": "King of the Hammers",
+  "abstract": "The toughest desert race. Very long course.",
+  "author": "TheClairvoyant",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/24926/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/24926/"
+  }
+}

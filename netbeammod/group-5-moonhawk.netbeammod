@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "group-5-moonhawk",
+  "$kref": "#/beamng/26682",
+  "name": "Group 5 Moonhawk",
+  "abstract": "Too much power, heaviest car, and massive amounts of axle-hop",
+  "author": "fillman86",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "rekt-desert-island-off-road",
+  "$kref": "#/beamng/34444",
+  "name": "REKT Desert Island Off Road",
+  "abstract": "A small map but packed with hours of off roading goodness. Realistic Rock crawls and trails.",
+  "author": "Randy Kelly Jr (REK)",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "ultimate-obstacle-course",
+  "$kref": "#/beamng/24805",
+  "name": "Ultimate Obstacle Course",
+  "abstract": "The Ultimate Obstacle Course",
+  "author": "Spencer Johnson",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "d-r-magnum-siren-pack",
+  "$kref": "#/beamng/17802",
+  "name": "D&R Magnum Siren Pack",
+  "abstract": "This is the siren used by London Ontario police and some other police agencies",
+  "author": "jordaniwick",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

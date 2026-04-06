@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "utv-mud-parts-pack",
+  "$kref": "#/beamng/28526",
+  "name": "UTV MUD PARTS PACK",
+  "abstract": "A lot of cool parts for the UTV",
+  "author": "Jay&#039;s_Builds",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

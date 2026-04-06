@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "gavril-g-series-pug-gavril-rouder",
+  "$kref": "#/beamng/22503",
+  "name": "Gavril G-series \"pug\" & Gavril Rouder",
+  "abstract": "Not a good mod, ill be surprised if you think it is",
+  "author": "a plane guy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

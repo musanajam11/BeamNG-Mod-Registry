@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "plenums-west-coast-usa",
+  "$kref": "#/beamng/32184",
+  "name": "Plenum's West Coast USA",
+  "abstract": "Monster Trucking, Rock Crawling, Gridmap Content, Planes, Jumps, Spawns and more!",
+  "author": "Tmanning47",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "development",
+  "tags": []
+}

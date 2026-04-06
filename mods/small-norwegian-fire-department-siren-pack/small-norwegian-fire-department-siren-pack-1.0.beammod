@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "small-norwegian-fire-department-siren-pack",
+  "name": "Small Norwegian Fire department siren pack",
+  "abstract": "A small pack of norwegian sirens used by their fire services",
+  "author": "jordaniwick",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/21561/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/21561/"
+  }
+}

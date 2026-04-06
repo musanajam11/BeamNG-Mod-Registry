@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "2018-gavril-scout-demo",
+  "$kref": "#/beamng/28056",
+  "name": "2018 Gavril Scout Demo",
+  "abstract": "Gavril Europe's entry into modern city vans.",
+  "author": "LucasBE",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

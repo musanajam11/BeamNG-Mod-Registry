@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "micro-world",
+  "$kref": "#/beamng/32213",
+  "name": "Micro World",
+  "abstract": "A map where you, the player, transform into a miniature car and drive around a house.",
+  "author": "Dekoder",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

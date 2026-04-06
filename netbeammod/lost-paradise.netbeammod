@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "lost-paradise",
+  "$kref": "#/beamng/29315",
+  "name": "Lost Paradise",
+  "abstract": "Two Abandoned Islands Reclaimed By Nature",
+  "author": "KAMUS_",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

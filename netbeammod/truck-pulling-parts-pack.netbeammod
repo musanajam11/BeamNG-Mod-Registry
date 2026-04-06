@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "truck-pulling-parts-pack",
+  "$kref": "#/beamng/31362",
+  "name": "Truck Pulling Parts Pack",
+  "abstract": "MAJOR UPDATE:New Tube Chassis, 2wd/4wd Parts, 10+ Wheels/Tires, Engine Parts, Beam BOSS,30+ Configs",
+  "author": "Youngblood",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "crandon-ultra-4-short-course",
+  "$kref": "#/beamng/33524",
+  "name": "Crandon Ultra 4 Short Course",
+  "abstract": "Ultra 4/Rock Racing version of Nachstiel's crandon map",
+  "author": "ATypicalWhiteGuy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

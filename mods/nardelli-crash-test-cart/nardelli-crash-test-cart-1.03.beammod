@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "nardelli-crash-test-cart",
+  "name": "Nardelli Crash Test Cart",
+  "abstract": "Cart to launch into things",
+  "author": "Nadeox1",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.03",
+  "download": "https://www.beamng.com/resources/8/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/8/"
+  }
+}

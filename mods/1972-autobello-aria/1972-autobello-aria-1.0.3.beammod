@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "1972-autobello-aria",
+  "name": "1972 Autobello Aria",
+  "abstract": "The song of innovation",
+  "author": "Kajzer",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.0.3",
+  "download": "https://www.beamng.com/resources/35232/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/35232/"
+  }
+}

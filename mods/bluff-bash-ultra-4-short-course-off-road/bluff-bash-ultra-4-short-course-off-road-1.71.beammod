@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "bluff-bash-ultra-4-short-course-off-road",
+  "name": "Bluff Bash Ultra 4 Short Course Off Road",
+  "abstract": "A go fast ultra 4 ish style track, with a short course chunk in it.",
+  "author": "ATypicalWhiteGuy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.71",
+  "download": "https://www.beamng.com/resources/30845/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/30845/"
+  }
+}

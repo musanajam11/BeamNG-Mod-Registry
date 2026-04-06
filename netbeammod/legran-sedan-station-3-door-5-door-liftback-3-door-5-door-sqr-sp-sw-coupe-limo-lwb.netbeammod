@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "legran-sedan-station-3-door-5-door-liftback-3-door-5-door-sqr-sp-sw-coupe-limo-lwb",
+  "$kref": "#/beamng/1709",
+  "name": "Legran Sedan, Station [3-Door, 5-Door], Liftback [3-Door, 5-Door], SQR, SP, SW, Coupe, Limo, LWB",
+  "abstract": "Fun to Drift.",
+  "author": "burilkovdeni",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

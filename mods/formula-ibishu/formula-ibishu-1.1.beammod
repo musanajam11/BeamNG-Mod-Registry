@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "formula-ibishu",
+  "name": "Formula Ibishu",
+  "abstract": "Entry level single seater",
+  "author": "TrackpadUser",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.1",
+  "download": "https://www.beamng.com/resources/27380/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/27380/"
+  }
+}

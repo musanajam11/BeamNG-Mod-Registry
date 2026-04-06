@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "dmm512-diesel-locomotive",
+  "$kref": "#/beamng/11142",
+  "name": "DMM512 Diesel-Locomotive",
+  "abstract": "Old Diesel Locomotive",
+  "author": "zagdima",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

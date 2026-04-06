@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "demolition-derby-the-fair-grounds-demo",
+  "name": "Demolition Derby - The Fair Grounds *Demo",
+  "abstract": "Derby and Racing Scenario - Figure 8, Grass, Concrete, Mud and More",
+  "author": "bidwars",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "10.11.1",
+  "download": "https://www.beamng.com/resources/1784/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/1784/"
+  }
+}

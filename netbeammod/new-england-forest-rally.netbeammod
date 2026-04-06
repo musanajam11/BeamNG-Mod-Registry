@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "new-england-forest-rally",
+  "$kref": "#/beamng/36849",
+  "name": "New England Forest Rally",
+  "abstract": "real life rally map with rally loop - the biggest rally map in beam",
+  "author": "SPittlebug",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

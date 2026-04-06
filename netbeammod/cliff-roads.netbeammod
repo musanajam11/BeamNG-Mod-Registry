@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "cliff-roads",
+  "$kref": "#/beamng/1242",
+  "name": "Cliff Roads",
+  "abstract": "Modified official Cliff map.",
+  "author": "Rewzu",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

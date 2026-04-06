@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "lonestar-speedway-usa",
+  "$kref": "#/beamng/29017",
+  "name": "Lonestar Speedway, USA",
+  "abstract": "An oval racing complex in the south of Texas with plenty to do and explore",
+  "author": "Track Broseff",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

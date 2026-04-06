@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "orv-offroad-vehicles-map",
+  "name": "ORV-Offroad Vehicles Map",
+  "abstract": "A fun and technical offroad map",
+  "author": "Modzilla",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.6",
+  "download": "https://www.beamng.com/resources/31651/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/31651/"
+  }
+}

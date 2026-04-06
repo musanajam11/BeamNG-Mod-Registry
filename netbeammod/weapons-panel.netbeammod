@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "weapons-panel",
+  "$kref": "#/beamng/36735",
+  "name": "Weapons Panel",
+  "abstract": "This mod adds a fun GUI panel for total destruction!",
+  "author": "Jack The Fox",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

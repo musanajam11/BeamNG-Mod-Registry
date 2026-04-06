@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "euro-trailer",
+  "$kref": "#/beamng/20101",
+  "name": "Euro Trailer",
+  "abstract": "European mid-sized dryvan",
+  "author": "H.S.P.",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "development",
+  "tags": []
+}

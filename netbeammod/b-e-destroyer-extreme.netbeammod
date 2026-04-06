@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "b-e-destroyer-extreme",
+  "$kref": "#/beamng/33597",
+  "name": "B.E. DESTROYER EXTREME",
+  "abstract": "A life sized battlebot to battle your way through traffic",
+  "author": "AwesomeCarlPlays",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

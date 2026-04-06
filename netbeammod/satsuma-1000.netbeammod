@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "satsuma-1000",
+  "$kref": "#/beamng/28052",
+  "name": "Satsuma 1000",
+  "abstract": "70s Japanese Economy Car",
+  "author": "Dayz Me Rollin&#039;",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

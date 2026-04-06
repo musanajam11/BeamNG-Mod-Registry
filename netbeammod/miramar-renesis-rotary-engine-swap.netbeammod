@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "miramar-renesis-rotary-engine-swap",
+  "$kref": "#/beamng/34991",
+  "name": "Miramar Renesis Rotary Engine Swap",
+  "abstract": "Renesis Rotary Engine for the refreshed Miramar (3 New Idle Sound, New Hood Exh, and more)",
+  "author": "Youngblood",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "stable",
+  "tags": []
+}

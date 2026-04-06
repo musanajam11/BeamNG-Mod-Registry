@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "seoil-framebody-pack",
+  "name": "Seoil Framebody Pack",
+  "abstract": "The proof of durability",
+  "author": "Urbanmaid",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "26.03.09",
+  "download": "https://www.beamng.com/resources/37292/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/37292/"
+  }
+}

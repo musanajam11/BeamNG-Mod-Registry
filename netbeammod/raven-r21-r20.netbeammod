@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "raven-r21-r20",
+  "$kref": "#/beamng/10858",
+  "name": "Raven R21 / R20",
+  "abstract": "-- Time Trial Update --",
+  "author": "aljowen",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

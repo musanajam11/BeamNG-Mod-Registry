@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "a-1-car-trailer",
+  "name": "A-1-CAR-TRAILER",
+  "abstract": "I made this trailer for the MFD challenge",
+  "author": "demolitionderbyA1",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.0",
+  "download": "https://www.beamng.com/resources/19621/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/19621/"
+  }
+}

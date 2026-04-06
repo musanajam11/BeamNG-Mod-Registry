@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "barbents-homerange",
+  "name": "Barbent's Homerange",
+  "abstract": "~70km² of realistic and funny action for all kind of vehicles",
+  "author": "Barbent Servo GT",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "development",
+  "tags": [],
+  "version": "0.1a",
+  "download": "https://www.beamng.com/resources/33614/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/33614/"
+  }
+}

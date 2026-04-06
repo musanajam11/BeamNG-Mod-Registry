@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "preset-for-zeits-graphics",
+  "$kref": "#/beamng/32415",
+  "name": "Preset for Zeit's graphics.",
+  "abstract": "Zeit's graphics.",
+  "author": "ViktorBNG",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": []
+}

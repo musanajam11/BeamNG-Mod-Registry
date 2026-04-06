@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "backyard-kart",
+  "$kref": "#/beamng/23416",
+  "name": "Backyard Kart",
+  "abstract": "A backyard-built kart",
+  "author": "nachtstiel",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

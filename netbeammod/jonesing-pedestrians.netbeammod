@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "jonesing-pedestrians",
+  "$kref": "#/beamng/36089",
+  "name": "Jonesing Pedestrians",
+  "abstract": "Adds dummy pedestrians that can be spawned using the vehicle config.",
+  "author": "Jonesing Gaming",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "development",
+  "tags": []
+}

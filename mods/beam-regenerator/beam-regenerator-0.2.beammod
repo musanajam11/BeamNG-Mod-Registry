@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "beam-regenerator",
+  "name": "Beam Regenerator",
+  "abstract": "An app that allows you to fix your vehicle after a crash",
+  "author": "[TWC] Scorp",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.2",
+  "download": "https://www.beamng.com/resources/35907/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/35907/"
+  }
+}

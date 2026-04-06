@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "wolf-heavy-industries-medium-duty-forklift",
+  "$kref": "#/beamng/13495",
+  "name": "Wolf Heavy Industries Medium Duty Forklift",
+  "abstract": "Forklift certification not required",
+  "author": "TrackpadUser",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

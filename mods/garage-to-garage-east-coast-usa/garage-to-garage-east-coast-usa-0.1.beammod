@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "garage-to-garage-east-coast-usa",
+  "name": "Garage to Garage East Coast USA",
+  "abstract": "Delivering vehicles to random locations on east coast usa",
+  "author": "geexmmo",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "0.1",
+  "download": "https://www.beamng.com/resources/21601/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/21601/"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "ibishu-prodigy",
+  "$kref": "#/beamng/21714",
+  "name": "Ibishu Prodigy",
+  "abstract": "A Japanese SUV produced from 1995 to 2001",
+  "author": "szanto_sz",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

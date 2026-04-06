@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "gm-1952-city-bus-horn",
+  "$kref": "#/beamng/19110",
+  "name": "GM 1952 City Bus Horn",
+  "abstract": "1.0",
+  "author": "ywf56249",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": []
+}

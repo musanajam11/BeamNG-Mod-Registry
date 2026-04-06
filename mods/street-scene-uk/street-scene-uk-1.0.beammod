@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "street-scene-uk",
+  "name": "Street Scene, UK",
+  "abstract": "A showroom like map set in an old victorian village street",
+  "author": "Car_Killer",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/27859/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/27859/"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "etk-c-series-2004-2011",
+  "name": "ETK C-Series (2004-2011)",
+  "abstract": "ETK's hatchback entry into the market.",
+  "author": "Vibestation 5",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.20a",
+  "download": "https://www.beamng.com/resources/23752/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/23752/"
+  }
+}

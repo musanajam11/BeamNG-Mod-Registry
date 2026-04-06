@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "1981-1996-wentward-5000-series",
+  "$kref": "#/beamng/23833",
+  "name": "1981 - 1996 Wentward 5000 Series",
+  "abstract": "Now includes new interior.",
+  "author": "RyanCookie",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

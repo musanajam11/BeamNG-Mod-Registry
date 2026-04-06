@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "freedom-factory-ai-races",
+  "name": "Freedom Factory AI Races",
+  "abstract": "5 AI races. 3/8th mile oval, kidney bean, skid plate, flag pole, and figure 8 races",
+  "author": "ToeBee",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.5",
+  "download": "https://www.beamng.com/resources/28244/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/28244/"
+  }
+}

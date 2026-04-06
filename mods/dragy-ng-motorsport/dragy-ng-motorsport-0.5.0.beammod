@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "dragy-ng-motorsport",
+  "name": "DRAGY NG MOTORSPORT",
+  "abstract": "DRAGY NG",
+  "author": "Karma_RGF",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.5.0",
+  "download": "https://www.beamng.com/resources/31942/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/31942/"
+  }
+}

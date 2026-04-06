@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "advanced-power-curve",
+  "$kref": "#/beamng/36973",
+  "name": "= Advanced Power Curve",
+  "abstract": "Highly customisable power curve graph with ghost hold feature",
+  "author": "AstonishingA",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

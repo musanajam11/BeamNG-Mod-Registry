@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "arcanox-core",
+  "$kref": "#/beamng/6060",
+  "name": "Arcanox Core",
+  "abstract": "Core libraries for Arcanox's other mods to use",
+  "author": "Arcanox",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

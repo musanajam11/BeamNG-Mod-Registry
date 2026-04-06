@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "aw-astro",
+  "name": "AW Astro",
+  "abstract": "Perfection in simplicity",
+  "author": "Nekkit",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "4.0.6",
+  "download": "https://www.beamng.com/resources/19186/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/19186/"
+  }
+}

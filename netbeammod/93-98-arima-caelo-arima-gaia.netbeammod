@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "93-98-arima-caelo-arima-gaia",
+  "$kref": "#/beamng/28695",
+  "name": "'93~'98 Arima Caelo / Arima Gaia",
+  "abstract": "Small, Light, and adorable",
+  "author": "Docroswagge",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

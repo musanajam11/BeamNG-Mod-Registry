@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "parrot-bay",
+  "$kref": "#/beamng/28793",
+  "name": "Parrot Bay",
+  "abstract": "Multi use Tropical Island",
+  "author": "nobeam",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

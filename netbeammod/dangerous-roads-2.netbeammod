@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "dangerous-roads-2",
+  "$kref": "#/beamng/36703",
+  "name": "Dangerous Roads 2",
+  "abstract": "A Snowy Dangerous Road Challenge Map",
+  "author": "Spencer Johnson",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

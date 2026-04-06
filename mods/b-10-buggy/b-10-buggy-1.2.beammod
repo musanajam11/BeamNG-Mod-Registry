@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "b-10-buggy",
+  "name": "B-10 Buggy!",
+  "abstract": "A big Suspension competitive rock crawling buggy",
+  "author": "OffTrailZ",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.2",
+  "download": "https://www.beamng.com/resources/37333/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/37333/"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "train-horn-pack",
+  "$kref": "#/beamng/31854",
+  "name": "Train Horn Pack",
+  "abstract": "I'm a Train!!!",
+  "author": "KyleJian",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

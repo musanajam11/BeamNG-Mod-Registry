@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "rocky-coast-usa",
+  "$kref": "#/beamng/21673",
+  "name": "Rocky Coast, USA",
+  "abstract": "An island located in the USA",
+  "author": "Bifdro",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "allison-transmission-megapack",
+  "$kref": "#/beamng/30611",
+  "name": "Allison Transmission megapack",
+  "abstract": "Ever wanted some automatic transmissions? Now you have them!",
+  "author": "Oxferd_Gaming",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "testing",
+  "tags": []
+}

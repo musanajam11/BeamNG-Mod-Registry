@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "rally-mode-smart-co-driver-stages-with-pacenotes",
+  "name": "Rally Mode: smart co-driver & stages with pacenotes",
+  "abstract": "A configurable co-driver, support for easy pacenote editing, and long time trials with pacenotes.",
+  "author": "lellolillili",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.5",
+  "download": "https://www.beamng.com/resources/21824/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/21824/"
+  }
+}

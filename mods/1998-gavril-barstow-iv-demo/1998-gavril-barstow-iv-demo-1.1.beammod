@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "1998-gavril-barstow-iv-demo",
+  "name": "1998 Gavril Barstow IV Demo",
+  "abstract": "The fourth evolution of Gavril's iconic mid-size muscle car.",
+  "author": "LucasBE",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.1",
+  "download": "https://www.beamng.com/resources/33819/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/33819/"
+  }
+}

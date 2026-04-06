@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "horn-elektronik-polish-siren",
+  "$kref": "#/beamng/20508",
+  "name": "Horn Elektronik Polish Siren",
+  "abstract": "Horn Elektronik Polish Siren for BeamNG.drive",
+  "author": "jordaniwick",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

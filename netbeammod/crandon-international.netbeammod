@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "crandon-international",
+  "$kref": "#/beamng/22551",
+  "name": "Crandon International",
+  "abstract": "The off-road course at Crandon",
+  "author": "nachtstiel",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

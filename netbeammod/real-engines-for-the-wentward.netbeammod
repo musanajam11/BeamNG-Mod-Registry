@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "real-engines-for-the-wentward",
+  "$kref": "#/beamng/28750",
+  "name": "Real Engines for the Wentward",
+  "abstract": "Detroit Diesel + Cummins engines for the DT40L",
+  "author": "DetroitDieselS50G",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

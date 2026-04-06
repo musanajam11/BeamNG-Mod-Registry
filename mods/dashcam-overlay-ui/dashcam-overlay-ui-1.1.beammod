@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "dashcam-overlay-ui",
+  "name": "Dashcam Overlay UI",
+  "abstract": "Configurable dashcam overlay with GPS info, time, audio and more",
+  "author": "Wojtas0",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.1",
+  "download": "https://www.beamng.com/resources/29839/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/29839/"
+  }
+}

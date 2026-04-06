@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "river-highway",
+  "$kref": "#/beamng/18662",
+  "name": "River Highway",
+  "abstract": "A huge 8x8km map with over 200km/125mi of roads to explore.",
+  "author": "unyxium",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "vitamin-a-tire-contact-monitor",
+  "$kref": "#/beamng/36670",
+  "name": "Vitamin A Tire Contact Monitor",
+  "abstract": "Advanced Tire Telemetry & 3D Contact Overlay for Precision Tuning.",
+  "author": "Vitamin A",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

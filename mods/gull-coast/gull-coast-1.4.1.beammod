@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "gull-coast",
+  "name": "Gull Coast",
+  "abstract": "A fictional area by the ocean. Features great views and fun roads.",
+  "author": "Gamergull",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.4.1",
+  "download": "https://www.beamng.com/resources/5294/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/5294/"
+  }
+}

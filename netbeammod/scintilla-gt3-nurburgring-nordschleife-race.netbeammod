@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "scintilla-gt3-nurburgring-nordschleife-race",
+  "$kref": "#/beamng/31552",
+  "name": "Scintilla GT3 Nurburgring Nordschleife Race",
+  "abstract": "GT3 car go vroom!",
+  "author": "GamerRukky",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": []
+}

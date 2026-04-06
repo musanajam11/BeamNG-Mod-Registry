@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "betterperformancetimer",
+  "$kref": "#/beamng/31130",
+  "name": "BetterPerformanceTimer",
+  "abstract": "Measure 0-100, 100-200, 1/4 mile and more.",
+  "author": "ArmenG",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": []
+}

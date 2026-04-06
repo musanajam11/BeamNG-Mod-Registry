@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "crashgrounds",
+  "name": "CrashGrounds",
+  "abstract": "An abandoned island forgotten in time...",
+  "author": "nobeam",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.6",
+  "download": "https://www.beamng.com/resources/28976/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/28976/"
+  }
+}

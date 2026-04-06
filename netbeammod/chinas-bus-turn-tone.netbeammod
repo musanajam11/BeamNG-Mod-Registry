@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "chinas-bus-turn-tone",
+  "$kref": "#/beamng/33774",
+  "name": "China's bus turn tone 中国的公交转向音",
+  "abstract": "Good steering ringtones and China",
+  "author": "wsalj",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": []
+}

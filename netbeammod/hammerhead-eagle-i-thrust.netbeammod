@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "hammerhead-eagle-i-thrust",
+  "$kref": "#/beamng/37224",
+  "name": "Hammerhead Eagle i-Thrust",
+  "abstract": "better than a G-Wiz",
+  "author": "meins",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

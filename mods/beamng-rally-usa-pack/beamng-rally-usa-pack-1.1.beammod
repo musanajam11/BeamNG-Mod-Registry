@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "beamng-rally-usa-pack",
+  "name": "BeamNg.Rally USA Pack",
+  "abstract": "Rally stages and rally cars based on the real life ARA championship.",
+  "author": "Track Broseff",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.1",
+  "download": "https://www.beamng.com/resources/33083/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/33083/"
+  }
+}

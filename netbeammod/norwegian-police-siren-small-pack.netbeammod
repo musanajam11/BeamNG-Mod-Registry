@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "norwegian-police-siren-small-pack",
+  "$kref": "#/beamng/22107",
+  "name": "Norwegian police siren small pack",
+  "abstract": "Norwegian police small siren pack for BeamNG.drive",
+  "author": "jordaniwick",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

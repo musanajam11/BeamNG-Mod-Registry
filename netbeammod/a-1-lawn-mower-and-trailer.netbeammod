@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "a-1-lawn-mower-and-trailer",
+  "$kref": "#/beamng/19059",
+  "name": "A-1 Lawn Mower And Trailer",
+  "abstract": "This is a Lawn Mower I'm making and it will have more updates soon.",
+  "author": "demolitionderbyA1",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

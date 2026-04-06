@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "minimap",
+  "$kref": "#/beamng/24257",
+  "name": "Minimap",
+  "abstract": "A minimap based on an old version of the Navigation app",
+  "author": "DaddelZeit",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

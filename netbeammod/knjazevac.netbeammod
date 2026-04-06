@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "knjazevac",
+  "$kref": "#/beamng/21668",
+  "name": "Knjazevac",
+  "abstract": "3d scanning project for Assetto Corsa by ISavic is now on BeamNG",
+  "author": "Kolas",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "development",
+  "tags": []
+}

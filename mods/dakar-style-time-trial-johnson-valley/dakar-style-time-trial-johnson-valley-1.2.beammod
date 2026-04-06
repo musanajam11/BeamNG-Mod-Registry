@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "dakar-style-time-trial-johnson-valley",
+  "name": "Dakar Style | Time Trial | Johnson Valley",
+  "abstract": "An adventure for those who attend, a dream for those who watch.",
+  "author": "petlua",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.2",
+  "download": "https://www.beamng.com/resources/25468/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/25468/"
+  }
+}

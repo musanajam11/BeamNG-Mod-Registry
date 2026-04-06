@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "97-04-arima-hestia",
+  "$kref": "#/beamng/29139",
+  "name": "'97~'04 Arima Hestia",
+  "abstract": "Guardian of the Family",
+  "author": "Docroswagge",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

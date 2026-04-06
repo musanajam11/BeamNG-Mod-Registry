@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "beamng-driving-academy",
+  "$kref": "#/beamng/26688",
+  "name": "BeamNG Driving Academy",
+  "abstract": "Pack de configuration officiel de la BeamNG Driving Academy",
+  "author": "Nath_yt",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": []
+}

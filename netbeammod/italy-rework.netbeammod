@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "italy-rework",
+  "$kref": "#/beamng/28353",
+  "name": "Italy Rework",
+  "abstract": "A rework of official Italy map",
+  "author": "FTamino",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

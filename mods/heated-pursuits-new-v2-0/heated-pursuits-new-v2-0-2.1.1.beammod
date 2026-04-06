@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "heated-pursuits-new-v2-0",
+  "name": "Heated Pursuits (New V2.0)",
+  "abstract": "Stop the suspects! A series of crazy police pursuits in West Coast USA.",
+  "author": "Gamergull",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.1.1",
+  "download": "https://www.beamng.com/resources/3677/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/3677/"
+  }
+}

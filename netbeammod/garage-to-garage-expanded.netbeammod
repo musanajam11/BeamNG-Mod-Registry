@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "garage-to-garage-expanded",
+  "$kref": "#/beamng/26399",
+  "name": "Garage to Garage: Expanded",
+  "abstract": "Extra Garage to Garage scenarios for Small Island, Industrial Site and Johnson Valley",
+  "author": "JamTheHuman",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

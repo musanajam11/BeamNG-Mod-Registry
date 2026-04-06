@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "band1t-county",
+  "$kref": "#/beamng/36120",
+  "name": "Band1t County",
+  "abstract": "Endless Driving...",
+  "author": "B00tyBand1t",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

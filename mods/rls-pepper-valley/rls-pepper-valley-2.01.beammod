@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "rls-pepper-valley",
+  "name": "RLS Pepper Valley",
+  "abstract": "A Johnson Valley Overhaul",
+  "author": "Raceless",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.01",
+  "download": "https://www.beamng.com/resources/31372/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/31372/"
+  }
+}

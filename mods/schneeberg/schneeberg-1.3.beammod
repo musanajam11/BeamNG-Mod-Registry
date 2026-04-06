@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "schneeberg",
+  "name": "Schneeberg",
+  "abstract": "Snowy German Map",
+  "author": "Grille",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.3",
+  "download": "https://www.beamng.com/resources/36257/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/36257/"
+  }
+}

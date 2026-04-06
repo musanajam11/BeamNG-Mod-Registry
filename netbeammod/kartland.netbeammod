@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "kartland",
+  "$kref": "#/beamng/26521",
+  "name": "Kartland",
+  "abstract": "A collection of real and imagined go kart tracks",
+  "author": "nachtstiel",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

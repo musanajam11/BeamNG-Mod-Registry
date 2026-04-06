@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "cf26-carbonworks-f4-add-on",
+  "name": "CF26 [Carbonworks F4 Add-On]",
+  "abstract": "Welcome to the world of FR, F1A and F3!",
+  "author": "novarnna",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.1.0",
+  "download": "https://www.beamng.com/resources/33229/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/33229/"
+  }
+}

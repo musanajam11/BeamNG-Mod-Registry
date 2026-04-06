@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "ibishu-chisai",
+  "name": "Ibishu Chisai",
+  "abstract": "A little nugget that could",
+  "author": "Nekkit",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.3.8",
+  "download": "https://www.beamng.com/resources/12852/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/12852/"
+  }
+}

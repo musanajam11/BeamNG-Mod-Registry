@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "the-junker",
+  "$kref": "#/beamng/33700",
+  "name": "The Junker",
+  "abstract": "Full remake of the Half-Life2 Ep2 muscle car, also known as Jalopy",
+  "author": "Sopze",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

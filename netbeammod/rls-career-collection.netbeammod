@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "rls-career-collection",
+  "$kref": "#/beamng/36260",
+  "name": "RLS Career Collection",
+  "abstract": "A Massive Collection of Career Focused Mods Compatible with Each Other",
+  "author": "Raceless",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "stable",
+  "tags": []
+}

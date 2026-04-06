@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "straight-line-challenge",
+  "$kref": "#/beamng/32265",
+  "name": "Straight Line Challenge",
+  "abstract": "Cross the map within a narrow, straight corridor",
+  "author": "RcCookie",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

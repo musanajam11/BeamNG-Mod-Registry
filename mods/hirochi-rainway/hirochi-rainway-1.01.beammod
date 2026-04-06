@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "hirochi-rainway",
+  "name": "Hirochi Rainway",
+  "abstract": "Hirochi Raceway, but wet!",
+  "author": "Bentonchiez",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.01",
+  "download": "https://www.beamng.com/resources/22865/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/22865/"
+  }
+}

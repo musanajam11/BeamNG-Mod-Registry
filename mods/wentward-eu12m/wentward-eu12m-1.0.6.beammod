@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "wentward-eu12m",
+  "name": "Wentward EU12M",
+  "abstract": "A European Style Wentward",
+  "author": "Snowmaster",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.0.6",
+  "download": "https://www.beamng.com/resources/27745/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/27745/"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "modified-tractor-puller",
+  "$kref": "#/beamng/30442",
+  "name": "Modified Tractor Puller",
+  "abstract": "v3.011 Major Update (New Engines, Paints, Configs, and overall Rework)",
+  "author": "Youngblood",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

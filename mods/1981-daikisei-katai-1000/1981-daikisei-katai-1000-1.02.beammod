@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "1981-daikisei-katai-1000",
+  "name": "1981 Daikisei Katai/1000",
+  "abstract": "\"Picks up five times more women than a Civetta\"",
+  "author": "Endxrr",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.02",
+  "download": "https://www.beamng.com/resources/32305/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/32305/"
+  }
+}

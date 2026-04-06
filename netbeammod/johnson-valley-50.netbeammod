@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "johnson-valley-50",
+  "$kref": "#/beamng/24853",
+  "name": "Johnson Valley 50",
+  "abstract": "A longer desert racing time trial for Johnson Valley",
+  "author": "RSWatanabe",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "street-scene-uk",
+  "$kref": "#/beamng/27859",
+  "name": "Street Scene, UK",
+  "abstract": "A showroom like map set in an old victorian village street",
+  "author": "Car_Killer",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

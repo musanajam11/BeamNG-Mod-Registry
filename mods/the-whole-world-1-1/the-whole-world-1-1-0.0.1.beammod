@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "the-whole-world-1-1",
+  "name": "The Whole World 1:1",
+  "abstract": "The whole world made at a 1:1 scale",
+  "author": "Willfa",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "development",
+  "tags": [],
+  "version": "0.0.1",
+  "download": "https://www.beamng.com/resources/32579/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/32579/"
+  }
+}

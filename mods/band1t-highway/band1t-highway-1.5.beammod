@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "band1t-highway",
+  "name": "Band1t Highway",
+  "abstract": "Highway Dedicated to cutting up in BeamNG",
+  "author": "B00tyBand1t",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.5",
+  "download": "https://www.beamng.com/resources/35612/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/35612/"
+  }
+}

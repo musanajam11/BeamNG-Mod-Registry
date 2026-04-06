@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "wentward-eu12m",
+  "$kref": "#/beamng/27745",
+  "name": "Wentward EU12M",
+  "abstract": "A European Style Wentward",
+  "author": "Snowmaster",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

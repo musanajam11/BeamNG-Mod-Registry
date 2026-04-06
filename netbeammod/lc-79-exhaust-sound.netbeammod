@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "lc-79-exhaust-sound",
+  "$kref": "#/beamng/23584",
+  "name": "LC 79 EXHAUST SOUND",
+  "abstract": "THE FAMOUS EXHAUST SOUND OF THE LC79 PACKED AS A HORN",
+  "author": "SANTO#3032",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "testing",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "mbwr-alps",
+  "$kref": "#/beamng/23068",
+  "name": "MBWR Alps",
+  "abstract": "Alps Map from \"World Racing\" (2003)",
+  "author": "Grille",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

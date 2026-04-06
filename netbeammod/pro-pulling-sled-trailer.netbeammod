@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "pro-pulling-sled-trailer",
+  "$kref": "#/beamng/34853",
+  "name": "Pro Pulling Sled Trailer",
+  "abstract": "Pro Pulling and Mini Pulling Sled Trailer",
+  "author": "Youngblood",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

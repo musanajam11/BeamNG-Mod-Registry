@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "most-wanted-mission",
+  "$kref": "#/beamng/25881",
+  "name": "Most Wanted Mission",
+  "abstract": "With this mod you can enjoy car chases from heat level 1 to heat level 6.",
+  "author": "ますくろ",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

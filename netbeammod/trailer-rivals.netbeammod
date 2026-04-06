@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "trailer-rivals",
+  "$kref": "#/beamng/21233",
+  "name": "Trailer Rivals",
+  "abstract": "Deliver the cargo before your opponent does!",
+  "author": "Gamergull",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

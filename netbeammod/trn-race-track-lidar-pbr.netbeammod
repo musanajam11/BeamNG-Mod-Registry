@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "trn-race-track-lidar-pbr",
+  "$kref": "#/beamng/21296",
+  "name": "TRN Race Track  LIDAR + PBR",
+  "abstract": "Toruń Track and Motocross",
+  "author": "BlackMetal",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

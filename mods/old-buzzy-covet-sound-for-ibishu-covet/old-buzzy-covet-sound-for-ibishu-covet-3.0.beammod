@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "old-buzzy-covet-sound-for-ibishu-covet",
+  "name": "Old buzzy Covet sound for Ibishu Covet",
+  "abstract": "The old and noisy sound of the Covet is back!",
+  "author": "Inn0centJok3r",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": [],
+  "version": "3.0",
+  "download": "https://www.beamng.com/resources/6266/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/6266/"
+  }
+}

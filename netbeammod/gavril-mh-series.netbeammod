@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "gavril-mh-series",
+  "$kref": "#/beamng/36868",
+  "name": "Gavril MH-Series",
+  "abstract": "Better, Taller, Faster and Sexier",
+  "author": "Windows 7 Meme Edition",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

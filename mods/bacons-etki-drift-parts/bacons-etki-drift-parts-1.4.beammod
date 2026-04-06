@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "bacons-etki-drift-parts",
+  "name": "Bacon's ETKi Drift parts",
+  "abstract": "Drift bits for big angle",
+  "author": "jay blundell",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.4",
+  "download": "https://www.beamng.com/resources/24021/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/24021/"
+  }
+}

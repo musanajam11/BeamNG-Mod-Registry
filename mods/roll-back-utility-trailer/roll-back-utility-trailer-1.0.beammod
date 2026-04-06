@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "roll-back-utility-trailer",
+  "name": "Roll Back Utility Trailer",
+  "abstract": "Box Utility converted into a roll back trailer.",
+  "author": "essej818",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/18618/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/18618/"
+  }
+}

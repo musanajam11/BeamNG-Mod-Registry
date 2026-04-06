@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "flood-escape-mountain",
+  "$kref": "#/beamng/32145",
+  "name": "Flood Escape Mountain",
+  "abstract": "An Dangerous Ice-y Mountain for Flood Escape!",
+  "author": "Spencer Johnson",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

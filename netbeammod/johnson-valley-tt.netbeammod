@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "johnson-valley-tt",
+  "$kref": "#/beamng/24964",
+  "name": "Johnson Valley TT",
+  "abstract": "A 15 Mile (Mostly) Offroad Sprint",
+  "author": "SkrubXela",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

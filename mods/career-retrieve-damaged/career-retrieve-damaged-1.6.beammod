@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "career-retrieve-damaged",
+  "name": "Career Retrieve Damaged",
+  "abstract": "Allows retrieval of damaged vehicles in career mode",
+  "author": "snoutie",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.6",
+  "download": "https://www.beamng.com/resources/33531/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/33531/"
+  }
+}

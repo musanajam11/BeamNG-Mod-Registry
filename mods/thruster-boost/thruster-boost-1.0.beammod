@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "thruster-boost",
+  "name": "Thruster Boost",
+  "abstract": "Gives the car a variable boost without jets",
+  "author": "Ashmaker000",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/34507/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/34507/"
+  }
+}

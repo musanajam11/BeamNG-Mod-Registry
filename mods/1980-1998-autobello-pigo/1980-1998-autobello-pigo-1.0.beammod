@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "1980-1998-autobello-pigo",
+  "name": "1980 - 1998 Autobello Pigo",
+  "abstract": "It looks great, but drives like s**t!",
+  "author": "Schmitti",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/34518/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/34518/"
+  }
+}

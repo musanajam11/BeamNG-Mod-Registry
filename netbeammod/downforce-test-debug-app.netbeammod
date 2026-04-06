@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "downforce-test-debug-app",
+  "$kref": "#/beamng/34763",
+  "name": "Downforce Test Debug App",
+  "abstract": "Downforce testing tool that measures weight distribution changes under simulated wind conditions",
+  "author": "ghost_cauli",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "development",
+  "tags": []
+}

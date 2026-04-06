@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "off-road-trials-by-hendrixx",
+  "$kref": "#/beamng/1748",
+  "name": "Off-Road Trials by Hendrixx",
+  "abstract": "A large level with one long route for offroad truck trials. A challenge indeed.",
+  "author": "HighDef",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

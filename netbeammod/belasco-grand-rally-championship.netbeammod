@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "belasco-grand-rally-championship",
+  "$kref": "#/beamng/32242",
+  "name": "Belasco Grand Rally Championship",
+  "abstract": "A roughly 5 mile Belasco rally scenario with a good mix of surfaces, elevation, speed and technique",
+  "author": "ms. mcsnail",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

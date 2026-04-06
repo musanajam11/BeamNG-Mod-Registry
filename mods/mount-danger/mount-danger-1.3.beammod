@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "mount-danger",
+  "name": "Mount Danger",
+  "abstract": "Drive as fast as you dare",
+  "author": "Insanegaz",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.3",
+  "download": "https://www.beamng.com/resources/13490/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/13490/"
+  }
+}

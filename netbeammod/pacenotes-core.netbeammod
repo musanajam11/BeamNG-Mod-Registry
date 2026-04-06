@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "pacenotes-core",
+  "$kref": "#/beamng/10349",
+  "name": "Pacenotes Core",
+  "abstract": "Co-driver with UI symbols.",
+  "author": "Dummiesman",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": []
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "cherrier-tango-92-96",
+  "name": "Cherrier Tango 92' ~ 96'",
+  "abstract": "the smiley little frog :3",
+  "author": "Baconzez",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.4",
+  "download": "https://www.beamng.com/resources/33512/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/33512/"
+  }
+}

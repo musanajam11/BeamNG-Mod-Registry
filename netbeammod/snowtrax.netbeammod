@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "snowtrax",
+  "$kref": "#/beamng/34733",
+  "name": "Snowtrax",
+  "abstract": "Snowy map with multiple tracks",
+  "author": "Butch13 Gaming",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "development",
+  "tags": []
+}

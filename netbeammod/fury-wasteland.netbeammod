@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "fury-wasteland",
+  "$kref": "#/beamng/33958",
+  "name": "Fury Wasteland",
+  "abstract": "A massive post apocalyptic wasteland, based of Mad Max: Fury Road & Furiosa: A Mad Max Saga.",
+  "author": "Vawriss",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

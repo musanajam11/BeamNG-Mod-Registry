@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "backfire-afterfire-mod-now-customizable-and-mod-compatible",
+  "$kref": "#/beamng/6475",
+  "name": "Backfire/Afterfire Mod (now customizable and MOD COMPATIBLE)",
+  "abstract": "adds some flamey action to every stock beamng vehicle (and most mods with 0.0050 update)",
+  "author": "TommoT",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "development",
+  "tags": []
+}

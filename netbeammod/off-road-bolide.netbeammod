@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "off-road-bolide",
+  "$kref": "#/beamng/28043",
+  "name": "Off-Road Bolide",
+  "abstract": "An Off-Road setup with new parts!",
+  "author": "wolfox_M",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

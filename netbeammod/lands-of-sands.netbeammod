@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "lands-of-sands",
+  "$kref": "#/beamng/34867",
+  "name": "Lands of Sands",
+  "abstract": "The largest BeamNG sands-themed map out there... for now.",
+  "author": "ibishucovet1987.txt",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "development",
+  "tags": []
+}

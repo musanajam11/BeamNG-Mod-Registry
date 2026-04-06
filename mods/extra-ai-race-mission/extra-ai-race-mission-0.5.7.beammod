@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "extra-ai-race-mission",
+  "name": "Extra AI Race Mission",
+  "abstract": "This mod adds new mission type 'Extra AI Race'",
+  "author": "ますくろ",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "0.5.7",
+  "download": "https://www.beamng.com/resources/24348/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/24348/"
+  }
+}

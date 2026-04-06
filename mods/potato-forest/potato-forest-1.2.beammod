@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "potato-forest",
+  "name": "Potato Forest",
+  "abstract": "A road winding through a hilly german forest, mostly intended for low end systems.",
+  "author": "Grille",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.2",
+  "download": "https://www.beamng.com/resources/33827/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/33827/"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "leap-of-death",
+  "name": "Leap Of Death",
+  "abstract": "A car-wrecking, hole of doom!",
+  "author": "FunkyHunk",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.5.2",
+  "download": "https://www.beamng.com/resources/206/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/206/"
+  }
+}

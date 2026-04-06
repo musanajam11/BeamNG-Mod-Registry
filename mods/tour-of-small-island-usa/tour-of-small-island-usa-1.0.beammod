@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "tour-of-small-island-usa",
+  "name": "Tour of Small Island USA",
+  "abstract": "Go on a tour of Small Island as quickly as possible",
+  "author": "Kento282",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/30709/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/30709/"
+  }
+}

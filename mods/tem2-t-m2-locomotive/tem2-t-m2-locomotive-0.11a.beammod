@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "tem2-t-m2-locomotive",
+  "name": "TEM2 / TЭM2 Locomotive",
+  "abstract": "Heavy Russian six-axle diesel-electric locomotive",
+  "author": "Masuo",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.11a",
+  "download": "https://www.beamng.com/resources/16706/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/16706/"
+  }
+}

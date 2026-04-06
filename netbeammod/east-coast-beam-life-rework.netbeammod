@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "east-coast-beam-life-rework",
+  "$kref": "#/beamng/31486",
+  "name": "East Coast Beam Life Rework",
+  "abstract": "Rework of East Coast to make it feel more alive",
+  "author": "lsfan",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

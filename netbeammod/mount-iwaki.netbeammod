@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "mount-iwaki",
+  "$kref": "#/beamng/33523",
+  "name": "Mount Iwaki",
+  "abstract": "Real life reproduction of a Japanese mountain",
+  "author": "SPittlebug",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

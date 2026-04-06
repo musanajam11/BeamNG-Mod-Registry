@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "better-bindings",
+  "$kref": "#/beamng/32302",
+  "name": "Better Bindings",
+  "abstract": "Cruise control that behaves like a real car and better headlight bindings",
+  "author": "CodeCorrupt",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

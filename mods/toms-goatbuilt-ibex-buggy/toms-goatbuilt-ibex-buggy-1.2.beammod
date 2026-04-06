@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "toms-goatbuilt-ibex-buggy",
+  "name": "Tom's Goatbuilt Ibex Buggy",
+  "abstract": "one of the best crawlers in beam to date",
+  "author": "tomas guti",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.2",
+  "download": "https://www.beamng.com/resources/22425/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/22425/"
+  }
+}

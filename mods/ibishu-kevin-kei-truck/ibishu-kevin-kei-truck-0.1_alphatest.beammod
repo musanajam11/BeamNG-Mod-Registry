@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "ibishu-kevin-kei-truck",
+  "name": "Ibishu Kevin Kei Truck",
+  "abstract": "Meet Kevo, an smol cute Kei Truck :)",
+  "author": "Ezo",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "development",
+  "tags": [],
+  "version": "0.1_alphatest",
+  "download": "https://www.beamng.com/resources/30979/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/30979/"
+  }
+}

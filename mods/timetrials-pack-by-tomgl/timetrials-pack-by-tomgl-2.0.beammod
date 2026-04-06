@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "timetrials-pack-by-tomgl",
+  "name": "TimeTrials Pack by TomGl",
+  "abstract": "Collection of different type TimeTrials",
+  "author": "Tom GL",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": [],
+  "version": "2.0",
+  "download": "https://www.beamng.com/resources/20063/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/20063/"
+  }
+}

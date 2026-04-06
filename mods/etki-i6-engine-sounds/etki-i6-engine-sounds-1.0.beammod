@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "etki-i6-engine-sounds",
+  "name": "ETKi I6 ENGINE SOUNDS",
+  "abstract": "Sound mod for ETKi series",
+  "author": "Gordon_Parson",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/23422/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/23422/"
+  }
+}

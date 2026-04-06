@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "91-95-ibishu-pessima-rsv",
+  "$kref": "#/beamng/32526",
+  "name": "'91-'95 Ibishu Pessima RSV",
+  "abstract": "Different car, different adventure.",
+  "author": "FalloutNode",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "stable",
+  "tags": []
+}

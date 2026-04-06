@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "jason-scherer-2025-koh-car",
+  "$kref": "#/beamng/36435",
+  "name": "Jason Scherer 2025 KOH Car",
+  "abstract": "Exact replica of Jason's race car.",
+  "author": "tomas guti",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

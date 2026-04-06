@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "fury-utah",
+  "$kref": "#/beamng/33856",
+  "name": "Fury Utah",
+  "abstract": "A Mad Max inspired wasteland",
+  "author": "SvenCheddar",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

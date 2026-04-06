@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "arsenic-werks-vivace-tuning-and-oem-modifications",
+  "$kref": "#/beamng/24339",
+  "name": "Arsenic Werks: Vivace tuning and OEM+ modifications",
+  "abstract": "Various turbochargers, supporting upgrades, and factory options for the Cherrier Vivace and Tograc",
+  "author": "xpogosam",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "testing",
+  "tags": []
+}

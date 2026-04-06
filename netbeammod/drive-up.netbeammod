@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "drive-up",
+  "$kref": "#/beamng/27851",
+  "name": "Drive Up",
+  "abstract": "Just Drive Up.",
+  "author": "Spencer Johnson",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

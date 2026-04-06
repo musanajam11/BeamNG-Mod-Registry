@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "crandon-international",
+  "name": "Crandon International",
+  "abstract": "The off-road course at Crandon",
+  "author": "nachtstiel",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.4.2",
+  "download": "https://www.beamng.com/resources/22551/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/22551/"
+  }
+}

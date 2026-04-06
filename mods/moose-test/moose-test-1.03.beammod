@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "moose-test",
+  "name": "Moose Test",
+  "abstract": "Test the handling of cars using the industry standard ISO 3888-2 Moose Test!",
+  "author": "angelo234",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.03",
+  "download": "https://www.beamng.com/resources/23064/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/23064/"
+  }
+}

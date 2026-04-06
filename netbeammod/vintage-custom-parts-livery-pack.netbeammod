@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "vintage-custom-parts-livery-pack",
+  "$kref": "#/beamng/35304",
+  "name": "Vintage  Custom Parts&Livery Pack",
+  "abstract": "unique style:)",
+  "author": "saaaalleeeeeenn",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "testing",
+  "tags": []
+}

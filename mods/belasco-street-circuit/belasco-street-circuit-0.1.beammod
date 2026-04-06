@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "belasco-street-circuit",
+  "name": "Belasco Street Circuit",
+  "abstract": "Street Circuit With Kerbs, a Pitlane And two bridges over the highway",
+  "author": "RayBandz",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "0.1",
+  "download": "https://www.beamng.com/resources/28988/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/28988/"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "aw-goal",
+  "name": "AW Goal",
+  "abstract": "Boring German Robust Car!",
+  "author": "barabash",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "2.0",
+  "download": "https://www.beamng.com/resources/27004/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/27004/"
+  }
+}

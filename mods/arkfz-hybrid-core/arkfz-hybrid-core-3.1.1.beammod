@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "arkfz-hybrid-core",
+  "name": "ArkFz Hybrid Core",
+  "abstract": "Core libraries for ArkFz's other hybrid mods to use.",
+  "author": "ArkFz",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": [],
+  "version": "3.1.1",
+  "download": "https://www.beamng.com/resources/30971/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/30971/"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "etk-center-plus",
+  "$kref": "#/beamng/29219",
+  "name": "ETK Center Plus",
+  "abstract": "An expanded german map",
+  "author": "Bifdro",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

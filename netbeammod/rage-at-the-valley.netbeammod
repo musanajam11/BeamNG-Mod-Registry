@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "rage-at-the-valley",
+  "$kref": "#/beamng/25142",
+  "name": "Rage at the Valley",
+  "abstract": "Johnson Valley Trophy Truck Time Trial",
+  "author": "prerunners",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

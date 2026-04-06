@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "laguna-salada-short-loop",
+  "name": "Laguna Salada (Short Loop)",
+  "abstract": "256+km² map based on Laguna Salada Baja California Mex. using real terrain and real race maps.",
+  "author": "Fritz641",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0.31",
+  "download": "https://www.beamng.com/resources/31463/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/31463/"
+  }
+}

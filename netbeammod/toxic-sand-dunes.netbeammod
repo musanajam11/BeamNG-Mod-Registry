@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "toxic-sand-dunes",
+  "$kref": "#/beamng/28097",
+  "name": "Toxic Sand Dunes",
+  "abstract": "Toxic Sand Dunes",
+  "author": "Acug",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

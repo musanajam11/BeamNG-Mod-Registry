@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "italy-rework",
+  "name": "Italy Rework",
+  "abstract": "A rework of official Italy map",
+  "author": "FTamino",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "0.10",
+  "download": "https://www.beamng.com/resources/28353/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/28353/"
+  }
+}

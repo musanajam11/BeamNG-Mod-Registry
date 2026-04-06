@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "new-v10-sounds-for-scintilla-and-straight-6-sounds-for-etk800",
+  "$kref": "#/beamng/24168",
+  "name": "New V10 Sounds for Scintilla and Straight-6 Sounds for ETK800",
+  "abstract": "Adds two new sounds based on BMW S85 for the Scintilla V10 and BMW S58 for ETK I6",
+  "author": "Manchu",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": []
+}

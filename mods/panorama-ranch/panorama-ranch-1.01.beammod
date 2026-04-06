@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "panorama-ranch",
+  "name": "Panorama Ranch",
+  "abstract": "60s Racing Circuit with the dangers and thrills you expect.",
+  "author": "Track Broseff",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.01",
+  "download": "https://www.beamng.com/resources/33497/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/33497/"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "289ci-ford-windsor-v8-d-series-update",
+  "$kref": "#/beamng/22079",
+  "name": "289ci Ford Windsor V8 (D-Series Update)",
+  "abstract": "(Engine mod w/ custom sound)",
+  "author": "Ryan Lanz",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": []
+}

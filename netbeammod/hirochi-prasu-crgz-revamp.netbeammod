@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "hirochi-prasu-crgz-revamp",
+  "$kref": "#/beamng/19994",
+  "name": "Hirochi Prasu (CRGZ Revamp)",
+  "abstract": "Revamped of the Infamous Prasu",
+  "author": "CRGZ",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "development",
+  "tags": []
+}

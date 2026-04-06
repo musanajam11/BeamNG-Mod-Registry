@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "whelen-siren",
+  "$kref": "#/beamng/24621",
+  "name": "Whelen Siren",
+  "abstract": "Siren",
+  "author": "cloudcoder8",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "testing",
+  "tags": []
+}

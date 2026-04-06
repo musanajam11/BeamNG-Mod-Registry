@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "etk-w",
+  "name": "ETK W",
+  "abstract": "A model made in 1980s called the W-series",
+  "author": "waboll",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "5.0",
+  "download": "https://www.beamng.com/resources/7951/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/7951/"
+  }
+}

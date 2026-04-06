@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "catch-them-all-remake",
+  "$kref": "#/beamng/23345",
+  "name": "Catch Them All (Remake!)",
+  "abstract": "Chase and arrest all of the suspects... by yourself!",
+  "author": "Gamergull",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

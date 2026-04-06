@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "100km-straight",
+  "$kref": "#/beamng/35181",
+  "name": "100KM Straight",
+  "abstract": "The road is attributed to Japanese highway standards.",
+  "author": "SysVR",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

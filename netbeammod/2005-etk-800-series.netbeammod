@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "2005-etk-800-series",
+  "$kref": "#/beamng/30202",
+  "name": "2005 ETK 800-Series",
+  "abstract": "predecessor of the 800-Series",
+  "author": "JustRobertOFF",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "5-0l-coyote-v8-engine",
+  "name": "5.0L Coyote V8 Engine",
+  "abstract": "Put some modern muscle into your classic muscle!",
+  "author": "Ryan Lanz",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": [],
+  "version": "2.0",
+  "download": "https://www.beamng.com/resources/22090/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/22090/"
+  }
+}

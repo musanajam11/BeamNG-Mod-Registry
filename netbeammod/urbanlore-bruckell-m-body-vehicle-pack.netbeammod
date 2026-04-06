@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "urbanlore-bruckell-m-body-vehicle-pack",
+  "$kref": "#/beamng/25375",
+  "name": "Urbanlore Bruckell M-Body vehicle pack",
+  "abstract": "Early 90s-10s Bruckell Fullsize Vehicle Pack",
+  "author": "Urbanmaid",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

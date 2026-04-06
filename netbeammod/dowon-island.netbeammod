@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "dowon-island",
+  "$kref": "#/beamng/32708",
+  "name": "Dowon Island",
+  "abstract": "Imaginary island in South Korea",
+  "author": "êêêê -0-",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "development",
+  "tags": []
+}

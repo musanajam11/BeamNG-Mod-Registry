@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "urbanmaid-core-resource-package",
+  "$kref": "#/beamng/25354",
+  "name": "Urbanmaid Core Resource Package",
+  "abstract": "Includes wheels, hubcaps, material packs.",
+  "author": "Urbanmaid",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "stable",
+  "tags": []
+}

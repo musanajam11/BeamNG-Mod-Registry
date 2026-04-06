@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "ai-traffic-speed-controller",
+  "name": "AI Traffic Speed Controller",
+  "abstract": "Change traffic speed and risk ratios",
+  "author": "Famiano",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": [],
+  "version": "3",
+  "download": "https://www.beamng.com/resources/37435/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/37435/"
+  }
+}

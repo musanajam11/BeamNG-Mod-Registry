@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "offroadwashingtion",
+  "name": "OffroadWashingtion",
+  "abstract": "Easy but challenging enough to knock your socks off!",
+  "author": "OffTrailZ",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.6.1",
+  "download": "https://www.beamng.com/resources/29947/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/29947/"
+  }
+}

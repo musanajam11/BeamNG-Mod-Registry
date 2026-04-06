@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "cliff-pbr",
+  "name": "Cliff PBR",
+  "abstract": "The well-known Cliff in PBR with better lighting",
+  "author": "Bifdro",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.4",
+  "download": "https://www.beamng.com/resources/24375/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/24375/"
+  }
+}

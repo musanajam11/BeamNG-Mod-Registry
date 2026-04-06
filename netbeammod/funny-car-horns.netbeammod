@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "funny-car-horns",
+  "$kref": "#/beamng/22397",
+  "name": "Funny Car Horns",
+  "abstract": "created by Caitex.212 comprises: soundtracks made with carhorn sounds so no copyright",
+  "author": "Caitex212",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

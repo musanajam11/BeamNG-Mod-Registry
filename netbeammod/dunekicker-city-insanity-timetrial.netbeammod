@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "dunekicker-city-insanity-timetrial",
+  "$kref": "#/beamng/25381",
+  "name": "Dunekicker City Insanity (Timetrial)",
+  "abstract": "Take the Dunekicker off massive jumps through Belasco City.",
+  "author": "Bityu36",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

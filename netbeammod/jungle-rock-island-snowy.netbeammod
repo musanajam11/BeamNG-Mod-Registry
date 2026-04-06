@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "jungle-rock-island-snowy",
+  "$kref": "#/beamng/24259",
+  "name": "Jungle Rock Island Snowy",
+  "abstract": "Snow skin for Jungle Rock Island 0.26",
+  "author": "Stuntman PS2",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

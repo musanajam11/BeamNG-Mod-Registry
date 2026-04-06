@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "moab-utah",
+  "$kref": "#/beamng/26830",
+  "name": "Moab, Utah",
+  "abstract": "A town in the USA",
+  "author": "Bifdro",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "leap-of-death",
+  "$kref": "#/beamng/206",
+  "name": "Leap Of Death",
+  "abstract": "A car-wrecking, hole of doom!",
+  "author": "FunkyHunk",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

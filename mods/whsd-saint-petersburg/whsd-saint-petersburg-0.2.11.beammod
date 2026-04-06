@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "whsd-saint-petersburg",
+  "name": "WHSD (Saint Petersburg)",
+  "abstract": "Toll highway passing through the city of St. Petersburg.",
+  "author": "Sherman_",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.2.11",
+  "download": "https://www.beamng.com/resources/32797/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/32797/"
+  }
+}

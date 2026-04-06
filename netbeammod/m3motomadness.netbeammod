@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "m3motomadness",
+  "$kref": "#/beamng/34924",
+  "name": "M3MotoMadness",
+  "abstract": "A variety map with several challenges and things to do and explore.",
+  "author": "M3MotoMan",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

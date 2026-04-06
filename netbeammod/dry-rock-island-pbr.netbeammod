@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "dry-rock-island-pbr",
+  "$kref": "#/beamng/34047",
+  "name": "Dry Rock Island (PBR)",
+  "abstract": "Dry Rock Island PBR Remaster",
+  "author": "Grille",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

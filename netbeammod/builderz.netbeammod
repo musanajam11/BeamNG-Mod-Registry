@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "builderz",
+  "$kref": "#/beamng/34743",
+  "name": "Builderz",
+  "abstract": "Truck in building materialz to construction sites and raise new buildings on your map!",
+  "author": "Riccarr",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": []
+}

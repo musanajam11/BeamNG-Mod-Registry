@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "ibishu-serenity",
+  "name": "Ibishu Serenity",
+  "abstract": "Peak Japanese luxury",
+  "author": "Nekkit",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0.3",
+  "download": "https://www.beamng.com/resources/27941/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/27941/"
+  }
+}

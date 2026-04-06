@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "satsuma-expansion",
+  "$kref": "#/beamng/28509",
+  "name": "Satsuma Expansion",
+  "abstract": "An Expansion Addon For The Satsuma ( Quite Literally ) **supported satsuma version: 0.91**",
+  "author": "Bugster",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "stable",
+  "tags": []
+}

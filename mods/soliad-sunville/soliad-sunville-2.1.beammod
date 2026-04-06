@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "soliad-sunville",
+  "name": "Soliad Sunville",
+  "abstract": "Like a normal Moonhawk, but longer.",
+  "author": "Shuddair",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "2.1",
+  "download": "https://www.beamng.com/resources/19801/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/19801/"
+  }
+}

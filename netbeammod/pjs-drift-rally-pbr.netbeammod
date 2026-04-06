@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "pjs-drift-rally-pbr",
+  "$kref": "#/beamng/21164",
+  "name": "PJS Drift & Rally [PBR]",
+  "abstract": "Map featuring 2 real drift tracks and 1 fantasy",
+  "author": "BlackMetal",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "vroom-pack-lite",
+  "name": "Vroom Pack Lite",
+  "abstract": "23 \"new\" engine sounds, 227 engines from Vroom Pack, and some sequential transmissions",
+  "author": "Joey Auburn",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.5",
+  "download": "https://www.beamng.com/resources/21353/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/21353/"
+  }
+}

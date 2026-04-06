@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "teardrop-trailer",
+  "name": "Teardrop Trailer",
+  "abstract": "For all your camping adventures!",
+  "author": "Littleturdlet",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/19620/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/19620/"
+  }
+}

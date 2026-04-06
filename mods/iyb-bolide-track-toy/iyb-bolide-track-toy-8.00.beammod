@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "iyb-bolide-track-toy",
+  "name": "IYB Bolide Track Toy",
+  "abstract": "2022 Tracktoy",
+  "author": "ItsYourBoi",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "8.00",
+  "download": "https://www.beamng.com/resources/3707/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/3707/"
+  }
+}

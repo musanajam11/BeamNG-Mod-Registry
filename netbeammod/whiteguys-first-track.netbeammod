@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "whiteguys-first-track",
+  "$kref": "#/beamng/30695",
+  "name": "WhiteGuy's First Track",
+  "abstract": "This was the first time I ever tried doing something, the map sucks but its here...",
+  "author": "ATypicalWhiteGuy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "development",
+  "tags": []
+}

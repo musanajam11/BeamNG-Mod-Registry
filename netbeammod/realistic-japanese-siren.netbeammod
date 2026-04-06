@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "realistic-japanese-siren",
+  "$kref": "#/beamng/25647",
+  "name": "Realistic Japanese Siren",
+  "abstract": "My first mod!",
+  "author": "Nooby_Bob",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": []
+}

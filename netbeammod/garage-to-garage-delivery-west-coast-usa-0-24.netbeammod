@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "garage-to-garage-delivery-west-coast-usa-0-24",
+  "$kref": "#/beamng/21175",
+  "name": "Garage to Garage Delivery - West Coast USA [0.24]",
+  "abstract": "Deliver random vehicles from A to B, no rush, just get there in one piece",
+  "author": "Ofetios",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

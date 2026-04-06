@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "iyb-bolide-track-toy",
+  "$kref": "#/beamng/3707",
+  "name": "IYB Bolide Track Toy",
+  "abstract": "2022 Tracktoy",
+  "author": "ItsYourBoi",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

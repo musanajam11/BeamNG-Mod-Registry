@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "kartland",
+  "name": "Kartland",
+  "abstract": "A collection of real and imagined go kart tracks",
+  "author": "nachtstiel",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.4",
+  "download": "https://www.beamng.com/resources/26521/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/26521/"
+  }
+}

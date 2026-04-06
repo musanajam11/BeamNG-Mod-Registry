@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "jade-mountain",
+  "$kref": "#/beamng/34279",
+  "name": "Jade Mountain",
+  "abstract": "jade",
+  "author": "Hushaboom",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

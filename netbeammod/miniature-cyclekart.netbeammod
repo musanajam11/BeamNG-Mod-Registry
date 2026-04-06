@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "miniature-cyclekart",
+  "$kref": "#/beamng/28959",
+  "name": "miniature cyclekart",
+  "abstract": "as wobbly as the real thing",
+  "author": "fillman86",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

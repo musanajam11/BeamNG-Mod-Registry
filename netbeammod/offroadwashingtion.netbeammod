@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "offroadwashingtion",
+  "$kref": "#/beamng/29947",
+  "name": "OffroadWashingtion",
+  "abstract": "Easy but challenging enough to knock your socks off!",
+  "author": "OffTrailZ",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

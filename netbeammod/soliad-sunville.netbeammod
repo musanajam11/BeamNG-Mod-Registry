@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "soliad-sunville",
+  "$kref": "#/beamng/19801",
+  "name": "Soliad Sunville",
+  "abstract": "Like a normal Moonhawk, but longer.",
+  "author": "Shuddair",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

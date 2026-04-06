@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "scintilla-acquarossa",
+  "$kref": "#/beamng/28187",
+  "name": "Scintilla Acquarossa",
+  "abstract": "Downforce for days",
+  "author": "The Stig Is A Spy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

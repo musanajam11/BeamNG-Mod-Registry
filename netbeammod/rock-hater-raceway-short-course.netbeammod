@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "rock-hater-raceway-short-course",
+  "$kref": "#/beamng/31930",
+  "name": "Rock Hater Raceway Short Course",
+  "abstract": "Short course racing, for those who hate rocks. Smooth dirt, jumps, berms, whoops.",
+  "author": "ATypicalWhiteGuy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

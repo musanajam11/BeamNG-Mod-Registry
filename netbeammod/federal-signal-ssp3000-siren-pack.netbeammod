@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "federal-signal-ssp3000-siren-pack",
+  "$kref": "#/beamng/20026",
+  "name": "Federal Signal SSP3000 Siren pack",
+  "abstract": "Federal Signal SSP3000 Siren for BeamNG.drive",
+  "author": "jordaniwick",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

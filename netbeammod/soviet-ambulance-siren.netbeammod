@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "soviet-ambulance-siren",
+  "$kref": "#/beamng/35014",
+  "name": "SOVIET AMBULANCE SIREN",
+  "abstract": "0.1",
+  "author": "tipochek",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": []
+}

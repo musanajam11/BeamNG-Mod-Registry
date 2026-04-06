@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "gambler-hills",
+  "$kref": "#/beamng/27037",
+  "name": "Gambler Hills",
+  "abstract": "Let's Roam Around!",
+  "author": "Bifdro",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "heltom-fab-ss3-dualsport-offroad-buggy",
+  "$kref": "#/beamng/25321",
+  "name": "HelTom Fab SS3 DualSport Offroad buggy",
+  "abstract": "Tom and Isaac's entry for the MFD Challenge",
+  "author": "tomas guti",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

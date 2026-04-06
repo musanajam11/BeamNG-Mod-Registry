@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "winch-transport-trailer",
+  "name": "Winch Transport Trailer",
+  "abstract": "Transport Trailer with Working Winch",
+  "author": "Youngblood",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.1",
+  "download": "https://www.beamng.com/resources/34369/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/34369/"
+  }
+}

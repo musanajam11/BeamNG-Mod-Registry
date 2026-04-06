@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "hungarian-roads",
+  "$kref": "#/beamng/36229",
+  "name": "Hungarian Roads",
+  "abstract": "A snapshot of Hungary",
+  "author": "Bifdro",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

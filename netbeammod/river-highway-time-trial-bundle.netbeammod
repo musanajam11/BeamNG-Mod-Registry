@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "river-highway-time-trial-bundle",
+  "$kref": "#/beamng/31677",
+  "name": "River Highway Time Trial Bundle",
+  "abstract": "a bundle of timetrials for the river highway map mod/Rally/Circuits/Jumps/SuperSpecialStage/",
+  "author": "KLAX",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "finlayson-brook-road-new-zealand",
+  "$kref": "#/beamng/34475",
+  "name": "Finlayson Brook Road, New Zealand",
+  "abstract": "A short gravel section of Finlayson Brook Rd, NZ",
+  "author": "Caboose222",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

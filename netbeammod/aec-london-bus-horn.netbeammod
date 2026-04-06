@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "aec-london-bus-horn",
+  "$kref": "#/beamng/18067",
+  "name": "AEC London Bus Horn",
+  "abstract": "A old bus horn for long time ago",
+  "author": "ywf56249",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "testing",
+  "tags": []
+}

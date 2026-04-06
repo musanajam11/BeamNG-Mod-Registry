@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "targa-italiano",
+  "name": "Targa Italiano",
+  "abstract": "Tribute to the famous Targa Florio",
+  "author": "Jaileh",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.03",
+  "download": "https://www.beamng.com/resources/35216/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/35216/"
+  }
+}

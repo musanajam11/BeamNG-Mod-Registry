@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "taz-pack",
+  "$kref": "#/beamng/28805",
+  "name": "TAZ Pack",
+  "abstract": "just the average Soviet automobiles",
+  "author": "RyanCookie",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "vehicle-and-part-randomizer",
+  "$kref": "#/beamng/34361",
+  "name": "Vehicle And Part Randomizer",
+  "abstract": "Randomizer: Two in One",
+  "author": "_N_S_",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": []
+}

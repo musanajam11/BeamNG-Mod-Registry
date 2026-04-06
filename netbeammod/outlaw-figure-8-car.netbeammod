@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "outlaw-figure-8-car",
+  "$kref": "#/beamng/36290",
+  "name": "Outlaw Figure 8 Car",
+  "abstract": "Figure8cars",
+  "author": "OneManCreations",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

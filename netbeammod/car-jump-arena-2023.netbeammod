@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "car-jump-arena-2023",
+  "$kref": "#/beamng/29877",
+  "name": "Car Jump Arena 2023",
+  "abstract": "Your personal car-olympics-map!",
+  "author": "MysteryManGER",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

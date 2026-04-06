@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "2020-hirochi-ccf",
+  "$kref": "#/beamng/29318",
+  "name": "2020 Hirochi CCF",
+  "abstract": "The ground-up rework of a small roadster with big ambitions. Includes a functional screen & a V8!",
+  "author": "Theo Wilkinson",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

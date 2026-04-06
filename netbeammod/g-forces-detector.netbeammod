@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "g-forces-detector",
+  "$kref": "#/beamng/35057",
+  "name": "G-Forces Detector",
+  "abstract": "Real-time G-force monitoring widget",
+  "author": "NikolasSnorkell",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

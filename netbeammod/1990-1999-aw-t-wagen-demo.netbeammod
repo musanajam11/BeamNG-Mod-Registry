@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "1990-1999-aw-t-wagen-demo",
+  "$kref": "#/beamng/35758",
+  "name": "1990-1999 AW T-Wagen Demo",
+  "abstract": "A van-new standard. The all new T-WAGEN.",
+  "author": "Traxisek",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

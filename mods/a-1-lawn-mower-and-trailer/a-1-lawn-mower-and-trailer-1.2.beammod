@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "a-1-lawn-mower-and-trailer",
+  "name": "A-1 Lawn Mower And Trailer",
+  "abstract": "This is a Lawn Mower I'm making and it will have more updates soon.",
+  "author": "demolitionderbyA1",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.2",
+  "download": "https://www.beamng.com/resources/19059/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/19059/"
+  }
+}

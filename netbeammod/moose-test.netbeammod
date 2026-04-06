@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "moose-test",
+  "$kref": "#/beamng/23064",
+  "name": "Moose Test",
+  "abstract": "Test the handling of cars using the industry standard ISO 3888-2 Moose Test!",
+  "author": "angelo234",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": []
+}

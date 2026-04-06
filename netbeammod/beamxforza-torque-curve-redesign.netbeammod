@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "beamxforza-torque-curve-redesign",
+  "$kref": "#/beamng/28856",
+  "name": "BeamXForza - Torque Curve Redesign",
+  "abstract": "A redesigned torque curve app that matches BeamXForza.",
+  "author": "Galaxia",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "individual-part-repair-menu",
+  "name": "Individual Part Repair Menu",
+  "abstract": "Allows for the repair of individual parts.",
+  "author": "Jesus Goose",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": [],
+  "version": "3.6",
+  "download": "https://www.beamng.com/resources/35878/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/35878/"
+  }
+}

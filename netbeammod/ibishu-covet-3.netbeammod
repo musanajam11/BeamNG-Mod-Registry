@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "ibishu-covet-3",
+  "$kref": "#/beamng/26609",
+  "name": "Ibishu Covet 3",
+  "abstract": "Another Covet Successor!",
+  "author": "barabash",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

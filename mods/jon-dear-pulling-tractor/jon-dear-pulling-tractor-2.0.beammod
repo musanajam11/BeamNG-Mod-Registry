@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "jon-dear-pulling-tractor",
+  "name": "Jon Dear Pulling Tractor",
+  "abstract": "Jon Dear Sled Pulling Tractor",
+  "author": "Youngblood",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.0",
+  "download": "https://www.beamng.com/resources/29366/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/29366/"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "the-whole-world-1-1",
+  "$kref": "#/beamng/32579",
+  "name": "The Whole World 1:1",
+  "abstract": "The whole world made at a 1:1 scale",
+  "author": "Willfa",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "development",
+  "tags": []
+}

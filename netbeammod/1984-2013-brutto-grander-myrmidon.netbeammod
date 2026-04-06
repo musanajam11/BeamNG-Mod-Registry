@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "1984-2013-brutto-grander-myrmidon",
+  "$kref": "#/beamng/23325",
+  "name": "1984-2013 Brutto Grander & Myrmidon",
+  "abstract": "Unique SUV and Pickup of the 1980's - 2010's",
+  "author": "N0mN0m",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

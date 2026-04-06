@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "toxic-sand-dunes",
+  "name": "Toxic Sand Dunes",
+  "abstract": "Toxic Sand Dunes",
+  "author": "Acug",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.4",
+  "download": "https://www.beamng.com/resources/28097/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/28097/"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "taiga",
+  "name": "Taiga",
+  "abstract": "Quiet place in the eastern part of Russia.",
+  "author": "Sherman_",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.1",
+  "download": "https://www.beamng.com/resources/29554/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/29554/"
+  }
+}

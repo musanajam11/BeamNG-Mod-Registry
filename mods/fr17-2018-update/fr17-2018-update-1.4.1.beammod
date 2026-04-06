@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "fr17-2018-update",
+  "name": "FR17 (2018 update)",
+  "abstract": "Super fast, super advanced racing car",
+  "author": "Raider",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.4.1",
+  "download": "https://www.beamng.com/resources/2258/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/2258/"
+  }
+}

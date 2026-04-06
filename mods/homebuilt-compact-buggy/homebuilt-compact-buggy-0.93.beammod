@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "homebuilt-compact-buggy",
+  "name": "'Homebuilt' Compact Buggy",
+  "abstract": "A small but super versatile buggy, built in your shed! (or..somewhere)",
+  "author": "DutchyGamer",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.93",
+  "download": "https://www.beamng.com/resources/22133/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/22133/"
+  }
+}

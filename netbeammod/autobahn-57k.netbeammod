@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "autobahn-57k",
+  "$kref": "#/beamng/33295",
+  "name": "Autobahn 57k",
+  "abstract": "57km of German Autobahn, looping through a hilly landscape.",
+  "author": "Grille",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "dirty-4x4-offroad",
+  "name": "Dirty 4x4 Offroad",
+  "abstract": "Dirty 4x4 is based off one of my local trails call naches A fun muddy looped trail",
+  "author": "OffTrailZ",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.7",
+  "download": "https://www.beamng.com/resources/20416/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/20416/"
+  }
+}

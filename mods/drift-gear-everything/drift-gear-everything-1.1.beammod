@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "drift-gear-everything",
+  "name": "Drift Gear Everything",
+  "abstract": "BX drift gear",
+  "author": "BadmanTru 2",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.1",
+  "download": "https://www.beamng.com/resources/36432/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/36432/"
+  }
+}

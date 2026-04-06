@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "realtime-trail",
+  "$kref": "#/beamng/36391",
+  "name": "Realtime trail",
+  "abstract": "Config and add a realtime trajectory to your car",
+  "author": "flintt",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

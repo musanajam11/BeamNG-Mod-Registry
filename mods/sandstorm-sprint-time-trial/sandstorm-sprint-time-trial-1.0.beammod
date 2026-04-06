@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "sandstorm-sprint-time-trial",
+  "name": "Sandstorm Sprint (Time Trial)",
+  "abstract": "A fast paced desert sprint through Johnson Valley",
+  "author": "Bityu36",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/24951/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/24951/"
+  }
+}

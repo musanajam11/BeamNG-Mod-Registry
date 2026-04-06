@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "cbz-ui-pack",
+  "name": "CBz UI Pack",
+  "abstract": "Simplistic Digital UI for tuners",
+  "author": "ChocoBeez",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.10",
+  "download": "https://www.beamng.com/resources/35285/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/35285/"
+  }
+}

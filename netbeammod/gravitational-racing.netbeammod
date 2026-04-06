@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "gravitational-racing",
+  "$kref": "#/beamng/8792",
+  "name": "Gravitational Racing",
+  "abstract": "A sequel to gravitational stunting, with race tracks and full dynamic gravity",
+  "author": "Darthbob555",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "fr17-2018-update",
+  "$kref": "#/beamng/2258",
+  "name": "FR17 (2018 update)",
+  "abstract": "Super fast, super advanced racing car",
+  "author": "Raider",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

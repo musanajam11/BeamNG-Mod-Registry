@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "adventure-off-road",
+  "name": "Adventure Off-Road",
+  "abstract": "Adventure the private island",
+  "author": "Ashmaker000",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.4",
+  "download": "https://www.beamng.com/resources/27477/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/27477/"
+  }
+}

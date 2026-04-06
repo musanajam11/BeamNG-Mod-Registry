@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "sirena-y-bocina-kingvox-patrullero-argentina",
+  "name": "Sirena y bocina Kingvox patrullero Argentina",
+  "abstract": "sonido de sirena y bocina de los patrulleros de argentina / argentine police siren and horn",
+  "author": "Nico147",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": [],
+  "version": "2.0",
+  "download": "https://www.beamng.com/resources/15132/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/15132/"
+  }
+}

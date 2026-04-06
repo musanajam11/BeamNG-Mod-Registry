@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "the-lightweight-collection",
+  "$kref": "#/beamng/32857",
+  "name": "The Lightweight Collection",
+  "abstract": "An ever expanding collection of Carbon Fiber Parts, Starting with the Bastion",
+  "author": "xpogosam",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "testing",
+  "tags": []
+}

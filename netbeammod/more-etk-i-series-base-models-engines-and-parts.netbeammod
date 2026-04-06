@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "more-etk-i-series-base-models-engines-and-parts",
+  "$kref": "#/beamng/36189",
+  "name": "More ETK I-series base models, engines and parts",
+  "abstract": "new 1.8L i4 and 2.0L i6 petrol engines, a 2.4L i6 diesel, plastic trims and more",
+  "author": "carambolage",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "stable",
+  "tags": []
+}

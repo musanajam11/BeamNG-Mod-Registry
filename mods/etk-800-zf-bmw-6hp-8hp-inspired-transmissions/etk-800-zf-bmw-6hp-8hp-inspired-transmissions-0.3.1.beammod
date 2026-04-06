@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "etk-800-zf-bmw-6hp-8hp-inspired-transmissions",
+  "name": "ETK 800 ZF BMW 6HP/8HP Inspired Transmissions",
+  "abstract": "Fine tuned propulsion",
+  "author": "Milendur",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.3.1",
+  "download": "https://www.beamng.com/resources/35331/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/35331/"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "tc42-construction-crane",
+  "name": "TC42 Construction Crane",
+  "abstract": "A massive crane",
+  "author": "CRGZ",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "development",
+  "tags": [],
+  "version": "1.01",
+  "download": "https://www.beamng.com/resources/22479/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/22479/"
+  }
+}

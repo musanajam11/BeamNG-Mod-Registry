@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "roadblock-run-remake",
+  "name": "Roadblock Run (Remake!)",
+  "abstract": "Old idea, new scenario! Play as the suspect or police!",
+  "author": "Gamergull",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.2",
+  "download": "https://www.beamng.com/resources/21953/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/21953/"
+  }
+}

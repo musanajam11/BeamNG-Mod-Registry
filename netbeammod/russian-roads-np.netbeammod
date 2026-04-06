@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "russian-roads-np",
+  "$kref": "#/beamng/2043",
+  "name": "Russian Roads NP",
+  "abstract": "Nine kilometers of terrible roads, under the beautiful Russian nature",
+  "author": "Archibalto",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

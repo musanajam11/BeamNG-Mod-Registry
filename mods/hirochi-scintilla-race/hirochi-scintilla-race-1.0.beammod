@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "hirochi-scintilla-race",
+  "name": "Hirochi Scintilla Race",
+  "abstract": "A 3 lap race in Scintillas around the Hirochi long course",
+  "author": "el_ferrito",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/23037/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/23037/"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "soundoff-signal-nergy-siren",
+  "$kref": "#/beamng/24490",
+  "name": "SoundOff Signal nERGY Siren",
+  "abstract": "The siren that the Arkansas State Police uses.",
+  "author": "cloudcoder8",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "testing",
+  "tags": []
+}

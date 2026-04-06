@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "heavy-thing-dense-truck",
+  "$kref": "#/beamng/27965",
+  "name": "heavy thing (dense truck)",
+  "abstract": "bad vehicle (funny)",
+  "author": "Z24zorpx4",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

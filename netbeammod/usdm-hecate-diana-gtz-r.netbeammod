@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "usdm-hecate-diana-gtz-r",
+  "$kref": "#/beamng/30991",
+  "name": "USDM Hecate & Diana GTZ-R",
+  "abstract": "USDM export models for the Diana & Hecate",
+  "author": "Bugster",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "stable",
+  "tags": []
+}

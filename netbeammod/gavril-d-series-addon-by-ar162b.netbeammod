@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "gavril-d-series-addon-by-ar162b",
+  "$kref": "#/beamng/11002",
+  "name": "Gavril D-Series addon by AR162b",
+  "abstract": "Oldstyle parts, XL frame with cargobox/rollback/wedgeback beds, flatbeds, (prerunner) suspension par",
+  "author": "AR162B",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "seoil-framebody-pack",
+  "$kref": "#/beamng/37292",
+  "name": "Seoil Framebody Pack",
+  "abstract": "The proof of durability",
+  "author": "Urbanmaid",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

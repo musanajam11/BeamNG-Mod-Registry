@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "italy-mille-miglia-lap",
+  "name": "Italy - Mille Miglia Lap",
+  "abstract": "The longest Lap in the history of BeamNG - a lap 39 miles long! Plus Slaloms on the Airfield.",
+  "author": "Leo Zieger",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.04",
+  "download": "https://www.beamng.com/resources/29471/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/29471/"
+  }
+}

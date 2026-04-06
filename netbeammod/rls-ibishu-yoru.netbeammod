@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "rls-ibishu-yoru",
+  "$kref": "#/beamng/35886",
+  "name": "RLS Ibishu Yoru",
+  "abstract": "Forged by Fire",
+  "author": "Raceless",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

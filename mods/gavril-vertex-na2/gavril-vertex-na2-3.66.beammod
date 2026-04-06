@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "gavril-vertex-na2",
+  "name": "Gavril Vertex NA2",
+  "abstract": "Completely reworked. The most customizable vehicle in the game! 106 configs and 1300 parts to choose",
+  "author": "Inn0centJok3r",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "3.66",
+  "download": "https://www.beamng.com/resources/13061/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/13061/"
+  }
+}

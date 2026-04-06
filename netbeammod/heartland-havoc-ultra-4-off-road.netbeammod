@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "heartland-havoc-ultra-4-off-road",
+  "$kref": "#/beamng/31123",
+  "name": "Heartland Havoc Ultra 4 Off Road",
+  "abstract": "A 3 lap ultra 4 style race course, but send it because it's a video game.",
+  "author": "ATypicalWhiteGuy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "polish-roads-mission-pack",
+  "$kref": "#/beamng/36648",
+  "name": "Polish Roads Mission Pack!",
+  "abstract": "Only skill gets you through..",
+  "author": "mcct",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "tc42-construction-crane",
+  "$kref": "#/beamng/22479",
+  "name": "TC42 Construction Crane",
+  "abstract": "A massive crane",
+  "author": "CRGZ",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "development",
+  "tags": []
+}

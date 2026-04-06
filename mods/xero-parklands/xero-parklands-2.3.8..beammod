@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "xero-parklands",
+  "name": "Xero Parklands",
+  "abstract": "A very diverse yet realistic map with almost anything your heart desires.",
+  "author": "Track Broseff",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.3.8.",
+  "download": "https://www.beamng.com/resources/27889/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/27889/"
+  }
+}

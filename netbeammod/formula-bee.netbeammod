@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "formula-bee",
+  "$kref": "#/beamng/17409",
+  "name": "Formula Bee",
+  "abstract": "Entry level single seater with interesting handling",
+  "author": "TrackpadUser",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

@@ -7,8 +7,12 @@
     "build": "node scripts/build-index.mjs",
     "inflate": "node scripts/inflate.mjs",
     "inflate:dry": "node scripts/inflate.mjs --dry-run",
+    "inflate:nohash": "node scripts/inflate.mjs --no-hash",
     "verify": "node scripts/verify-downloads.mjs",
-    "verify:fix": "node scripts/verify-downloads.mjs --fix"
+    "verify:fix": "node scripts/verify-downloads.mjs --fix",
+    "seed": "node scripts/seed-registry.mjs",
+    "seed:dry": "node scripts/seed-registry.mjs --dry-run",
+    "seed:categories": "node scripts/seed-registry.mjs --list-categories"
   },
   "devDependencies": {
     "ajv": "^8.17.0",

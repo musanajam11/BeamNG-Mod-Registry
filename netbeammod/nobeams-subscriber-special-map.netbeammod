@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "nobeams-subscriber-special-map",
+  "$kref": "#/beamng/30837",
+  "name": "nobeam's subscriber special map",
+  "abstract": "Map Celebrating 1000 subscribers on youtube",
+  "author": "nobeam",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

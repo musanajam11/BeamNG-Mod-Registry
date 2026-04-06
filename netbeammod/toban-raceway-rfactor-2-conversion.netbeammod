@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "toban-raceway-rfactor-2-conversion",
+  "$kref": "#/beamng/5552",
+  "name": "Toban Raceway (rFactor 2 conversion)",
+  "abstract": "Toban Raceway with all 3 configs using the road surface from the rfactor version.",
+  "author": "HighDef",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

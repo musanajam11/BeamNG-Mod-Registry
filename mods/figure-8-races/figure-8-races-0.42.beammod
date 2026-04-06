@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "figure-8-races",
+  "name": "Figure 8 Races",
+  "abstract": "Multi-class figure 8 racing against 9 AI opponents",
+  "author": "danielr",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "development",
+  "tags": [],
+  "version": "0.42",
+  "download": "https://www.beamng.com/resources/9689/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/9689/"
+  }
+}

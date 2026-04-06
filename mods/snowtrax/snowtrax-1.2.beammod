@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "snowtrax",
+  "name": "Snowtrax",
+  "abstract": "Snowy map with multiple tracks",
+  "author": "Butch13 Gaming",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "development",
+  "tags": [],
+  "version": "1.2",
+  "download": "https://www.beamng.com/resources/34733/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/34733/"
+  }
+}

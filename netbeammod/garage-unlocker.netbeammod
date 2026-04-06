@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "garage-unlocker",
+  "$kref": "#/beamng/9308",
+  "name": "Garage Unlocker",
+  "abstract": "Unlocks two official maps",
+  "author": "Alex_Farmer557",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

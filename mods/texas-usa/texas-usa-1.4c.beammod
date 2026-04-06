@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "texas-usa",
+  "name": "Texas, USA",
+  "abstract": "Farmlands and forests of Texas",
+  "author": "themanhacc",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.4c",
+  "download": "https://www.beamng.com/resources/31200/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/31200/"
+  }
+}

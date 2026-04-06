@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "hirochi-rainway",
+  "$kref": "#/beamng/22865",
+  "name": "Hirochi Rainway",
+  "abstract": "Hirochi Raceway, but wet!",
+  "author": "Bentonchiez",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

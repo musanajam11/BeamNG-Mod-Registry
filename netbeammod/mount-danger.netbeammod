@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "mount-danger",
+  "$kref": "#/beamng/13490",
+  "name": "Mount Danger",
+  "abstract": "Drive as fast as you dare",
+  "author": "Insanegaz",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

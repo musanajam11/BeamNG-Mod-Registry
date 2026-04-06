@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "dangerous-roads",
+  "$kref": "#/beamng/27319",
+  "name": "Dangerous Roads",
+  "abstract": "A Dangerous Road Challenge Map",
+  "author": "Spencer Johnson",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "beamng-sega-rally-srforest-map-mp-ready",
+  "$kref": "#/beamng/32690",
+  "name": "BeamNG Sega Rally SrForest Map (MP Ready)",
+  "abstract": "Sega Rally '95 remake + bonus openworld customs PART 2",
+  "author": "Dsden",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

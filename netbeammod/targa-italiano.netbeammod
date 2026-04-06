@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "targa-italiano",
+  "$kref": "#/beamng/35216",
+  "name": "Targa Italiano",
+  "abstract": "Tribute to the famous Targa Florio",
+  "author": "Jaileh",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "crawler-heaven",
+  "$kref": "#/beamng/27837",
+  "name": "Crawler Heaven",
+  "abstract": "Crawler Roleplay?",
+  "author": "LuxurySkeleton",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

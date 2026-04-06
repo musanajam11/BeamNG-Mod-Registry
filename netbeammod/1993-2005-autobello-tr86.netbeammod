@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "1993-2005-autobello-tr86",
+  "$kref": "#/beamng/37460",
+  "name": "1993-2005 Autobello TR86",
+  "abstract": "Medium Duty Truck by Autobello",
+  "author": "Schmitti",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

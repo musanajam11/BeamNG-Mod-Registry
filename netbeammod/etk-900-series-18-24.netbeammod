@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "etk-900-series-18-24",
+  "$kref": "#/beamng/34546",
+  "name": "ETK 900-Series '18-'24",
+  "abstract": "Distilled Excellence.",
+  "author": "Vibestation 5",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

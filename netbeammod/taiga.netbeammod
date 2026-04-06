@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "taiga",
+  "$kref": "#/beamng/29554",
+  "name": "Taiga",
+  "abstract": "Quiet place in the eastern part of Russia.",
+  "author": "Sherman_",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

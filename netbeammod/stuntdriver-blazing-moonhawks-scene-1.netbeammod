@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "stuntdriver-blazing-moonhawks-scene-1",
+  "$kref": "#/beamng/32492",
+  "name": "STUNTDRIVER - Blazing Moonhawks (Scene 1)",
+  "abstract": "Stuntman style missions, fully voice acted with scripted events.",
+  "author": "jamessimo",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": []
+}

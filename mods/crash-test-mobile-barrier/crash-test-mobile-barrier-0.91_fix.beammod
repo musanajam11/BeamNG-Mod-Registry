@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "crash-test-mobile-barrier",
+  "name": "Crash Test Mobile Barrier",
+  "abstract": "A mobile barrier used for crash test",
+  "author": "03ff",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "0.91_fix",
+  "download": "https://www.beamng.com/resources/35131/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/35131/"
+  }
+}

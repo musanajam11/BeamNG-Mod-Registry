@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "christmas-endurance",
+  "$kref": "#/beamng/29970",
+  "name": "Christmas Endurance",
+  "abstract": "A Christmas Endurance Course",
+  "author": "Spencer Johnson",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

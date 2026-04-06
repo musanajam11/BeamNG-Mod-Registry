@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "band1t-county",
+  "name": "Band1t County",
+  "abstract": "Endless Driving...",
+  "author": "B00tyBand1t",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.91",
+  "download": "https://www.beamng.com/resources/36120/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/36120/"
+  }
+}

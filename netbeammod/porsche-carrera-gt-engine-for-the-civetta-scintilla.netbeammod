@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "porsche-carrera-gt-engine-for-the-civetta-scintilla",
+  "$kref": "#/beamng/31598",
+  "name": "Porsche Carrera GT Engine for the Civetta Scintilla",
+  "abstract": "Listen to the beautiful porsche carrera gt v10 engine but in the scintilla",
+  "author": "mythakreep",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

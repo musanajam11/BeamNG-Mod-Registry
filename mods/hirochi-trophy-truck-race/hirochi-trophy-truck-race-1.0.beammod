@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "hirochi-trophy-truck-race",
+  "name": "Hirochi Trophy truck race",
+  "abstract": "An Ai race around a figure 8 track",
+  "author": "SufixR_Dulz",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "development",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/27300/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/27300/"
+  }
+}

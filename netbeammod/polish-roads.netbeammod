@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "polish-roads",
+  "$kref": "#/beamng/5846",
+  "name": "Polish Roads",
+  "abstract": "Semi-realistic map based on Poland",
+  "author": "mcct",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

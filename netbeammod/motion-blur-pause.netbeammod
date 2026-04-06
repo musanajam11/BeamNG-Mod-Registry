@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "motion-blur-pause",
+  "$kref": "#/beamng/34778",
+  "name": "Motion Blur Pause",
+  "abstract": "Pauses the game while keeping motion blur active",
+  "author": "snoutie",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

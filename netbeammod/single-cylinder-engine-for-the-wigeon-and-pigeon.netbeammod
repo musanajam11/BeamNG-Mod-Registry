@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "single-cylinder-engine-for-the-wigeon-and-pigeon",
+  "$kref": "#/beamng/18761",
+  "name": "Single Cylinder engine for the wigeon and pigeon",
+  "abstract": "fuel efficient 1 banger",
+  "author": "devo343",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": []
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "isola-rocciosa",
+  "name": "Isola Rocciosa",
+  "abstract": "A peaceful italian island",
+  "author": "Bifdro",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.3",
+  "download": "https://www.beamng.com/resources/24863/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/24863/"
+  }
+}

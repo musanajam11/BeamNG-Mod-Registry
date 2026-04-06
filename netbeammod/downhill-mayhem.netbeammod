@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "downhill-mayhem",
+  "$kref": "#/beamng/26184",
+  "name": "Downhill Mayhem",
+  "abstract": "The Ultimate Downhill Destruction Map",
+  "author": "Spencer Johnson",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

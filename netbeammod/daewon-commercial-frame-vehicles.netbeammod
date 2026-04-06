@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "daewon-commercial-frame-vehicles",
+  "$kref": "#/beamng/30008",
+  "name": "Daewon Commercial Frame Vehicles",
+  "abstract": "Heavy commercial trucks and buses",
+  "author": "Urbanmaid",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

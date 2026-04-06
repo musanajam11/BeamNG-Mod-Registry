@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "formulabee-super-sport",
+  "$kref": "#/beamng/29019",
+  "name": "formulabee super sport",
+  "abstract": "wobbly wheels",
+  "author": "meins",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "development",
+  "tags": []
+}

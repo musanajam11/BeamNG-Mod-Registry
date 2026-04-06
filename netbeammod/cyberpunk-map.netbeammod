@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "cyberpunk-map",
+  "$kref": "#/beamng/22517",
+  "name": "Cyberpunk Map",
+  "abstract": "A Detailed Futuristic Map",
+  "author": "Spencer Johnson",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

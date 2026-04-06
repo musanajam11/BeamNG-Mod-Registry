@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "lucas-oil-speedway",
+  "$kref": "#/beamng/22448",
+  "name": "Lucas Oil Speedway",
+  "abstract": "The off-road short course in Wheatland, MO",
+  "author": "nachtstiel",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "utah-ultracross-ultra-4-short-course",
+  "$kref": "#/beamng/33802",
+  "name": "Utah Ultracross Ultra 4 Short Course",
+  "abstract": "Ultra 4 Racing Meets Nitrocross. Jumps, Rocks, Berms, Whoops, Desert.",
+  "author": "ATypicalWhiteGuy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

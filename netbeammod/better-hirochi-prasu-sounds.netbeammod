@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "better-hirochi-prasu-sounds",
+  "$kref": "#/beamng/23236",
+  "name": "Better Hirochi Prasu sounds",
+  "abstract": "very gut!",
+  "author": "_blazio_",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

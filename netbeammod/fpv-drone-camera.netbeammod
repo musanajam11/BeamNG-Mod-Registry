@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "fpv-drone-camera",
+  "$kref": "#/beamng/24486",
+  "name": "FPV Drone Camera",
+  "abstract": "Fully configurable realistic fpv drone (camera mode)",
+  "author": "sug4",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

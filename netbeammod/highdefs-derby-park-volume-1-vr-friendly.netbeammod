@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "highdefs-derby-park-volume-1-vr-friendly",
+  "$kref": "#/beamng/16686",
+  "name": "HighDef's Derby Park Volume 1 (VR Friendly)",
+  "abstract": "A potato PC friendly derby venue with race missions",
+  "author": "HighDef",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

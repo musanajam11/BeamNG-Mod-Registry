@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "ridiculous-engines-and-other-goofy-parts",
+  "$kref": "#/beamng/35255",
+  "name": "Ridiculous Engines and Other Goofy Parts",
+  "abstract": "SCREW IT, IT'S BACK.",
+  "author": "Pfeldon The Furry",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "development",
+  "tags": []
+}

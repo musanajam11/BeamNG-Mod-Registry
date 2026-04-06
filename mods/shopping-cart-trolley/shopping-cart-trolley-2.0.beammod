@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "shopping-cart-trolley",
+  "name": "Shopping Cart/Trolley",
+  "abstract": "Transport your merchandise",
+  "author": "Asgalager",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "2.0",
+  "download": "https://www.beamng.com/resources/3760/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/3760/"
+  }
+}

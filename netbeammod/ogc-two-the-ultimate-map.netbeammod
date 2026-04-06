@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "ogc-two-the-ultimate-map",
+  "$kref": "#/beamng/30908",
+  "name": "OGC TWO - The Ultimate Map",
+  "abstract": "A literal combination of West Coast, East Coast, Utah & Jungle Rock Island",
+  "author": "Online90",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

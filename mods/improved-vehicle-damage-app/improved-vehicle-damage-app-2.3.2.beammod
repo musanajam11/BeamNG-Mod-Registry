@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "improved-vehicle-damage-app",
+  "name": "Improved Vehicle Damage App",
+  "abstract": "A better version of BeamNG’s vehicle damage app",
+  "author": "SpaceGood",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.3.2",
+  "download": "https://www.beamng.com/resources/36692/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/36692/"
+  }
+}

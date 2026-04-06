@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "1981-daikisei-katai-1000",
+  "$kref": "#/beamng/32305",
+  "name": "1981 Daikisei Katai/1000",
+  "abstract": "\"Picks up five times more women than a Civetta\"",
+  "author": "Endxrr",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

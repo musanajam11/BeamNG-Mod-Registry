@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "1995-ibishu-kashira-gen-2",
+  "$kref": "#/beamng/8319",
+  "name": "1995 Ibishu Kashira (Gen 2)",
+  "abstract": "The compact minivan that became a worldwide phenomenon!",
+  "author": "Re:Z_IA",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

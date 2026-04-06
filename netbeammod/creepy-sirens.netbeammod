@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "creepy-sirens",
+  "$kref": "#/beamng/19082",
+  "name": "Creepy Sirens!",
+  "abstract": "Creepy Sirens for your cars!",
+  "author": "j-beam infrastructure",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": []
+}

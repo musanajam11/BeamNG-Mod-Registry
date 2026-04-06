@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "powerups-the-police-military-ordnance-update",
+  "$kref": "#/beamng/33601",
+  "name": "Powerups. The Police/Military Ordnance Update!",
+  "abstract": "Simply put.. Powerups!",
+  "author": "Neverless",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "development",
+  "tags": []
+}

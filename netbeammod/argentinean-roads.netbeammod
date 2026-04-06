@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "argentinean-roads",
+  "$kref": "#/beamng/31093",
+  "name": "Argentinean Roads",
+  "abstract": "Rutas Argentinas, but bigger and better.",
+  "author": "marleystruli",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

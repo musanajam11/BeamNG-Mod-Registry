@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "start-up-and-warning-chime-pack",
+  "name": "Start Up and Warning Chime Pack",
+  "abstract": "Adds Startup and Warning Chimes to BeamNG's Vehicles",
+  "author": "StrictBark",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.5.1",
+  "download": "https://www.beamng.com/resources/35948/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/35948/"
+  }
+}

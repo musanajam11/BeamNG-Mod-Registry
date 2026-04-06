@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "aw-goal",
+  "$kref": "#/beamng/27004",
+  "name": "AW Goal",
+  "abstract": "Boring German Robust Car!",
+  "author": "barabash",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

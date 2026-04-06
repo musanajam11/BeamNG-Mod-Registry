@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "pure-sands",
+  "$kref": "#/beamng/30873",
+  "name": "Pure Sands",
+  "abstract": "Perfect for Some Off-road Fun",
+  "author": "Bifdro",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

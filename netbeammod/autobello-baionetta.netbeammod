@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "autobello-baionetta",
+  "$kref": "#/beamng/35826",
+  "name": "Autobello Baionetta",
+  "abstract": "Italian Bastion with a Civetta heart",
+  "author": "ValN84",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "development",
+  "tags": []
+}

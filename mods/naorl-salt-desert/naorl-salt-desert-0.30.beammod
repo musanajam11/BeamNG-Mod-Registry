@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "naorl-salt-desert",
+  "name": "Naorl Salt Desert",
+  "abstract": "Huge salt desert for speed runners",
+  "author": "xnx1985",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "0.30",
+  "download": "https://www.beamng.com/resources/27980/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/27980/"
+  }
+}

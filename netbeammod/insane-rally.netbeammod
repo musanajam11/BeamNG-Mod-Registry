@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "insane-rally",
+  "$kref": "#/beamng/23400",
+  "name": "Insane Rally",
+  "abstract": "Enjoy!",
+  "author": "Insanegaz",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "grant-gooseneck-wedge-car-trailer",
+  "name": "Grant Gooseneck Wedge Car Trailer",
+  "abstract": "35 and 50ft gooseneck auto hauler",
+  "author": "RenAzuma66",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.2b",
+  "download": "https://www.beamng.com/resources/30917/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/30917/"
+  }
+}

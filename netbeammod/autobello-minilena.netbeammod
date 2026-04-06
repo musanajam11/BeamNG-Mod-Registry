@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "autobello-minilena",
+  "$kref": "#/beamng/27413",
+  "name": "Autobello Minilena",
+  "abstract": "Italian car for Italian roads.",
+  "author": "azshtx253",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "development",
+  "tags": []
+}

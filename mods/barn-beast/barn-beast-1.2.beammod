@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "barn-beast",
+  "name": "Barn Beast",
+  "abstract": "A backyard colletion of vehicles based off the pigeon frame.",
+  "author": "Shadow_Clan1965",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.2",
+  "download": "https://www.beamng.com/resources/33926/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/33926/"
+  }
+}

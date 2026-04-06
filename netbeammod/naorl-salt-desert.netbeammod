@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "naorl-salt-desert",
+  "$kref": "#/beamng/27980",
+  "name": "Naorl Salt Desert",
+  "abstract": "Huge salt desert for speed runners",
+  "author": "xnx1985",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

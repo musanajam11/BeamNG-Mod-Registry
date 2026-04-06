@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "the-hawk-story-campaign",
+  "name": "The Hawk (Story Campaign)",
+  "abstract": "Retro-styled Police Procedural",
+  "author": "Occam&#039;s Razer",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.35",
+  "download": "https://www.beamng.com/resources/32352/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/32352/"
+  }
+}

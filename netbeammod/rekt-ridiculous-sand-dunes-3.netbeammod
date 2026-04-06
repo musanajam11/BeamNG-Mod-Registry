@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "rekt-ridiculous-sand-dunes-3",
+  "$kref": "#/beamng/35738",
+  "name": "REKT Ridiculous Sand Dunes 3",
+  "abstract": "Stupid levels of sand dunes and a long BAJA course.",
+  "author": "Randy Kelly Jr (REK)",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

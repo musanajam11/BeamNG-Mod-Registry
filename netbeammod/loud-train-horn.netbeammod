@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "loud-train-horn",
+  "$kref": "#/beamng/31913",
+  "name": "Loud Train Horn",
+  "abstract": "A very loud train horn, used in many US trucks",
+  "author": "Red_Beast77",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": []
+}

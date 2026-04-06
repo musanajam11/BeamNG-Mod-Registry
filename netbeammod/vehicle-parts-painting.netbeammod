@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "vehicle-parts-painting",
+  "$kref": "#/beamng/35874",
+  "name": "Vehicle Parts Painting",
+  "abstract": "Let's paint any vehicle part with any color—previously possible only in Career mode",
+  "author": "KRtekTM",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": []
+}

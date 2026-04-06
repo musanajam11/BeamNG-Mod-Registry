@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "giant-road-roller",
+  "name": "Giant road roller",
+  "abstract": "Giant road roller weighing 1334 tons",
+  "author": "Wreck",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/29286/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/29286/"
+  }
+}

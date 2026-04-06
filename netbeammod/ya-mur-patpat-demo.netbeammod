@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "ya-mur-patpat-demo",
+  "$kref": "#/beamng/36121",
+  "name": "Yağmur Patpat [DEMO]",
+  "abstract": "Single cylinder, load-carrying patpat",
+  "author": "XosKadir",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "development",
+  "tags": []
+}

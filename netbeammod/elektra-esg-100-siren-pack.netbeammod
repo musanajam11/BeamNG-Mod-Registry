@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "elektra-esg-100-siren-pack",
+  "$kref": "#/beamng/18201",
+  "name": "Elektra ESG 100 Siren Pack",
+  "abstract": "Elektra ESG 100 Siren",
+  "author": "jordaniwick",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

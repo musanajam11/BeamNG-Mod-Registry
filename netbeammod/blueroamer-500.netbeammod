@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "blueroamer-500",
+  "$kref": "#/beamng/27172",
+  "name": "BlueRoamer 500",
+  "abstract": "if the Gambler 500 had a bigger budget",
+  "author": "fillman86",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "stable",
+  "tags": []
+}

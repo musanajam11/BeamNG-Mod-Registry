@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "american-island",
+  "$kref": "#/beamng/31863",
+  "name": "American Island",
+  "abstract": "American Island",
+  "author": "Samusko",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "development",
+  "tags": []
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "outlaw-figure-8-car",
+  "name": "Outlaw Figure 8 Car",
+  "abstract": "Figure8cars",
+  "author": "OneManCreations",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.05",
+  "download": "https://www.beamng.com/resources/36290/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/36290/"
+  }
+}

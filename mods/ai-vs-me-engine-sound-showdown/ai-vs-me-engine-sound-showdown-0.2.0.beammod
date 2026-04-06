@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "ai-vs-me-engine-sound-showdown",
+  "name": "AI vs Me: Engine Sound Showdown",
+  "abstract": "AI-generated & human-made sounds - let’s listen and compare!(+add more engines)",
+  "author": "Tsukatan",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": [],
+  "version": "0.2.0",
+  "download": "https://www.beamng.com/resources/35797/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/35797/"
+  }
+}

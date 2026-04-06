@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "backyard-kart",
+  "name": "Backyard Kart",
+  "abstract": "A backyard-built kart",
+  "author": "nachtstiel",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.17.6",
+  "download": "https://www.beamng.com/resources/23416/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/23416/"
+  }
+}

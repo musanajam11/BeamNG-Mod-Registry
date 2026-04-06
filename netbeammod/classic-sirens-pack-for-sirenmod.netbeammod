@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "classic-sirens-pack-for-sirenmod",
+  "$kref": "#/beamng/26380",
+  "name": "Classic Sirens Pack for Sirenmod",
+  "abstract": "1980s Revival.",
+  "author": "OldFullZaisCudnaem",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "testing",
+  "tags": []
+}

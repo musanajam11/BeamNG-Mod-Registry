@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "code-3-z3-matrix-siren",
+  "name": "Code 3 Z3 Matrix Siren",
+  "abstract": "Code 3 Z3 Matrix Siren for BeamNG.drive",
+  "author": "jordaniwick",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/19882/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/19882/"
+  }
+}

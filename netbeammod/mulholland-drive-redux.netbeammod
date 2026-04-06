@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "mulholland-drive-redux",
+  "$kref": "#/beamng/29795",
+  "name": "Mulholland Drive [Redux]",
+  "abstract": "A twisty mountain top road in Los Angeles traversing a mix of residential streets and scenic bends.",
+  "author": "MRVCSL80",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

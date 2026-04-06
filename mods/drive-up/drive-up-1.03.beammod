@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "drive-up",
+  "name": "Drive Up",
+  "abstract": "Just Drive Up.",
+  "author": "Spencer Johnson",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.03",
+  "download": "https://www.beamng.com/resources/27851/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/27851/"
+  }
+}

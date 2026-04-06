@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "vehicle-and-part-randomizer",
+  "name": "Vehicle And Part Randomizer",
+  "abstract": "Randomizer: Two in One",
+  "author": "_N_S_",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": [],
+  "version": "2",
+  "download": "https://www.beamng.com/resources/34361/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/34361/"
+  }
+}

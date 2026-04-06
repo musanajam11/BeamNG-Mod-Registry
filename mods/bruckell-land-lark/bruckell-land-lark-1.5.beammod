@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "bruckell-land-lark",
+  "name": "Bruckell  Land Lark",
+  "abstract": "Driver 2 Secret Car",
+  "author": "Mr. Twiglesworth",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.5",
+  "download": "https://www.beamng.com/resources/2147/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/2147/"
+  }
+}

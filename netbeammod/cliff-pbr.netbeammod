@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "cliff-pbr",
+  "$kref": "#/beamng/24375",
+  "name": "Cliff PBR",
+  "abstract": "The well-known Cliff in PBR with better lighting",
+  "author": "Bifdro",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

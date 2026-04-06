@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "belgian-sirens-pack",
+  "$kref": "#/beamng/26653",
+  "name": "Belgian Sirens Pack",
+  "abstract": "Some Belgian Sirens",
+  "author": "DJCVR",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "testing",
+  "tags": []
+}

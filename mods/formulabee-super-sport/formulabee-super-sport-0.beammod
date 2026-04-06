@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "formulabee-super-sport",
+  "name": "formulabee super sport",
+  "abstract": "wobbly wheels",
+  "author": "meins",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "development",
+  "tags": [],
+  "version": "0",
+  "download": "https://www.beamng.com/resources/29019/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/29019/"
+  }
+}

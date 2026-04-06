@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "alternate-etk-gas-i6-sounds",
+  "name": "Alternate ETK gas i6 sounds",
+  "abstract": "Alternate sound that give slightly more rasp like the BMWs",
+  "author": "AbyssWalker240",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.2",
+  "download": "https://www.beamng.com/resources/19275/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/19275/"
+  }
+}

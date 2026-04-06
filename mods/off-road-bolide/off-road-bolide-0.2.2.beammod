@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "off-road-bolide",
+  "name": "Off-Road Bolide",
+  "abstract": "An Off-Road setup with new parts!",
+  "author": "wolfox_M",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.2.2",
+  "download": "https://www.beamng.com/resources/28043/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/28043/"
+  }
+}

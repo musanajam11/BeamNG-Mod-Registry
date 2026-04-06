@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "ectro-kit-car-flat-8",
+  "$kref": "#/beamng/29923",
+  "name": "Ectro Kit Car flat 8",
+  "abstract": "based on the pickle",
+  "author": "fillman86",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

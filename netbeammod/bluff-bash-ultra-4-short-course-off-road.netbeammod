@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "bluff-bash-ultra-4-short-course-off-road",
+  "$kref": "#/beamng/30845",
+  "name": "Bluff Bash Ultra 4 Short Course Off Road",
+  "abstract": "A go fast ultra 4 ish style track, with a short course chunk in it.",
+  "author": "ATypicalWhiteGuy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

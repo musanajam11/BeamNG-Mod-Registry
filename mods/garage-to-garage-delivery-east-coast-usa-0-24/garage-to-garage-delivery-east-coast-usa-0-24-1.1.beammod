@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "garage-to-garage-delivery-east-coast-usa-0-24",
+  "name": "Garage to Garage Delivery - East Coast USA [0.24]",
+  "abstract": "Deliver random vehicles from A to B, no rush, just get there in one piece",
+  "author": "Ofetios",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.1",
+  "download": "https://www.beamng.com/resources/21276/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/21276/"
+  }
+}

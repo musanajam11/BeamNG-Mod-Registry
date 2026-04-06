@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "etk-k-series-2-2-with-a-hot-v8",
+  "name": "ETK K-Series 2+2 (with a Hot V8!)",
+  "abstract": "Now you can carry your friends in your K-Series!",
+  "author": "Angry_Bird",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0.2",
+  "download": "https://www.beamng.com/resources/35885/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/35885/"
+  }
+}

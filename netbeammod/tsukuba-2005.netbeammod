@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "tsukuba-2005",
+  "$kref": "#/beamng/28072",
+  "name": "Tsukuba 2005",
+  "abstract": "Race in one of the most popular japanese track's",
+  "author": "Ender34 #SaveTF2",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "mount-iwaki",
+  "name": "Mount Iwaki",
+  "abstract": "Real life reproduction of a Japanese mountain",
+  "author": "SPittlebug",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.10",
+  "download": "https://www.beamng.com/resources/33523/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/33523/"
+  }
+}

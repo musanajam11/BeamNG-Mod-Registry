@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "car-alarm",
+  "$kref": "#/beamng/34288",
+  "name": "Car Alarm",
+  "abstract": "It can scare away pigeons (The real ones and the car)",
+  "author": "Jack The Fox",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

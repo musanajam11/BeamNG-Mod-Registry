@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "covet-challenge",
+  "$kref": "#/beamng/24218",
+  "name": "Covet Challenge",
+  "abstract": "Conquer the Covets in this race scenario!",
+  "author": "Gamergull",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

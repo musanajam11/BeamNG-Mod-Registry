@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "restored-nurburgring-time-trials",
+  "name": "Restored Nurburgring Time Trials",
+  "abstract": "Bring back the time trial missions on the Nurburgring",
+  "author": "EddieHimself",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "0.99",
+  "download": "https://www.beamng.com/resources/26452/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/26452/"
+  }
+}

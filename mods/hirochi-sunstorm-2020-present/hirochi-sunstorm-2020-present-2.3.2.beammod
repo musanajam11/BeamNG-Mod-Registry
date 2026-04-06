@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "hirochi-sunstorm-2020-present",
+  "name": "Hirochi Sunstorm (2020-present)",
+  "abstract": "Hirochi's solution to the Scintilla swarms",
+  "author": "Angry_Bird",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "testing",
+  "tags": [],
+  "version": "2.3.2",
+  "download": "https://www.beamng.com/resources/27684/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/27684/"
+  }
+}

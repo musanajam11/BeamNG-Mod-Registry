@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "las-colinilas-de-vapor",
+  "$kref": "#/beamng/18460",
+  "name": "Las Colinilas de Vapor",
+  "abstract": "Overhaul of Ouerbacker's old desert map",
+  "author": "ltntai",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

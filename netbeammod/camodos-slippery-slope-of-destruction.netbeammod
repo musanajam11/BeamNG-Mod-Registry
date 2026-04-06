@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "camodos-slippery-slope-of-destruction",
+  "$kref": "#/beamng/29453",
+  "name": "Camodo's Slippery Slope of DESTRUCTION",
+  "abstract": "COLD. HARD. FUN.",
+  "author": "emery1212",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "point-elias-business-district-stalburg-infra",
+  "name": "Point Elias Business District, Stalburg (INFRA)",
+  "abstract": "A business district located in the centre of the city of Stalburg",
+  "author": "AgentMooshroom5",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.01",
+  "download": "https://www.beamng.com/resources/32402/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/32402/"
+  }
+}

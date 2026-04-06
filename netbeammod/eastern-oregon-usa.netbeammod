@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "eastern-oregon-usa",
+  "$kref": "#/beamng/27270",
+  "name": "Eastern Oregon, USA",
+  "abstract": "Oregon: Home of Gambler 500",
+  "author": "DaddelZeit",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

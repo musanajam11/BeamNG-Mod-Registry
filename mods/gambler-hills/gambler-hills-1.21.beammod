@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "gambler-hills",
+  "name": "Gambler Hills",
+  "abstract": "Let's Roam Around!",
+  "author": "Bifdro",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.21",
+  "download": "https://www.beamng.com/resources/27037/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/27037/"
+  }
+}

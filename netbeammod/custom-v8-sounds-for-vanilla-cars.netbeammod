@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "custom-v8-sounds-for-vanilla-cars",
+  "$kref": "#/beamng/31391",
+  "name": "custom v8 sounds for vanilla cars",
+  "abstract": "custom sounds for vanilla cars (will be expanded)",
+  "author": "burntnugget1223offical",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "a-1-demolition-derby-car-pack",
+  "$kref": "#/beamng/28522",
+  "name": "A-1 Demolition Derby Car Pack",
+  "abstract": "Regal Lumina Wendover Based Off IRL Demolition Derby cars. With Real Life Parts And Interior",
+  "author": "demolitionderbyA1",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

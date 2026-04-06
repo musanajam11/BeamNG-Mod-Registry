@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "gavril-d-series-trailers",
+  "$kref": "#/beamng/30135",
+  "name": "Gavril D-Series Trailers",
+  "abstract": "Cut off the rear end from a d-series and slapped a trailer tongue on it.",
+  "author": "E32k",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

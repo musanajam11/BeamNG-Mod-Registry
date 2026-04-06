@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "code-3-z3-rumbler-siren-pack",
+  "$kref": "#/beamng/17198",
+  "name": "Code 3 Z3 Rumbler Siren Pack",
+  "abstract": "Adds sirens from the well known manufacturer Code 3",
+  "author": "jordaniwick",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

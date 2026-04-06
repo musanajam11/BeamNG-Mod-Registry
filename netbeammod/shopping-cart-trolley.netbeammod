@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "shopping-cart-trolley",
+  "$kref": "#/beamng/3760",
+  "name": "Shopping Cart/Trolley",
+  "abstract": "Transport your merchandise",
+  "author": "Asgalager",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

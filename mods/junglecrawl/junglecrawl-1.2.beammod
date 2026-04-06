@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "junglecrawl",
+  "name": "JungleCrawl",
+  "abstract": "jungle map with crazy wheeling, long trails, mud bogs and awesome views",
+  "author": "GHOST707",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.2",
+  "download": "https://www.beamng.com/resources/28486/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/28486/"
+  }
+}

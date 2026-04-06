@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "east-coast-usa-with-lights",
+  "name": "East Coast USA with Lights!",
+  "abstract": "East Coast USA with working street lights",
+  "author": "DerPedda",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "3.11",
+  "download": "https://www.beamng.com/resources/15251/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/15251/"
+  }
+}

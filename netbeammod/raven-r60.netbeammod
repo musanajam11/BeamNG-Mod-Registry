@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "raven-r60",
+  "$kref": "#/beamng/6875",
+  "name": "Raven R60",
+  "abstract": "Family hatchback / Rally Car / Electric Race Car / Off-Roader / etc..",
+  "author": "aljowen",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "development",
+  "tags": []
+}

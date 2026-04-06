@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "stalburg-industrial-district-infra",
+  "$kref": "#/beamng/32408",
+  "name": "Stalburg Industrial District (INFRA)",
+  "abstract": "A run down industrial district in the Scandinavian city of Stalburg.",
+  "author": "AgentMooshroom5",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "time-trial-for-rutas-argentinas-part-01",
+  "$kref": "#/beamng/25691",
+  "name": "Time Trial for Rutas Argentinas Part 01",
+  "abstract": "Part 01 with 5 circuits, 3 rally and 1 gymkhana",
+  "author": "omathingo",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

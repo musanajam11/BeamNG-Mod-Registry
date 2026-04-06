@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "junior-rock-island",
+  "$kref": "#/beamng/18027",
+  "name": "Junior Rock Island",
+  "abstract": "Volcanic island in the Pacific",
+  "author": "KyotoBlissard",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

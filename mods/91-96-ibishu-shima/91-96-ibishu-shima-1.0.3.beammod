@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "91-96-ibishu-shima",
+  "name": "'91~'96 Ibishu Shima",
+  "abstract": "The lil Kei that could!",
+  "author": "Baconzez",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0.3",
+  "download": "https://www.beamng.com/resources/30962/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/30962/"
+  }
+}

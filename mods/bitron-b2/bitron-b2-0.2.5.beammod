@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "bitron-b2",
+  "name": "Bitron B2",
+  "abstract": "A 2010's french hatchback",
+  "author": "thomatoes50",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.2.5",
+  "download": "https://www.beamng.com/resources/2068/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/2068/"
+  }
+}

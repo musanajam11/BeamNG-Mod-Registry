@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "wentward-fusion",
+  "$kref": "#/beamng/36438",
+  "name": "Wentward Fusion",
+  "abstract": "A modern Type-C School Bus.",
+  "author": "ponluxime",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

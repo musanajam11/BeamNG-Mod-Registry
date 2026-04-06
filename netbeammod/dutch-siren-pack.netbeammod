@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "dutch-siren-pack",
+  "$kref": "#/beamng/15511",
+  "name": "Dutch Siren Pack",
+  "abstract": "A moderately big dutch siren pack",
+  "author": "jordaniwick",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "mini-modified-tractor-puller",
+  "$kref": "#/beamng/36072",
+  "name": "Mini Modified Tractor Puller",
+  "abstract": "Mini Modified Tractor with 24 Configs, 10+ unique Engines, and more",
+  "author": "Youngblood",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

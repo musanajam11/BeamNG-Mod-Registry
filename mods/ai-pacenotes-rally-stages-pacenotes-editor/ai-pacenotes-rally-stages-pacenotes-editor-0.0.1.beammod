@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "ai-pacenotes-rally-stages-pacenotes-editor",
+  "name": "ai pacenotes: rally stages & pacenotes editor",
+  "abstract": "Rally pacenotes that can say anything.",
+  "author": "dirtwheel",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "0.0.1",
+  "download": "https://www.beamng.com/resources/27352/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/27352/"
+  }
+}

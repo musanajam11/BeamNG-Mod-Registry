@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "band1t-highway",
+  "$kref": "#/beamng/35612",
+  "name": "Band1t Highway",
+  "abstract": "Highway Dedicated to cutting up in BeamNG",
+  "author": "B00tyBand1t",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

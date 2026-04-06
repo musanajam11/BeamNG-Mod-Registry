@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "92-98-arima-monica-eldy-arima-celina-exia",
+  "name": "'92~'98 Arima Monica ELDY / Arima Celina EXiA",
+  "abstract": "Meet the new fashionable four-door hardtop sedans",
+  "author": "Docroswagge",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.6.2.2",
+  "download": "https://www.beamng.com/resources/27947/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/27947/"
+  }
+}

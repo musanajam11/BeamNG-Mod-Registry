@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "urbanlore-ibishu-lumiance-o32",
+  "$kref": "#/beamng/32001",
+  "name": "Urbanlore Ibishu Lumiance O32",
+  "abstract": "Includes Mod Building Guideline",
+  "author": "Urbanmaid",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

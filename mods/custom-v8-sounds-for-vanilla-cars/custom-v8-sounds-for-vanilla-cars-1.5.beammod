@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "custom-v8-sounds-for-vanilla-cars",
+  "name": "custom v8 sounds for vanilla cars",
+  "abstract": "custom sounds for vanilla cars (will be expanded)",
+  "author": "burntnugget1223offical",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": [],
+  "version": "1.5",
+  "download": "https://www.beamng.com/resources/31391/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/31391/"
+  }
+}

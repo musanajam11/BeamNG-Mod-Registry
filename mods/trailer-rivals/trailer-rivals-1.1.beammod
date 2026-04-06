@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "trailer-rivals",
+  "name": "Trailer Rivals",
+  "abstract": "Deliver the cargo before your opponent does!",
+  "author": "Gamergull",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.1",
+  "download": "https://www.beamng.com/resources/21233/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/21233/"
+  }
+}

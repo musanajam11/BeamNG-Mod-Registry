@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "iyb-off-road",
+  "$kref": "#/beamng/23780",
+  "name": "IYB Off-Road",
+  "abstract": "A High Quality Off-Road Map",
+  "author": "ItsYourBoi",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

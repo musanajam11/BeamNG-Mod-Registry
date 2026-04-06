@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "etk-k-series-etk-800-v8-engine-mod",
+  "name": "ETK K-Series & ETK 800 V8 Engine Mod",
+  "abstract": "4.5L V8 Engine for ETK K-Series & ETK 800",
+  "author": "Dartex",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.2.5",
+  "download": "https://www.beamng.com/resources/15965/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/15965/"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "hirochi-sunstorm-2020-present",
+  "$kref": "#/beamng/27684",
+  "name": "Hirochi Sunstorm (2020-present)",
+  "abstract": "Hirochi's solution to the Scintilla swarms",
+  "author": "Angry_Bird",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "testing",
+  "tags": []
+}

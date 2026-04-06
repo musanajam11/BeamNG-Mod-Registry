@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "nobeams-subscriber-special-map",
+  "name": "nobeam's subscriber special map",
+  "abstract": "Map Celebrating 1000 subscribers on youtube",
+  "author": "nobeam",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/30837/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/30837/"
+  }
+}

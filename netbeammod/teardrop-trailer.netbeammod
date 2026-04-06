@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "teardrop-trailer",
+  "$kref": "#/beamng/19620",
+  "name": "Teardrop Trailer",
+  "abstract": "For all your camping adventures!",
+  "author": "Littleturdlet",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

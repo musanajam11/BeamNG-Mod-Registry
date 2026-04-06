@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "rock-island",
+  "$kref": "#/beamng/32120",
+  "name": "Rock Island",
+  "abstract": "Small map using only the elements from the HighDef Template Map",
+  "author": "hachi86_",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

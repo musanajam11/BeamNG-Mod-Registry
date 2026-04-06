@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "downhill-destruction",
+  "$kref": "#/beamng/23263",
+  "name": "Downhill Destruction",
+  "abstract": "Destructive Downhill Playground",
+  "author": "Spencer Johnson",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "speed-warning-system",
+  "$kref": "#/beamng/36472",
+  "name": "Speed Warning System",
+  "abstract": "The speed warning system found in indian cars is now in beamng so you know your not speeding",
+  "author": "Mohin",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

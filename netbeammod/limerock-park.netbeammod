@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "limerock-park",
+  "$kref": "#/beamng/28484",
+  "name": "Limerock Park",
+  "abstract": "The Real Limerock Park",
+  "author": "MartZilka",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

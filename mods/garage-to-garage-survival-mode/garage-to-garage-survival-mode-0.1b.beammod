@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "garage-to-garage-survival-mode",
+  "name": "Garage to Garage Survival Mode",
+  "abstract": "5 levels of difficulty to make you give up :)",
+  "author": "Hash",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.1b",
+  "download": "https://www.beamng.com/resources/22707/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/22707/"
+  }
+}

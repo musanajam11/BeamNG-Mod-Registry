@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "fps-trapez",
+  "$kref": "#/beamng/21004",
+  "name": "FPS Trapez",
+  "abstract": "A family car for every budget",
+  "author": "Marf_",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "somerset-uk",
+  "$kref": "#/beamng/20323",
+  "name": "Somerset, UK",
+  "abstract": "Rolling hills and farmland through cider country",
+  "author": "el_ferrito",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

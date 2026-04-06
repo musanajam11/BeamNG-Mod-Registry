@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "beamng-driving-academy",
+  "name": "BeamNG Driving Academy",
+  "abstract": "Pack de configuration officiel de la BeamNG Driving Academy",
+  "author": "Nath_yt",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.2.1",
+  "download": "https://www.beamng.com/resources/26688/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/26688/"
+  }
+}

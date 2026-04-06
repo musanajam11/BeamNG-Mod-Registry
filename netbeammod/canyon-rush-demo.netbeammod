@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "canyon-rush-demo",
+  "$kref": "#/beamng/30875",
+  "name": "Canyon Rush Demo",
+  "abstract": "Utah desert playground, with Race Track, Drift Track, a Cityscape, Off-Road Trails with Jumps",
+  "author": "KAMUS_",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

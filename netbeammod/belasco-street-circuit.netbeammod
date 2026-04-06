@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "belasco-street-circuit",
+  "$kref": "#/beamng/28988",
+  "name": "Belasco Street Circuit",
+  "abstract": "Street Circuit With Kerbs, a Pitlane And two bridges over the highway",
+  "author": "RayBandz",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

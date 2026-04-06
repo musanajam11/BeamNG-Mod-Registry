@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "duhen-sunstrip",
+  "$kref": "#/beamng/2236",
+  "name": "Duhen Sunstrip",
+  "abstract": "An ancient covet from an ancient game.",
+  "author": "crashmaster",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

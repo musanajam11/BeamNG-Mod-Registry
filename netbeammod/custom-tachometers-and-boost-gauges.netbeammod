@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "custom-tachometers-and-boost-gauges",
+  "$kref": "#/beamng/17398",
+  "name": "Custom Tachometers and Boost Gauges",
+  "abstract": "5 new tachometer and forced induction apps for any vehicle",
+  "author": "Darthbob555",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "west-coast-usa-street-circuit-newer-version-available",
+  "name": "West Coast USA Street Circuit (Newer Version Available)",
+  "abstract": "Street Circuit Which Includes a Pitlane and Passes Twice over the Highway.",
+  "author": "RayBandz",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "0.1",
+  "download": "https://www.beamng.com/resources/28531/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/28531/"
+  }
+}

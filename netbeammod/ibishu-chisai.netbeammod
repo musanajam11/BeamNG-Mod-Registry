@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "ibishu-chisai",
+  "$kref": "#/beamng/12852",
+  "name": "Ibishu Chisai",
+  "abstract": "A little nugget that could",
+  "author": "Nekkit",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

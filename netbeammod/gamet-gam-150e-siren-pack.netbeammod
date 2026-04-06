@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "gamet-gam-150e-siren-pack",
+  "$kref": "#/beamng/20254",
+  "name": "Gamet GAM 150E siren pack",
+  "abstract": "The Gamet GAM 150E siren for BeamNG.drive",
+  "author": "jordaniwick",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

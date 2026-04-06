@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "timetrials-fo-rally-forest-map-7-tracks",
+  "name": "TimeTrials fo Rally Forest Map (7 Tracks)",
+  "abstract": "TimeTrials fo Rally Forest Map",
+  "author": "Irwencena",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "0.9",
+  "download": "https://www.beamng.com/resources/26197/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/26197/"
+  }
+}

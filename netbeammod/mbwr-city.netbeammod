@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "mbwr-city",
+  "$kref": "#/beamng/34330",
+  "name": "MBWR City",
+  "abstract": "City map from World Racing",
+  "author": "Grille",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

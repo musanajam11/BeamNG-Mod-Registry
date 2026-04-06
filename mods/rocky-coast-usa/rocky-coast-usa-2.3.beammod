@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "rocky-coast-usa",
+  "name": "Rocky Coast, USA",
+  "abstract": "An island located in the USA",
+  "author": "Bifdro",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.3",
+  "download": "https://www.beamng.com/resources/21673/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/21673/"
+  }
+}

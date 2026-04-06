@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "cliff-roads",
+  "name": "Cliff Roads",
+  "abstract": "Modified official Cliff map.",
+  "author": "Rewzu",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.5",
+  "download": "https://www.beamng.com/resources/1242/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/1242/"
+  }
+}

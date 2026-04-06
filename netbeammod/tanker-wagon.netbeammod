@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "tanker-wagon",
+  "$kref": "#/beamng/24153",
+  "name": "Tanker Wagon",
+  "abstract": "Cistern or tanker wagon for trains in Beamng",
+  "author": "zagdima",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

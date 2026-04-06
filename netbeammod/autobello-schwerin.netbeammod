@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "autobello-schwerin",
+  "$kref": "#/beamng/31032",
+  "name": "Autobello Schwerin",
+  "abstract": "Insanely fast exocar version of the Piccolina",
+  "author": "ebargza",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

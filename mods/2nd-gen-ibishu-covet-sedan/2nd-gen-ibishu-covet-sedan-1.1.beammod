@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "2nd-gen-ibishu-covet-sedan",
+  "name": "2nd gen Ibishu Covet Sedan",
+  "abstract": "New generation Ibishu Covet based on the 1st gen Pessima platform",
+  "author": "vReck",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.1",
+  "download": "https://www.beamng.com/resources/37357/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/37357/"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "iyb-seems-legit",
+  "$kref": "#/beamng/6519",
+  "name": "IYB Seems Legit",
+  "abstract": "Half of a pessima, but double the fun.",
+  "author": "ItsYourBoi",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

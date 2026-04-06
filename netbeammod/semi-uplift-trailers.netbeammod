@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "semi-uplift-trailers",
+  "$kref": "#/beamng/21542",
+  "name": "Semi Uplift Trailers",
+  "abstract": "Take a semi and saw it in half. Now you got trailers!",
+  "author": "essej818",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

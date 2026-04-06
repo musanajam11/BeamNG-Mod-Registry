@@ -11,6 +11,8 @@
  *   node scripts/inflate.mjs                    # Process all templates
  *   node scripts/inflate.mjs --dry-run           # Show what would be generated
  *   node scripts/inflate.mjs --id gta_radio      # Process specific mod only
+ *   node scripts/inflate.mjs --no-hash           # Skip download+hash (metadata only)
+ *   node scripts/inflate.mjs --cookie 'xf_session=abc123'  # BeamNG.com auth cookie
  *
  * Environment:
  *   GITHUB_TOKEN — optional, raises rate limit from 60/hr to 5000/hr
@@ -28,8 +30,11 @@ const MODS_DIR = join(ROOT, 'mods')
 // --- CLI ---
 const args = process.argv.slice(2)
 const DRY_RUN = args.includes('--dry-run')
+const NO_HASH = args.includes('--no-hash')
 const idFlagIdx = args.indexOf('--id')
 const FILTER_ID = idFlagIdx !== -1 ? args[idFlagIdx + 1] : null
+const cookieIdx = args.indexOf('--cookie')
+const BEAMNG_COOKIE = cookieIdx !== -1 ? args[cookieIdx + 1] : (process.env.BEAMNG_COOKIE || '')
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN || ''
 
 const GITHUB_HEADERS = {
@@ -76,7 +81,10 @@ async function fetchGitHubReleases(owner, repo) {
  * Returns an array of "release-like" objects compatible with the GitHub pipeline.
  */
 async function fetchBeamNGResource(resourceId) {
-  const headers = { 'User-Agent': 'BeamNG-Mod-Registry-Inflator/1.0' }
+  const headers = {
+    'User-Agent': 'BeamNG-Mod-Registry-Inflator/1.0',
+    ...(BEAMNG_COOKIE ? { 'Cookie': BEAMNG_COOKIE } : {})
+  }
 
   // Fetch the resource page to get current version + title
   const pageUrl = `https://www.beamng.com/resources/${resourceId}/`
@@ -158,13 +166,12 @@ function findAsset(release, template) {
  * Does NOT buffer the entire file in memory.
  */
 async function computeDownloadHash(url) {
-  const res = await fetch(url, {
-    headers: {
-      'User-Agent': 'BeamNG-Mod-Registry-Inflator/1.0',
-      ...(GITHUB_TOKEN ? { 'Authorization': `Bearer ${GITHUB_TOKEN}` } : {})
-    },
-    redirect: 'follow'
-  })
+  const hdrs = {
+    'User-Agent': 'BeamNG-Mod-Registry-Inflator/1.0',
+    ...(GITHUB_TOKEN ? { 'Authorization': `Bearer ${GITHUB_TOKEN}` } : {}),
+    ...(BEAMNG_COOKIE && url.includes('beamng.com') ? { 'Cookie': BEAMNG_COOKIE } : {})
+  }
+  const res = await fetch(url, { headers: hdrs, redirect: 'follow' })
   if (!res.ok) throw new Error(`Download failed: ${res.status} for ${url}`)
 
   const hash = createHash('sha256')
@@ -284,25 +291,29 @@ async function inflateTemplate(templatePath) {
       continue
     }
 
-    console.log(`  ⬇ ${version} — downloading ${asset.name} (${(asset.size / 1024 / 1024).toFixed(1)} MB) ...`)
-
-    // Download and hash
-    let hashResult
-    try {
-      hashResult = await computeDownloadHash(asset.browser_download_url)
-    } catch (err) {
-      console.error(`  ✗ ${version} download failed: ${err.message}`)
-      continue
-    }
-    console.log(`    SHA256: ${hashResult.sha256}`)
-
     // Build the .beammod metadata
     const beammod = {
       ...stripDollarFields(template),
       version,
       download: asset.browser_download_url,
-      download_hash: { sha256: hashResult.sha256 },
-      download_size: hashResult.size,
+    }
+
+    if (NO_HASH) {
+      console.log(`  ⏭ ${version} — skipping download (--no-hash)`)
+    } else {
+      console.log(`  ⬇ ${version} — downloading ${asset.name} (${(asset.size / 1024 / 1024).toFixed(1)} MB) ...`)
+
+      // Download and hash
+      let hashResult
+      try {
+        hashResult = await computeDownloadHash(asset.browser_download_url)
+      } catch (err) {
+        console.error(`  ✗ ${version} download failed: ${err.message}`)
+        continue
+      }
+      console.log(`    SHA256: ${hashResult.sha256}`)
+      beammod.download_hash = { sha256: hashResult.sha256 }
+      beammod.download_size = hashResult.size
     }
 
     // Set release_date from GitHub

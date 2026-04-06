@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "enhanced-chase-camera-fix-adaptive-height-refined-fov",
+  "$kref": "#/beamng/37135",
+  "name": "Enhanced Chase Camera FIX - Adaptive Height & Refined FOV",
+  "abstract": "A tweaked version of the Enhanced Chase Camera script. Fixes visibility issues on steep downhills/ra",
+  "author": "LevelCrow",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

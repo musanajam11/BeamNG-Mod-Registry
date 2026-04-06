@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "1980s-movies-police-siren-sound",
+  "$kref": "#/beamng/26270",
+  "name": "1980s Movies Police Siren Sound",
+  "abstract": "\"Hold on Flash we're in hot pursuit.\"",
+  "author": "OldFullZaisCudnaem",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

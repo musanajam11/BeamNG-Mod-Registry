@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "rayton-mr-platform-vehicle-pack",
+  "$kref": "#/beamng/28508",
+  "name": "Rayton MR Platform Vehicle Pack",
+  "abstract": "Revival",
+  "author": "Urbanmaid",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

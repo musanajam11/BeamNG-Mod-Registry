@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "i-r-o-k-ai-races",
+  "name": "I.R.O.K. AI Races",
+  "abstract": "Ten street courses, ten uniquely different vehicles balanced for competition.",
+  "author": "ToeBee",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.5",
+  "download": "https://www.beamng.com/resources/28895/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/28895/"
+  }
+}

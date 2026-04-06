@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "soliad-hightrail",
+  "$kref": "#/beamng/37521",
+  "name": "Soliad Hightrail",
+  "abstract": "versatile small SUV designed for adventure, work, and everyday driving",
+  "author": "Peanutz77",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "cherrier-tango-92-96",
+  "$kref": "#/beamng/33512",
+  "name": "Cherrier Tango 92' ~ 96'",
+  "abstract": "the smiley little frog :3",
+  "author": "Baconzez",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

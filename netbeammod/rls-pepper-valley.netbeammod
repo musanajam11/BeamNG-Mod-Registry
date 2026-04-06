@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "rls-pepper-valley",
+  "$kref": "#/beamng/31372",
+  "name": "RLS Pepper Valley",
+  "abstract": "A Johnson Valley Overhaul",
+  "author": "Raceless",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

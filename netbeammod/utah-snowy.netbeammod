@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "utah-snowy",
+  "$kref": "#/beamng/24083",
+  "name": "Utah snowy",
+  "abstract": "Snow skin for Utah 0.26 + scenarios",
+  "author": "Stuntman PS2",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "tadaptor",
+  "$kref": "#/beamng/17955",
+  "name": "Tadaptor",
+  "abstract": "Like a semi, but for cars!",
+  "author": "Steelorse",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

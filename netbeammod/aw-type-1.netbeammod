@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "aw-type-1",
+  "$kref": "#/beamng/36664",
+  "name": "AW Type 1",
+  "abstract": "Small family car from 1963",
+  "author": "MrX13415",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

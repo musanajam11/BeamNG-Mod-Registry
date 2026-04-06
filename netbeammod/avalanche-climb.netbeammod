@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "avalanche-climb",
+  "$kref": "#/beamng/3601",
+  "name": "Avalanche Climb",
+  "abstract": "A hill to climb and a bunch of scenarios that pit you against cascading objects.",
+  "author": "HighDef",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "development",
+  "tags": []
+}

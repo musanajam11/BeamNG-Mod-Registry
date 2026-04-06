@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "ibishu-mirena-2000-2010",
+  "$kref": "#/beamng/31619",
+  "name": "Ibishu Mirena (2000-2010)",
+  "abstract": "A sturdy 2000s sport-luxury sedan",
+  "author": "Angry_Bird",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

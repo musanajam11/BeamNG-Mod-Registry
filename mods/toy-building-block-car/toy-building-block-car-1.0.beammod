@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "toy-building-block-car",
+  "name": "Toy Building Block Car",
+  "abstract": "Full size car made of toy building blocks of a famous brand. Great customization and destruction!",
+  "author": "Agent_Y",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "development",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/26315/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/26315/"
+  }
+}

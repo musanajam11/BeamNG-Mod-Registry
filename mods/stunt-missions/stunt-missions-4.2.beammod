@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "stunt-missions",
+  "name": "Stunt Missions",
+  "abstract": "34 scenarios inspired by Stuntman video game (New Scenario: Chuck, Texas Ranger)",
+  "author": "oskar20001_cadillac",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "development",
+  "tags": [],
+  "version": "4.2",
+  "download": "https://www.beamng.com/resources/23504/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/23504/"
+  }
+}

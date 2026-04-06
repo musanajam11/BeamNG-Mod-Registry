@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "rockyroadstx_remastered",
+  "name": "RockyRoadsTX_Remastered",
+  "abstract": "A funny little town near the coast of Texas.",
+  "author": "VR_D0GE",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "development",
+  "tags": [],
+  "version": "2.9",
+  "download": "https://www.beamng.com/resources/28113/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/28113/"
+  }
+}

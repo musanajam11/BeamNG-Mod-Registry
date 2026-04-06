@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "ambient-sounds",
+  "$kref": "#/beamng/34306",
+  "name": "Ambient Sounds",
+  "abstract": "This mod adds wind and bird chirping noises",
+  "author": "Jack The Fox",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

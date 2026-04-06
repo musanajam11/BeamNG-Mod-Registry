@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "speedkraft-micro-classic",
+  "name": "Speedkraft Micro Classic",
+  "abstract": "Small scale entry level race car",
+  "author": "TrackpadUser",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.01",
+  "download": "https://www.beamng.com/resources/33521/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/33521/"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "1982-hirochi-rush-demo",
+  "$kref": "#/beamng/28903",
+  "name": "1982 Hirochi RUSH Demo",
+  "abstract": "Demo version of the Hirochi RUSH",
+  "author": "LJ74",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

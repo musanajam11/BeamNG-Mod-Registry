@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "1960-gavril-dynamo-demo",
+  "name": "1960 Gavril Dynamo Demo",
+  "abstract": "Representing the most stylish era of cars",
+  "author": "LJ74",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.2",
+  "download": "https://www.beamng.com/resources/31096/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/31096/"
+  }
+}

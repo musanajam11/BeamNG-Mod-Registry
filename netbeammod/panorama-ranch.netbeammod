@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "panorama-ranch",
+  "$kref": "#/beamng/33497",
+  "name": "Panorama Ranch",
+  "abstract": "60s Racing Circuit with the dangers and thrills you expect.",
+  "author": "Track Broseff",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

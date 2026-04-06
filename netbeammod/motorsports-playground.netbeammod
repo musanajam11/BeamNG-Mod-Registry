@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "motorsports-playground",
+  "$kref": "#/beamng/21834",
+  "name": "Motorsports Playground",
+  "abstract": "A Comprehensive Motorsports Paradise",
+  "author": "emery1212",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

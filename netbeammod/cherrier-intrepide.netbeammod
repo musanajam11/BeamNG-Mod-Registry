@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "cherrier-intrepide",
+  "$kref": "#/beamng/28580",
+  "name": "Cherrier Intrepide",
+  "abstract": "The Aussie Cherrier",
+  "author": "JustRobertOFF",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

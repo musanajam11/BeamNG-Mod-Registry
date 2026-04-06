@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "beam-regenerator",
+  "$kref": "#/beamng/35907",
+  "name": "Beam Regenerator",
+  "abstract": "An app that allows you to fix your vehicle after a crash",
+  "author": "[TWC] Scorp",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": []
+}

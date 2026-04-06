@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "jade-mountain",
+  "name": "Jade Mountain",
+  "abstract": "jade",
+  "author": "Hushaboom",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.0.5",
+  "download": "https://www.beamng.com/resources/34279/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/34279/"
+  }
+}

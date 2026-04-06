@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "stop-that-car-high-speed-interception-missions",
+  "$kref": "#/beamng/34042",
+  "name": "Stop That Car! – High-Speed Interception Missions",
+  "abstract": "This mod adds 3 \"Stop the Car\" missions made with the mission editor",
+  "author": "Jack The Fox",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

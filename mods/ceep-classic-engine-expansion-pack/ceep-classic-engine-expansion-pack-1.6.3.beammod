@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "ceep-classic-engine-expansion-pack",
+  "name": "[CEEP] Classic Engine Expansion Pack",
+  "abstract": "Expanded Customization for Classic Engines & many New Engines + Extra Body Parts & Liveries",
+  "author": "JΛVI",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.6.3",
+  "download": "https://www.beamng.com/resources/29161/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/29161/"
+  }
+}

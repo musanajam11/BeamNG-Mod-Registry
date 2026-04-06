@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "blackpool-sandshark",
+  "$kref": "#/beamng/20918",
+  "name": "Blackpool Sandshark",
+  "abstract": "Soar through sandy dunes like a... shark",
+  "author": "Sithhy™",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

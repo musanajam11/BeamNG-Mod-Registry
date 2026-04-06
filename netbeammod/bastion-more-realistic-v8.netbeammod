@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "bastion-more-realistic-v8",
+  "$kref": "#/beamng/21104",
+  "name": "Bastion More Realistic V8",
+  "abstract": "Additional V8 Engine with a real V8 sound",
+  "author": "essej818",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "shipyard-stalburg-infra",
+  "$kref": "#/beamng/32403",
+  "name": "Shipyard, Stalburg (INFRA)",
+  "abstract": "An industrial port located in the heart of Stalburg",
+  "author": "AgentMooshroom5",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

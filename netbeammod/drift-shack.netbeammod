@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "drift-shack",
+  "$kref": "#/beamng/28804",
+  "name": "Drift Shack",
+  "abstract": "Small but fun drift track",
+  "author": "MartZilka",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

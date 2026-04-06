@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "dk28-wujskie-tyrawa-wo-oska-podkarpackie-poland",
+  "$kref": "#/beamng/36339",
+  "name": "DK28 Wujskie - Tyrawa Wołoska, Podkarpackie, Poland",
+  "abstract": "A part of a National Road 28 from Wujskie to Tyrawa Wołoska near Sanok in Podkarpackie Voivoideship",
+  "author": "Car_Killer",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

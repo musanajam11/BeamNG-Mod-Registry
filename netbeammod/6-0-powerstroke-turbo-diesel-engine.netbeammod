@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "6-0-powerstroke-turbo-diesel-engine",
+  "$kref": "#/beamng/21279",
+  "name": "6.0 Powerstroke Turbo Diesel Engine",
+  "abstract": "A very clean sounding 6.0 Power Stroke Engine & Sound.",
+  "author": "BaileyLSX5",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": []
+}

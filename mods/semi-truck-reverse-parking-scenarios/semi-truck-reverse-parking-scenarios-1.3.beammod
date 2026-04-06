@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "semi-truck-reverse-parking-scenarios",
+  "name": "Semi-truck reverse parking scenarios",
+  "abstract": "Four scenarios where you will need to reverse park a semi-truck trailer carefully.",
+  "author": "thinkfast999",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.3",
+  "download": "https://www.beamng.com/resources/29645/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/29645/"
+  }
+}

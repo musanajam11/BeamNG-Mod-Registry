@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "capsule",
+  "name": "Capsule",
+  "abstract": "A capsule-shaped double-decker (and single-decker) bus",
+  "author": "CYCJoseph",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "3.8.2",
+  "download": "https://www.beamng.com/resources/20933/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/20933/"
+  }
+}

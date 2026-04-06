@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "hungarian-police-siren-pack",
+  "name": "Hungarian Police Siren Pack",
+  "abstract": "This mod adds three siren sounds and one horn sound",
+  "author": "jordaniwick",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/17602/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/17602/"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "techeyys-pessima",
+  "$kref": "#/beamng/29743",
+  "name": "Techeyys Pessima",
+  "abstract": "RWD Unibody and High-Revving Engine",
+  "author": "Techeyy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

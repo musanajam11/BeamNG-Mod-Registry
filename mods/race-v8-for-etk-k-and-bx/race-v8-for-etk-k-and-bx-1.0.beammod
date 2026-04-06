@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "race-v8-for-etk-k-and-bx",
+  "name": "Race V8 for ETK-K and BX",
+  "abstract": "a loud race V8 for ETK and BX",
+  "author": "burntnugget1223offical",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/36461/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/36461/"
+  }
+}

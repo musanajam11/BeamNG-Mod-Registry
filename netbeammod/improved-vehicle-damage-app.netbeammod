@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "improved-vehicle-damage-app",
+  "$kref": "#/beamng/36692",
+  "name": "Improved Vehicle Damage App",
+  "abstract": "A better version of BeamNG’s vehicle damage app",
+  "author": "SpaceGood",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

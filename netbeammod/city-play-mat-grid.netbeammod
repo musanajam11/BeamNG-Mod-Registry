@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "city-play-mat-grid",
+  "$kref": "#/beamng/28837",
+  "name": "City Play Mat Grid",
+  "abstract": "25 years later but on PC",
+  "author": "Stuntman PS2",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

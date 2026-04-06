@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "roadblock-run-remake",
+  "$kref": "#/beamng/21953",
+  "name": "Roadblock Run (Remake!)",
+  "abstract": "Old idea, new scenario! Play as the suspect or police!",
+  "author": "Gamergull",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "mexico-race-street",
+  "$kref": "#/beamng/33911",
+  "name": "MEXICO RACE STREET",
+  "abstract": "STREET RACE, ROLL RACE, DRAGRACE",
+  "author": "OFICIAL_XMAFIA13X",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

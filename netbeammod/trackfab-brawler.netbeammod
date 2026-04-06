@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "trackfab-brawler",
+  "$kref": "#/beamng/11905",
+  "name": "Trackfab Brawler",
+  "abstract": "Offroad crawler thingy",
+  "author": "TrackpadUser",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

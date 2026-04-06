@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "dsc-scarab",
+  "$kref": "#/beamng/15272",
+  "name": "DSC Scarab",
+  "abstract": "Remember me?",
+  "author": "DrowsySam",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

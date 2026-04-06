@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "labrador-beaver-8x8",
+  "$kref": "#/beamng/13758",
+  "name": "Labrador Beaver 8x8",
+  "abstract": "Amphibious 8x8",
+  "author": "TrackpadUser",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

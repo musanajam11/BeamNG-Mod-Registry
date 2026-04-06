@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "city-of-los-injurus",
+  "name": "(City of) Los Injurus",
+  "abstract": "Los Injurus 2023, now featuring 11-foot-8 bridge!",
+  "author": "bob.blunderton",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "2023-12-20",
+  "download": "https://www.beamng.com/resources/10021/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/10021/"
+  }
+}

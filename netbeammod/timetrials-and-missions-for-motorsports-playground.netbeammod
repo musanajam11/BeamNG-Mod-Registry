@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "timetrials-and-missions-for-motorsports-playground",
+  "$kref": "#/beamng/25581",
+  "name": "Timetrials and Missions for MOTORSPORTS PLAYGROUND",
+  "abstract": "25+ Time Trials for Motorsports Playground",
+  "author": "Bityu36",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

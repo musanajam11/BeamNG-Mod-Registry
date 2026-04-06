@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "volcano-canyon",
+  "name": "Volcano Canyon",
+  "abstract": "Is this Extinct Volcano ready to erupt again.",
+  "author": "Ashmaker000",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.2",
+  "download": "https://www.beamng.com/resources/30876/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/30876/"
+  }
+}

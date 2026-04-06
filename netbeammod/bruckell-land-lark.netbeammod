@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "bruckell-land-lark",
+  "$kref": "#/beamng/2147",
+  "name": "Bruckell  Land Lark",
+  "abstract": "Driver 2 Secret Car",
+  "author": "Mr. Twiglesworth",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

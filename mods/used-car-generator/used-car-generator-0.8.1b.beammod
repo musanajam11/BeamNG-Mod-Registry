@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "used-car-generator",
+  "name": "Used Car Generator",
+  "abstract": "An app that generates used vehicles with randomized conditions and spawn locations.",
+  "author": "Cedminer66",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.8.1b",
+  "download": "https://www.beamng.com/resources/30414/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/30414/"
+  }
+}

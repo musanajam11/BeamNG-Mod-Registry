@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "heltom-fab-gamblerbuck",
+  "$kref": "#/beamng/27342",
+  "name": "Heltom Fab GamblerBuck",
+  "abstract": "Custom Built Offroad Bluebuck",
+  "author": "tomas guti",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

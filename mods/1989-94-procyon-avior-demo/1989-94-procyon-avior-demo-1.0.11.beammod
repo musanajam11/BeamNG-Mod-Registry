@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "1989-94-procyon-avior-demo",
+  "name": "1989-94 Procyon Avior Demo",
+  "abstract": "A demo of the high-end, full-size 90s luxury saloon which served as Procyon's first.",
+  "author": "Finn Wilkinson",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0.11",
+  "download": "https://www.beamng.com/resources/33871/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/33871/"
+  }
+}

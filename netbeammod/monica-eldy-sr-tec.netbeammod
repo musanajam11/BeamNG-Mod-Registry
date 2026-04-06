@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "monica-eldy-sr-tec",
+  "$kref": "#/beamng/28115",
+  "name": "Monica Eldy SR-TEC",
+  "abstract": "When SR-TEC kicks in.",
+  "author": "Ghosty | BNR Works",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

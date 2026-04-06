@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "bgm-player",
+  "$kref": "#/beamng/37239",
+  "name": "BGM Player",
+  "abstract": "Configure music to play in game in the background.",
+  "author": "HighDef",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": []
+}

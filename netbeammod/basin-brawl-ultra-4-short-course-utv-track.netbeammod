@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "basin-brawl-ultra-4-short-course-utv-track",
+  "$kref": "#/beamng/31183",
+  "name": "Basin Brawl Ultra 4 Short Course (UTV Track)",
+  "abstract": "An Ultra 4 Style short course track, with rocks scaled for a UTV",
+  "author": "ATypicalWhiteGuy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

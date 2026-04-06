@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "1961-stirling-s6-demo",
+  "$kref": "#/beamng/37431",
+  "name": "1961 Stirling S6 Demo",
+  "abstract": "Antonio Civetta once called it \"the most beautiful car in the world\"",
+  "author": "LJ74",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

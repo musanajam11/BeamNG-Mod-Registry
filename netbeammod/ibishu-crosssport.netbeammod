@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "ibishu-crosssport",
+  "$kref": "#/beamng/30134",
+  "name": "Ibishu CrossSport",
+  "abstract": "The most NPC car out of all NPC cars.",
+  "author": "ibishucovet1987.txt",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

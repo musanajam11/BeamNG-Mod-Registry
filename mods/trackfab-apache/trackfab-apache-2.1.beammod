@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "trackfab-apache",
+  "name": "Trackfab Apache",
+  "abstract": "Lightweight desert racing buggy",
+  "author": "TrackpadUser",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.1",
+  "download": "https://www.beamng.com/resources/23979/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/23979/"
+  }
+}

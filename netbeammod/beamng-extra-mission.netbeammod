@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "beamng-extra-mission",
+  "$kref": "#/beamng/30984",
+  "name": "Beamng Extra mission",
+  "abstract": "new mission,config and skin [slow progress]",
+  "author": "LaBananeViolette",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": []
+}

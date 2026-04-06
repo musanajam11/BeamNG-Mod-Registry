@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "career-paid-drifts",
+  "name": "career paid drifts",
+  "abstract": "cash for any drift you do in career",
+  "author": "pawelek von sttetin",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.2",
+  "download": "https://www.beamng.com/resources/36199/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/36199/"
+  }
+}

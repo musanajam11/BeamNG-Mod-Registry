@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "cummins-m11-sound-for-t-series",
+  "name": "Cummins M11 Sound for T-Series",
+  "abstract": "Loud open pipe sound of a Cummins M11",
+  "author": "Semi_Sound_Doctor",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.1",
+  "download": "https://www.beamng.com/resources/12479/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/12479/"
+  }
+}

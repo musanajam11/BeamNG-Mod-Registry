@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "m3motomadness",
+  "name": "M3MotoMadness",
+  "abstract": "A variety map with several challenges and things to do and explore.",
+  "author": "M3MotoMan",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.0",
+  "download": "https://www.beamng.com/resources/34924/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/34924/"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "foothills-off-road-park",
+  "$kref": "#/beamng/33786",
+  "name": "Foothills Off-Road Park",
+  "abstract": "Foothills Park v2",
+  "author": "Hushaboom",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "beamng-sega-rally-srdesert-map-mp-ready",
+  "$kref": "#/beamng/27581",
+  "name": "BeamNG Sega Rally SrDesert Map  (MP Ready)",
+  "abstract": "Sega Rally '95 remake + bonus openworld customs PART 1",
+  "author": "Dsden",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

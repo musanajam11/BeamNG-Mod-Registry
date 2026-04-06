@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "bush-valley",
+  "$kref": "#/beamng/29860",
+  "name": "Bush Valley",
+  "abstract": "Kalahari bushland savannah, some rocky hills and scenic views",
+  "author": "Murokmakto",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

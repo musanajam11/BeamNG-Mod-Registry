@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "simple-ui-suite",
+  "$kref": "#/beamng/32762",
+  "name": "Simple UI Suite",
+  "abstract": "A collection of minimalistic, modern and modular UI-apps",
+  "author": "DaddelZeit",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

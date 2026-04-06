@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "american-road",
+  "name": "American Road",
+  "abstract": "Very large (120 sq/km, 11x11 km) map, hundreds kilometers of all types of roads. 8 GB RAM required",
+  "author": "primo3001",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.94",
+  "download": "https://www.beamng.com/resources/3100/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/3100/"
+  }
+}

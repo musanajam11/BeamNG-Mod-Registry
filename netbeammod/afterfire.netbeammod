@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "afterfire",
+  "$kref": "#/beamng/37633",
+  "name": "afterfire",
+  "abstract": "мод для вихлопа",
+  "author": "nikeblok",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "testing",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "enta-type-325-excel-exion-ferax",
+  "$kref": "#/beamng/36622",
+  "name": "Šenta Type 325 (Excel, Exion, Ferax)",
+  "abstract": "Eastern European family car since 1987",
+  "author": "JustRobertOFF",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

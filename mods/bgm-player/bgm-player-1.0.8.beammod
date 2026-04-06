@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "bgm-player",
+  "name": "BGM Player",
+  "abstract": "Configure music to play in game in the background.",
+  "author": "HighDef",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": [],
+  "version": "1.0.8",
+  "download": "https://www.beamng.com/resources/37239/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/37239/"
+  }
+}

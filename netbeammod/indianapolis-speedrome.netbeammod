@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "indianapolis-speedrome",
+  "$kref": "#/beamng/33538",
+  "name": "Indianapolis Speedrome",
+  "abstract": "figure8",
+  "author": "OneManCreations",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

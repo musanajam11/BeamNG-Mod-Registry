@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "north-china-countryside-new",
+  "name": "North China Countryside New",
+  "abstract": "A Chinese style map with countryside roads and paths",
+  "author": "wcw",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.0",
+  "download": "https://www.beamng.com/resources/35979/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/35979/"
+  }
+}

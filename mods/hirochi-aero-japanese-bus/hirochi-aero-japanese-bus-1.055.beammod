@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "hirochi-aero-japanese-bus",
+  "name": "Hirochi Aero Japanese Bus",
+  "abstract": "A standart Japanese city bus.",
+  "author": "JNR231",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.055",
+  "download": "https://www.beamng.com/resources/29094/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/29094/"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "kolas-gamergull-ai-circuit-race-scenarios-vivace",
+  "name": "Kolas-Gamergull AI Circuit Race Scenarios: Vivace",
+  "abstract": "It is a racing scenario pack against AI opponents on the racetrack. Supports official and mod maps.",
+  "author": "Kolas",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.3",
+  "download": "https://www.beamng.com/resources/23372/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/23372/"
+  }
+}

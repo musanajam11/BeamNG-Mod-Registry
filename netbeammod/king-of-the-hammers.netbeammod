@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "king-of-the-hammers",
+  "$kref": "#/beamng/24926",
+  "name": "King of the Hammers",
+  "abstract": "The toughest desert race. Very long course.",
+  "author": "TheClairvoyant",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "clear-car-trailer",
+  "$kref": "#/beamng/19633",
+  "name": "Clear Car Trailer",
+  "abstract": "Display your amazing creations on the move!",
+  "author": "LJ74",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

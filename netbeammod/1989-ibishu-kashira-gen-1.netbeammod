@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "1989-ibishu-kashira-gen-1",
+  "$kref": "#/beamng/3459",
+  "name": "1989 Ibishu Kashira (Gen 1)",
+  "abstract": "A small, sporty, minivan from Ibishu!",
+  "author": "Re:Z_IA",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "labrador-beaver-8x8",
+  "name": "Labrador Beaver 8x8",
+  "abstract": "Amphibious 8x8",
+  "author": "TrackpadUser",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.2",
+  "download": "https://www.beamng.com/resources/13758/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/13758/"
+  }
+}

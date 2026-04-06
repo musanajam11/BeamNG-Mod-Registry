@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "train-horn-pack",
+  "name": "Train Horn Pack",
+  "abstract": "I'm a Train!!!",
+  "author": "KyleJian",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/31854/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/31854/"
+  }
+}

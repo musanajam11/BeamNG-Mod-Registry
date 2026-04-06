@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "autobello-mz7",
+  "$kref": "#/beamng/34654",
+  "name": "Autobello MZ7",
+  "abstract": "niente è impossibile, l'impossibile è ciò che non provi",
+  "author": "extrem speed3",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "development",
+  "tags": []
+}

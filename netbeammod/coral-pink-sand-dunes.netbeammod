@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "coral-pink-sand-dunes",
+  "$kref": "#/beamng/22895",
+  "name": "Coral Pink Sand Dunes",
+  "abstract": "The sand dunes in southeastern utah",
+  "author": "nachtstiel",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

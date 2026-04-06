@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "burnside-windsor",
+  "$kref": "#/beamng/35724",
+  "name": "Burnside Windsor",
+  "abstract": "Luxury, Defined.",
+  "author": "Blooperr",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

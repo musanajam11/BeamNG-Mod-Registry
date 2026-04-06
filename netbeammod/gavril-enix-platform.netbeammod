@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "gavril-enix-platform",
+  "$kref": "#/beamng/34754",
+  "name": "Gavril Enix Platform",
+  "abstract": "All purpose european van platform, including everything you need!",
+  "author": "Schmitti",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

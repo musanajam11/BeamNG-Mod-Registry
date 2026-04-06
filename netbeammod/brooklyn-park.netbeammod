@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "brooklyn-park",
+  "$kref": "#/beamng/28938",
+  "name": "Brooklyn Park",
+  "abstract": "Drifting",
+  "author": "PeterDankMemes",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

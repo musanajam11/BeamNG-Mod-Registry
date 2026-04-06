@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "duhen-sunstrip",
+  "name": "Duhen Sunstrip",
+  "abstract": "An ancient covet from an ancient game.",
+  "author": "crashmaster",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.28.2.0",
+  "download": "https://www.beamng.com/resources/2236/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/2236/"
+  }
+}

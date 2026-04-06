@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "arcanox-core",
+  "name": "Arcanox Core",
+  "abstract": "Core libraries for Arcanox's other mods to use",
+  "author": "Arcanox",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": [],
+  "version": "5.2.1",
+  "download": "https://www.beamng.com/resources/6060/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/6060/"
+  }
+}

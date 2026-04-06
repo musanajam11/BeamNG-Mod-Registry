@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "gavril-grand-marshal-classic",
+  "$kref": "#/beamng/34797",
+  "name": "Gavril Grand Marshal Classic",
+  "abstract": "Classic parts addon",
+  "author": "voyageur210",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "testing",
+  "tags": []
+}

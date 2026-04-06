@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "chaos-mod-ui",
+  "$kref": "#/beamng/30357",
+  "name": "Chaos Mod UI",
+  "abstract": "Add chaos mode to BeamNG.drive",
+  "author": "ますくろ",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

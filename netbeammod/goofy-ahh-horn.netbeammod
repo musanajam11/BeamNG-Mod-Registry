@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "goofy-ahh-horn",
+  "$kref": "#/beamng/35247",
+  "name": "Goofy ahh horn",
+  "abstract": "Truck drivers dream become true :D",
+  "author": "PowerSoap",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "super-rallycross-round-1",
+  "$kref": "#/beamng/34294",
+  "name": "Super Rallycross Round 1",
+  "abstract": "A rallycross track, but more, and more super.",
+  "author": "ATypicalWhiteGuy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

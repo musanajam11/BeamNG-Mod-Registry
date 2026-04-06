@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "daldong-town-dongyoung-county",
+  "$kref": "#/beamng/34401",
+  "name": "Daldong Town, Dongyoung County",
+  "abstract": "South Korea's Highland Area",
+  "author": "êêêê -0-",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

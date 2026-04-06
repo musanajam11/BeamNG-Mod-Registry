@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "bastion-coupe",
+  "name": "Bastion Coupe",
+  "abstract": "thanks to fillman86 for the idea i just remade it",
+  "author": "MTHoover97",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "stable",
+  "tags": [],
+  "version": "2.4",
+  "download": "https://www.beamng.com/resources/33278/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/33278/"
+  }
+}

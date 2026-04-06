@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "whelen-siren",
+  "name": "Whelen Siren",
+  "abstract": "Siren",
+  "author": "cloudcoder8",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/24621/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/24621/"
+  }
+}

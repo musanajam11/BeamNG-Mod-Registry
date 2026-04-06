@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "multislot-aka-general-modslot-generator-gmsg",
+  "$kref": "#/beamng/31265",
+  "name": "MultiSlot aka General Modslot Generator (GMSG)",
+  "abstract": "Generates and combines Additional Modification Mods! For every vehicle, even mods!",
+  "author": "TommoT",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "development",
+  "tags": []
+}

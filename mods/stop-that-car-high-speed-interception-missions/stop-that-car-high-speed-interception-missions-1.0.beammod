@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "stop-that-car-high-speed-interception-missions",
+  "name": "Stop That Car! – High-Speed Interception Missions",
+  "abstract": "This mod adds 3 \"Stop the Car\" missions made with the mission editor",
+  "author": "Jack The Fox",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/34042/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/34042/"
+  }
+}

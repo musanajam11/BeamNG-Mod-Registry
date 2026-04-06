@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "individual-part-repair-menu",
+  "$kref": "#/beamng/35878",
+  "name": "Individual Part Repair Menu",
+  "abstract": "Allows for the repair of individual parts.",
+  "author": "Jesus Goose",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

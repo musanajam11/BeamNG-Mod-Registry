@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "hirochi-h-ritage",
+  "name": "Hirochi Héritage",
+  "abstract": "2000s, Boxer engine powered station wagon",
+  "author": "jacob gareau",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "development",
+  "tags": [],
+  "version": "1.0.2",
+  "download": "https://www.beamng.com/resources/37439/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/37439/"
+  }
+}

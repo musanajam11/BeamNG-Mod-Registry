@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "ibishu-saga",
+  "$kref": "#/beamng/20208",
+  "name": "Ibishu Saga",
+  "abstract": "Ibishu's sporty grand-touring flagship from the late 80's",
+  "author": "Kueso",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

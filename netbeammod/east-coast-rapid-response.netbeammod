@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "east-coast-rapid-response",
+  "$kref": "#/beamng/15959",
+  "name": "East Coast Rapid Response",
+  "abstract": "Race against time in East Coast Rapid Response! Complete 6 missions unscathed in your police car.",
+  "author": "arnok19",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

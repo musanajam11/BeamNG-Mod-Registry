@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "real-diesel-engines-and-transmissions-megapack",
+  "name": "Real Diesel Engines And Transmissions Megapack",
+  "abstract": "Megapack of diesel engines & transmissions for Semi, Capsule & CityBus",
+  "author": "Hell_Raiser_999",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.12.2",
+  "download": "https://www.beamng.com/resources/24485/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/24485/"
+  }
+}

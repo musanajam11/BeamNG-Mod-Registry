@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "castle-rock-island-stalburg-infra",
+  "name": "Castle Rock Island, Stalburg (INFRA)",
+  "abstract": "A residential island located in the Scandanavian city of Stalburg.",
+  "author": "AgentMooshroom5",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/32406/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/32406/"
+  }
+}

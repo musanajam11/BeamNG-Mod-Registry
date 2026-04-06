@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "cherrier-intrepide",
+  "name": "Cherrier Intrepide",
+  "abstract": "The Aussie Cherrier",
+  "author": "JustRobertOFF",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/28580/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/28580/"
+  }
+}

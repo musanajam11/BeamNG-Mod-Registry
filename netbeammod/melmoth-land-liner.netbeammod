@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "melmoth-land-liner",
+  "$kref": "#/beamng/19600",
+  "name": "Melmoth Land Liner",
+  "abstract": "A luxury cruise ship on wheels",
+  "author": "Ryo13silvia",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

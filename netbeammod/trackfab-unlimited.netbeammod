@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "trackfab-unlimited",
+  "$kref": "#/beamng/10684",
+  "name": "Trackfab Unlimited",
+  "abstract": "V8 powered unlimited class buggy with loads of suspension travel",
+  "author": "TrackpadUser",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

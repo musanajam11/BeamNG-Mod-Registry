@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "civetta-bolide-legacy-edition",
+  "$kref": "#/beamng/20879",
+  "name": "Civetta Bolide Legacy Edition",
+  "abstract": "Brings back the old version of the Bolide from the good old days",
+  "author": "baarry5444",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

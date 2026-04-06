@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "pacenotes-core",
+  "name": "Pacenotes Core",
+  "abstract": "Co-driver with UI symbols.",
+  "author": "Dummiesman",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.102",
+  "download": "https://www.beamng.com/resources/10349/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/10349/"
+  }
+}

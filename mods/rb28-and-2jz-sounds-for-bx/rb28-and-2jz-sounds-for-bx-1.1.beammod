@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "rb28-and-2jz-sounds-for-bx",
+  "name": "RB28 and 2JZ sounds for BX",
+  "abstract": "RB28 and 2JZ sounds",
+  "author": "burntnugget1223offical",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.1",
+  "download": "https://www.beamng.com/resources/36360/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/36360/"
+  }
+}

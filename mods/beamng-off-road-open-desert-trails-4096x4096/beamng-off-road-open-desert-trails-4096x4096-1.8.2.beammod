@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "beamng-off-road-open-desert-trails-4096x4096",
+  "name": "BeamNG Off Road Open Desert Trails 4096x4096",
+  "abstract": "Bring your Offroad truck, Trophy truck, Pre runner, Rock crawler and Buggy to these trails.",
+  "author": "runnertyler",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.8.2",
+  "download": "https://www.beamng.com/resources/5438/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/5438/"
+  }
+}

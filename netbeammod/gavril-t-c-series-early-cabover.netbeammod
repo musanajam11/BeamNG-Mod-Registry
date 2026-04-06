@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "gavril-t-c-series-early-cabover",
+  "$kref": "#/beamng/22083",
+  "name": "Gavril- T/C Series Early Cabover",
+  "abstract": "First attempt at making a mod",
+  "author": "a plane guy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

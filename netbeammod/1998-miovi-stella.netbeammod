@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "1998-miovi-stella",
+  "$kref": "#/beamng/24602",
+  "name": "1998 Miovi Stella",
+  "abstract": "A cheap and small hatchback made by a Romanian brand",
+  "author": "StivJocuri",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

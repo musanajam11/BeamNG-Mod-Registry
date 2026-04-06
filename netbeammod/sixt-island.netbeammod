@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "sixt-island",
+  "$kref": "#/beamng/36503",
+  "name": "SIXT Island",
+  "abstract": "An Island-Based Map with a Neon Soaked City!",
+  "author": "SIXT",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

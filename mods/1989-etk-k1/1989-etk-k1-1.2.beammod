@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "1989-etk-k1",
+  "name": "1989 ETK K1",
+  "abstract": "Small roadster from early 90s",
+  "author": "AdamPLGames",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.2",
+  "download": "https://www.beamng.com/resources/31866/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/31866/"
+  }
+}

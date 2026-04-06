@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "lucky-la-map-deluxe",
+  "$kref": "#/beamng/34315",
+  "name": "Lucky La Map DELUXE",
+  "abstract": "The French masterpiece is back with many more ways to annihilate your cars.",
+  "author": "Lucky Le Renard",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "development",
+  "tags": []
+}

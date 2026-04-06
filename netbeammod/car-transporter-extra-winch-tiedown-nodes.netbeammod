@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "car-transporter-extra-winch-tiedown-nodes",
+  "$kref": "#/beamng/37392",
+  "name": "= Car Transporter Extra ( Winch, Tiedown Nodes)",
+  "abstract": "A car transporter with working winch or car tiedown point. Sliding and tilting ramps with rear jacks",
+  "author": "AstonishingA",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

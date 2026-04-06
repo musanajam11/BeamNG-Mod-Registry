@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "improved-siren-mod",
+  "$kref": "#/beamng/16811",
+  "name": "Improved Siren Mod",
+  "abstract": "A mod that adds rumblers, warnings and custom siren for every car",
+  "author": "jojos38",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": []
+}

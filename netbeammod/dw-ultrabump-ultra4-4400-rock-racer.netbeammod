@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "dw-ultrabump-ultra4-4400-rock-racer",
+  "$kref": "#/beamng/30382",
+  "name": "DW UltraBump Ultra4 4400 Rock Racer",
+  "abstract": "DW UltraBump Ultra4 4400 class Rock Racer",
+  "author": "Dennis-W",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

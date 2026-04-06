@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "autobello-fillmula-bee",
+  "$kref": "#/beamng/28900",
+  "name": "Autobello Fillmula Bee",
+  "abstract": "worse than you can imagine",
+  "author": "fillman86",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "flood",
+  "$kref": "#/beamng/23313",
+  "name": "Flood",
+  "abstract": "Ever wanted to flood a map without using the level editor? Now you can with this script",
+  "author": "daniel-w",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

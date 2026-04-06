@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "adventure-off-road",
+  "$kref": "#/beamng/27477",
+  "name": "Adventure Off-Road",
+  "abstract": "Adventure the private island",
+  "author": "Ashmaker000",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "bus-display-controller",
+  "$kref": "#/beamng/21292",
+  "name": "Bus Display Controller",
+  "abstract": "An app for modifing the bus destination display",
+  "author": "CYCJoseph",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "development",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "gavril-grand-marshal-5-5l-v8-new-engine-sound",
+  "$kref": "#/beamng/24695",
+  "name": "Gavril Grand Marshal 5.5L V8 New Engine Sound",
+  "abstract": "Why not?",
+  "author": "V6UAL",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "development",
+  "tags": []
+}

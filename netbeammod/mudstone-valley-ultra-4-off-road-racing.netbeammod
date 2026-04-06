@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "mudstone-valley-ultra-4-off-road-racing",
+  "$kref": "#/beamng/34443",
+  "name": "Mudstone Valley Ultra 4 & Off Road Racing",
+  "abstract": "A long, east-coast style ultra 4 race track/map, hope you're not afraid of trees!",
+  "author": "ATypicalWhiteGuy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

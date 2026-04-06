@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "rekt-ridiculous-sand-dunes",
+  "$kref": "#/beamng/34536",
+  "name": "REKT Ridiculous Sand Dunes",
+  "abstract": "Stupid levels of sand dunes",
+  "author": "Randy Kelly Jr (REK)",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

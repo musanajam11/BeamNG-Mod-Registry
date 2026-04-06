@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "japan-island-map",
+  "$kref": "#/beamng/30495",
+  "name": "Japan island map",
+  "abstract": "Fictional map inspired by japan. Isnt culturally accurate.",
+  "author": "Tomica",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

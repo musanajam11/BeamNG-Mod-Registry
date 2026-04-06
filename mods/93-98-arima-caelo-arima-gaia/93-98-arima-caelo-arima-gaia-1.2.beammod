@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "93-98-arima-caelo-arima-gaia",
+  "name": "'93~'98 Arima Caelo / Arima Gaia",
+  "abstract": "Small, Light, and adorable",
+  "author": "Docroswagge",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.2",
+  "download": "https://www.beamng.com/resources/28695/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/28695/"
+  }
+}

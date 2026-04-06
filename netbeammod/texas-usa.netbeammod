@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "texas-usa",
+  "$kref": "#/beamng/31200",
+  "name": "Texas, USA",
+  "abstract": "Farmlands and forests of Texas",
+  "author": "themanhacc",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

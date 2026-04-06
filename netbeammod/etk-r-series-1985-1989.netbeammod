@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "etk-r-series-1985-1989",
+  "$kref": "#/beamng/37259",
+  "name": "ETK R-Series (1985-1989)",
+  "abstract": "Roadster coupe with tons of fun!",
+  "author": "Schmitti",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

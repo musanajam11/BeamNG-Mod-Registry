@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "sealed-beam-headlights-for-the-1989-pessima-and-more",
+  "$kref": "#/beamng/30705",
+  "name": "Sealed beam headlights for the 1989 Pessima and MORE!!!",
+  "abstract": "dot compliant",
+  "author": "FalloutNode",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "stable",
+  "tags": []
+}

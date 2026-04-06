@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "tour-of-small-island-usa",
+  "$kref": "#/beamng/30709",
+  "name": "Tour of Small Island USA",
+  "abstract": "Go on a tour of Small Island as quickly as possible",
+  "author": "Kento282",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

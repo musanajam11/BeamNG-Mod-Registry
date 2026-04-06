@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "dirty-4x4-offroad",
+  "$kref": "#/beamng/20416",
+  "name": "Dirty 4x4 Offroad",
+  "abstract": "Dirty 4x4 is based off one of my local trails call naches A fun muddy looped trail",
+  "author": "OffTrailZ",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": []
+}

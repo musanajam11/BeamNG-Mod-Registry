@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "1992-cherrier-picnic-demo",
+  "$kref": "#/beamng/23074",
+  "name": "1992 Cherrier Picnic Demo",
+  "abstract": "French hatchback from the 90s.",
+  "author": "LucasBE",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

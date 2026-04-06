@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "sgr-simple-drag-timer",
+  "$kref": "#/beamng/33389",
+  "name": "SGR Simple Drag Timer",
+  "abstract": "Simple Drag Timers",
+  "author": "SillyGooseRacing",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "winter-west-coast-usa",
+  "name": "Winter West Coast, USA",
+  "abstract": "West Coast, USA but it's covered in snow",
+  "author": "_Octopus",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.38.1",
+  "download": "https://www.beamng.com/resources/34794/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/34794/"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "iyb-off-road",
+  "name": "IYB Off-Road",
+  "abstract": "A High Quality Off-Road Map",
+  "author": "ItsYourBoi",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.30",
+  "download": "https://www.beamng.com/resources/23780/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/23780/"
+  }
+}

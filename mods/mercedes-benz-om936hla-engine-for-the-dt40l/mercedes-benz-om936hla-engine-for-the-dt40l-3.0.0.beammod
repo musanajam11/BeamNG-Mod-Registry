@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "mercedes-benz-om936hla-engine-for-the-dt40l",
+  "name": "Mercedes Benz OM936HLA Engine for the DT40L",
+  "abstract": "Upgrade your Wentward DT40L with the Mercedes Benz OM936HLA Engine!",
+  "author": "MrRadYT",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "sound",
+  "release_status": "stable",
+  "tags": [],
+  "version": "3.0.0",
+  "download": "https://www.beamng.com/resources/25892/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/25892/"
+  }
+}

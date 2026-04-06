@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "bvaidownhill",
+  "$kref": "#/beamng/30493",
+  "name": "bvAIDownhill",
+  "abstract": "Various races designed for AI competition. Supports Multiplayer too.",
+  "author": "bobvorn",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

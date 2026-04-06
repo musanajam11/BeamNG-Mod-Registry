@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "rls-career-collection",
+  "name": "RLS Career Collection",
+  "abstract": "A Massive Collection of Career Focused Mods Compatible with Each Other",
+  "author": "Raceless",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "stable",
+  "tags": [],
+  "version": "4.7",
+  "download": "https://www.beamng.com/resources/36260/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/36260/"
+  }
+}

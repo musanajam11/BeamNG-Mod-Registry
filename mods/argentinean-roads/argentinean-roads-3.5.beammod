@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "argentinean-roads",
+  "name": "Argentinean Roads",
+  "abstract": "Rutas Argentinas, but bigger and better.",
+  "author": "marleystruli",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "3.5",
+  "download": "https://www.beamng.com/resources/31093/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/31093/"
+  }
+}

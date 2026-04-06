@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "cancelled-1931-gavril-phanta",
+  "$kref": "#/beamng/22839",
+  "name": "(Cancelled)1931 Gavril Phanta",
+  "abstract": "1930s one seater race car ish thing",
+  "author": "Lichi",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

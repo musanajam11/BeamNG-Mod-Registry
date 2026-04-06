@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "barbents-gambling-zone",
+  "name": "Barbent's Gambling Zone",
+  "abstract": "A small island somewhere in the endless seven oceans of peace",
+  "author": "Barbent Servo GT",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.3c",
+  "download": "https://www.beamng.com/resources/27332/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/27332/"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "meos-drag-parts-pack",
+  "name": "Meo's Drag Parts Pack",
+  "abstract": "Wheels/Tires/Drag Wing/Drag parachute bags/5000kw max variable nitrous/Suspension/Radiator...",
+  "author": "Meo_3000_QC",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "stable",
+  "tags": [],
+  "version": "3.0.19",
+  "download": "https://www.beamng.com/resources/10968/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/10968/"
+  }
+}

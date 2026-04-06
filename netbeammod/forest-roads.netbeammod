@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "forest-roads",
+  "$kref": "#/beamng/33942",
+  "name": "Forest Roads",
+  "abstract": "A Forest Touge Any Drifter Would Love",
+  "author": "MartZilka",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

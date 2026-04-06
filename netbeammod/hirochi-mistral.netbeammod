@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "hirochi-mistral",
+  "$kref": "#/beamng/23527",
+  "name": "Hirochi Mistral",
+  "abstract": "The Covet-fighter for a new generation of Covet-buyers",
+  "author": "Kajzer",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

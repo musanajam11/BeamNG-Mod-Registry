@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "2005-etk-800-series",
+  "name": "2005 ETK 800-Series",
+  "abstract": "predecessor of the 800-Series",
+  "author": "JustRobertOFF",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": [],
+  "version": "1.0",
+  "download": "https://www.beamng.com/resources/30202/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/30202/"
+  }
+}

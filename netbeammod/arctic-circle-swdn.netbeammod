@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "arctic-circle-swdn",
+  "$kref": "#/beamng/29735",
+  "name": "Arctic Circle SWDN",
+  "abstract": "Snowy map set within the Arctic Circle. Now with less fog and a Ski Jump!",
+  "author": "Track Broseff",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

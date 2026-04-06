@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "junior-rock-island",
+  "name": "Junior Rock Island",
+  "abstract": "Volcanic island in the Pacific",
+  "author": "KyotoBlissard",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": [],
+  "version": "9",
+  "download": "https://www.beamng.com/resources/18027/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/18027/"
+  }
+}

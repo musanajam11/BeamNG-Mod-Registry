@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "winds-of-change",
+  "name": "Winds of Change",
+  "abstract": "Dynamic wind generator",
+  "author": "Daefron",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "testing",
+  "tags": [],
+  "version": "0.93",
+  "download": "https://www.beamng.com/resources/33596/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/33596/"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "ibishu-kevin-kei-truck",
+  "$kref": "#/beamng/30979",
+  "name": "Ibishu Kevin Kei Truck",
+  "abstract": "Meet Kevo, an smol cute Kei Truck :)",
+  "author": "Ezo",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "development",
+  "tags": []
+}

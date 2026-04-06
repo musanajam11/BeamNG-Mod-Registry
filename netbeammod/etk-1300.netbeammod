@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "etk-1300",
+  "$kref": "#/beamng/9739",
+  "name": "ETK 1300",
+  "abstract": "Modern SUV based on the ETK800.",
+  "author": "OverPower",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

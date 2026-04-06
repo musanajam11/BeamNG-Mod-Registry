@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "pseudo-random-tour",
+  "$kref": "#/beamng/12432",
+  "name": "Pseudo Random Tour",
+  "abstract": "Drive from a random position to another random position, via a random vehicle!",
+  "author": "Darthbob555",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

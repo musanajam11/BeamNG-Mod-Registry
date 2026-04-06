@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "bus-display-controller",
+  "name": "Bus Display Controller",
+  "abstract": "An app for modifing the bus destination display",
+  "author": "CYCJoseph",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "development",
+  "tags": [],
+  "version": "2.8.",
+  "download": "https://www.beamng.com/resources/21292/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/21292/"
+  }
+}

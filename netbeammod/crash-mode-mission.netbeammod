@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "crash-mode-mission",
+  "$kref": "#/beamng/33210",
+  "name": "Crash Mode Mission",
+  "abstract": "This MOD allows you to enjoy crash modes inspired by Burnout 2 and Burnout 3.",
+  "author": "ますくろ",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

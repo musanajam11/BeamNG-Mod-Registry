@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "hirochi-outlaw",
+  "$kref": "#/beamng/33927",
+  "name": "Hirochi Outlaw",
+  "abstract": "Budget 90's 2-wheeled fun",
+  "author": "thatjackguy",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

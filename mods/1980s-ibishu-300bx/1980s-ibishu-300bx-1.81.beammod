@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "1980s-ibishu-300bx",
+  "name": "1980's Ibishu 300BX",
+  "abstract": "Hot Hatchback from the 80's outrun and miami sunsets era",
+  "author": "Agent Uly (G.E.W.P)",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.81",
+  "download": "https://www.beamng.com/resources/19834/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/19834/"
+  }
+}

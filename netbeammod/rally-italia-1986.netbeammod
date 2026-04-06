@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "rally-italia-1986",
+  "$kref": "#/beamng/29149",
+  "name": "Rally Italia 1986",
+  "abstract": "Featuring 28 stages including the longest ever in sim rallying. Pacenotes included.",
+  "author": "Track Broseff",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

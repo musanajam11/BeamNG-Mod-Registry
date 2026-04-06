@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "gunner-patriot-claymore",
+  "$kref": "#/beamng/28703",
+  "name": "Gunner Patriot / Claymore",
+  "abstract": "Multipurpose military vehicle platform",
+  "author": "Cadillacman80",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "testing",
+  "tags": []
+}

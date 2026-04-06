@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "garage-to-garage-survival-mode",
+  "$kref": "#/beamng/22707",
+  "name": "Garage to Garage Survival Mode",
+  "abstract": "5 levels of difficulty to make you give up :)",
+  "author": "Hash",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "testing",
+  "tags": []
+}

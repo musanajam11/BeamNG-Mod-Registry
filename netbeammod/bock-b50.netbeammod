@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "bock-b50",
+  "$kref": "#/beamng/29874",
+  "name": "Bock B50",
+  "abstract": "The smallest production car ever, now in BeamNG",
+  "author": "Nekkit",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "rutas-argentinas",
+  "$kref": "#/beamng/21122",
+  "name": "Rutas Argentinas",
+  "abstract": "A map based in Argentinean Pampas",
+  "author": "marleystruli",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "map",
+  "release_status": "stable",
+  "tags": []
+}

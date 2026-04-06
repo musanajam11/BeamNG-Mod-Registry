@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "arcade-performance-index",
+  "$kref": "#/beamng/33245",
+  "name": "Arcade Performance Index",
+  "abstract": "Get a performance rating for any car, setup, or tune!",
+  "author": "Galaxia",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "ui_app",
+  "release_status": "stable",
+  "tags": []
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "project-beamng-rally-competition",
+  "$kref": "#/beamng/31308",
+  "name": "Project BeamNg.rally - Competition",
+  "abstract": "An addon pack of pace notes and competition stages for Project BeamNg.rally",
+  "author": "Track Broseff",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": []
+}

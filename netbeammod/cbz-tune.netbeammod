@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "cbz-tune",
+  "$kref": "#/beamng/25591",
+  "name": "CBz-Tune",
+  "abstract": "Car part mods aimed to have a vanilla feel",
+  "author": "ChocoBeez",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "other",
+  "release_status": "stable",
+  "tags": []
+}

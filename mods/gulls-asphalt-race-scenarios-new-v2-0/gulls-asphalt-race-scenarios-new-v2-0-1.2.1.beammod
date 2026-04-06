@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "identifier": "gulls-asphalt-race-scenarios-new-v2-0",
+  "name": "Gull's Asphalt Race Scenarios (New V2.0)",
+  "abstract": "Just a bunch of fun AI races. Includes bonus races!",
+  "author": "Gamergull",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "scenario",
+  "release_status": "stable",
+  "tags": [],
+  "version": "1.2.1",
+  "download": "https://www.beamng.com/resources/20813/download",
+  "resources": {
+    "beamng_resource": "https://www.beamng.com/resources/20813/"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "identifier": "super-powers-mobility-epex",
+  "$kref": "#/beamng/36380",
+  "name": "Super Powers Mobility EPEX",
+  "abstract": "The SPM EPEX is a high-performance electric UTV designed for both recreational and competitive use.",
+  "author": "Super_Powers_Mobility",
+  "license": "restricted",
+  "kind": "package",
+  "mod_type": "vehicle",
+  "release_status": "stable",
+  "tags": []
+}
