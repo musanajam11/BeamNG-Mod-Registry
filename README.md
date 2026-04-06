@@ -261,6 +261,14 @@ Fields prefixed with `x_` are allowed for third-party tooling and are ignored by
 }
 ```
 
+The registry uses one built-in extension field:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `x_verified` | boolean | `true` for manually-curated GitHub-sourced entries, `false` for auto-scraped BeamNG.com entries. Set automatically by the inflator based on `$kref` source. |
+
+Verified mods display a **Registry Verified** badge in the Content Manager and are sorted above unverified entries.
+
 ## For Mod Authors
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the full submission guide.
@@ -276,6 +284,17 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full submission guide.
 4. Open a Pull Request
 5. GitHub Actions validates metadata, cross-checks dependencies, and verifies downloads
 6. Once merged, your mod appears in the BeamMP Content Manager
+
+### Claiming an Auto-Scraped Mod
+
+Many mods are auto-imported from BeamNG.com with minimal metadata and appear as **unverified**. If you're the original author, you can claim your mod to get the **Registry Verified** badge:
+
+1. Find your mod's `.netbeammod` template in `netbeammod/`
+2. Change `$kref` from `#/beamng/{id}` to `#/github/{you}/{your-repo}`
+3. Fill in proper license, tags, and description
+4. Open a Pull Request
+
+The inflator automatically prefers GitHub sources over BeamNG when duplicate identifiers exist. See the [Claiming guide in CONTRIBUTING.md](CONTRIBUTING.md#claiming-an-auto-scraped-mod) for full details.
 
 ### Embedding Metadata
 
@@ -310,6 +329,9 @@ npm run inflate:dry
 
 # Run inflator (generate .beammod files from templates)
 GITHUB_TOKEN=ghp_... npm run inflate
+
+# Regenerate all .beammod files (even existing ones)
+GITHUB_TOKEN=ghp_... node scripts/inflate.mjs --force
 
 # Verify all download URLs and SHA256 hashes
 npm run verify
