@@ -4,26 +4,31 @@
   "name": "GTA-Radio",
   "abstract": "Synchronized in-car radio for BeamMP — 3D positional audio, proximity radio, and server-synced playback",
   "author": "Justmusa",
-  "version": "0.7.9",
   "license": "MIT",
   "kind": "package",
   "mod_type": "sound",
   "multiplayer_scope": "both",
-  "download": "https://github.com/musanajam11/GTA-Radio/releases/download/v0.7.9/beamradio-v0.7.9-stable.zip",
-  "download_hash": {
-    "sha256": "c140ddec7236374226a5e74aafebb3f0eaa0f14e7e2582a6850a17f86b3c5e0c"
-  },
-  "download_size": 328419647,
   "beamng_version_min": "0.32",
   "beammp_version_min": "3.0",
   "release_status": "stable",
-  "release_date": "2026-04-05",
-  "tags": ["radio", "audio", "multiplayer", "3d-audio", "proximity", "server-plugin", "immersion"],
+  "tags": [
+    "radio",
+    "audio",
+    "multiplayer",
+    "3d-audio",
+    "proximity",
+    "server-plugin",
+    "immersion"
+  ],
   "description": "GTA-Radio adds a synchronized in-car radio to BeamMP multiplayer servers.\n\nAll players on the server hear the same point in each station. Drive past another player and hear their radio through their car's speakers with 3D positional audio.\n\n### Features\n- Synchronized playback — all clients compute the same position for sync\n- 3D positional audio — radio sound comes from the vehicle with smooth position lerp\n- Proximity radio — hear other players' radios within 20 m with quadratic distance falloff\n- Door-aware muffling — sound mutes when doors are closed and camera is outside\n- Ignition-linked — radio only plays when the vehicle ignition is on\n- ImGui HUD — power button with glow pulse, station dropdown, volume slider\n- 13 stations — hot-swappable OGG files",
+  "depends": [],
+  "x_station_count": 13,
+  "x_audio_format": "ogg",
+  "version": "0.7.9",
+  "download": "https://github.com/musanajam11/GTA-Radio/releases/download/v0.7.9/beamradio-v0.7.9-stable.zip",
+  "release_date": "2026-04-05",
   "resources": {
     "repository": "https://github.com/musanajam11/GTA-Radio"
   },
-  "depends": [],
-  "x_station_count": 13,
-  "x_audio_format": "ogg"
+  "x_verified": true
 }

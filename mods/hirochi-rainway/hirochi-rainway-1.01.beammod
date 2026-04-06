@@ -13,5 +13,6 @@
   "download": "https://www.beamng.com/resources/22865/download",
   "resources": {
     "beamng_resource": "https://www.beamng.com/resources/22865/"
-  }
+  },
+  "x_verified": false
 }

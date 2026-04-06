@@ -18,7 +18,7 @@
  *   GITHUB_TOKEN — optional, raises rate limit from 60/hr to 5000/hr
  */
 import { readFileSync, readdirSync, writeFileSync, existsSync, mkdirSync } from 'fs'
-import { join, dirname } from 'path'
+import { join, dirname, basename } from 'path'
 import { fileURLToPath } from 'url'
 import { createHash } from 'crypto'
 
@@ -31,6 +31,7 @@ const MODS_DIR = join(ROOT, 'mods')
 const args = process.argv.slice(2)
 const DRY_RUN = args.includes('--dry-run')
 const NO_HASH = args.includes('--no-hash')
+const FORCE = args.includes('--force')
 const idFlagIdx = args.indexOf('--id')
 const FILTER_ID = idFlagIdx !== -1 ? args[idFlagIdx + 1] : null
 const cookieIdx = args.indexOf('--cookie')
@@ -272,8 +273,8 @@ async function inflateTemplate(templatePath) {
     const modDir = join(MODS_DIR, id)
     const outFile = join(modDir, `${id}-${version}.beammod`)
 
-    // Skip existing versions (idempotent)
-    if (existsSync(outFile)) {
+    // Skip existing versions (idempotent) unless --force
+    if (existsSync(outFile) && !FORCE) {
       console.log(`  · ${version} — exists`)
       continue
     }
@@ -337,6 +338,9 @@ async function inflateTemplate(templatePath) {
       beammod.resources.beamng_resource = `https://www.beamng.com/resources/${kref.resourceId}/`
     }
 
+    // Mark manually-curated entries as verified
+    beammod.x_verified = kref.source === 'github'
+
     // Write the .beammod file
     mkdirSync(modDir, { recursive: true })
     writeFileSync(outFile, JSON.stringify(beammod, null, 2) + '\n', 'utf-8')
@@ -355,14 +359,38 @@ if (templates.length === 0) {
   process.exit(0)
 }
 
-console.log(`Found ${templates.length} template(s)`)
+// Deduplicate: when multiple templates share an identifier, prefer github over beamng
+const byId = new Map()
+for (const tpl of templates) {
+  const data = JSON.parse(readFileSync(tpl, 'utf-8'))
+  const id = data.identifier
+  const kref = data.$kref ?? ''
+  const source = kref.startsWith('#/github/') ? 'github' : kref.startsWith('#/beamng/') ? 'beamng' : 'unknown'
+  const existing = byId.get(id)
+  if (existing) {
+    // GitHub source takes priority over BeamNG
+    if (source === 'github' && existing.source !== 'github') {
+      console.log(`⚠ Duplicate identifier "${id}": ${basename(tpl)} (github) supersedes ${basename(existing.path)} (${existing.source})`)
+      byId.set(id, { path: tpl, source })
+    } else if (source !== 'github' && existing.source === 'github') {
+      console.log(`⚠ Duplicate identifier "${id}": ${basename(existing.path)} (github) supersedes ${basename(tpl)} (${source})`)
+    } else {
+      console.log(`⚠ Duplicate identifier "${id}": ${basename(tpl)} and ${basename(existing.path)} — using first`)
+    }
+  } else {
+    byId.set(id, { path: tpl, source })
+  }
+}
+const deduped = Array.from(byId.values()).map(v => v.path)
+
+console.log(`Found ${templates.length} template(s)${deduped.length < templates.length ? ` (${deduped.length} after dedup)` : ''}`)
 if (DRY_RUN) console.log('(dry-run mode — no files will be written)')
 if (!GITHUB_TOKEN) console.log('(tip: set GITHUB_TOKEN to avoid API rate limits)')
 
 let totalNew = 0
 let totalErrors = 0
 
-for (const tpl of templates) {
+for (const tpl of deduped) {
   try {
     const result = await inflateTemplate(tpl)
     totalNew += result.newVersions

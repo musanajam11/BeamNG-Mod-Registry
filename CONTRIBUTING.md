@@ -180,6 +180,56 @@ mods/
 
 The Content Manager uses the newest version by default.
 
+## Claiming an Auto-Scraped Mod
+
+Some mods are auto-imported from BeamNG.com with minimal metadata and appear as **unverified** in the Content Manager. If you're the author, you can claim your mod and get a **Registry Verified** badge by switching it to a GitHub-hosted release:
+
+### 1. Find Your Mod's Identifier
+
+Look up your mod in the `netbeammod/` directory. The filename matches the identifier (e.g. `netbeammod/my-cool-mod.netbeammod`). Inside you'll see `"$kref": "#/beamng/12345"`.
+
+### 2. Host Your Mod on GitHub
+
+Create a GitHub repository for your mod and publish releases with the `.zip` archive attached as a release asset. Tag each release with the version number (e.g. `v1.0`).
+
+### 3. Replace the Template
+
+Edit the existing `.netbeammod` file (keeping the **same identifier**) to:
+
+1. Change `$kref` from `#/beamng/{id}` to `#/github/{your_username}/{your_repo}`
+2. Fill in proper metadata — real license, tags, description, etc.
+
+```json
+{
+  "spec_version": 1,
+  "identifier": "my-cool-mod",
+  "$kref": "#/github/your_username/your_repo",
+  "name": "My Cool Mod",
+  "abstract": "A proper description of what this mod does",
+  "author": "YourName",
+  "license": "MIT",
+  "mod_type": "vehicle",
+  "tags": ["drift", "physics"],
+  "description": "Full Markdown description here..."
+}
+```
+
+### 4. Open a Pull Request
+
+The inflator detects duplicate identifiers and automatically **prefers the GitHub source** over BeamNG. Your new GitHub-sourced releases will be generated with `x_verified: true`, and the old BeamNG-sourced versions become superseded.
+
+After merge, your mod will show the blue **Registry Verified** badge in the Content Manager.
+
+### What Changes
+
+| Before (auto-scraped) | After (claimed) |
+|----------------------|-----------------|
+| `$kref: #/beamng/12345` | `$kref: #/github/you/your-repo` |
+| `license: "restricted"` | Real SPDX license (e.g. `MIT`) |
+| Empty tags | Proper categorization |
+| No description | Full Markdown description |
+| Unverified in Content Manager | **Registry Verified** badge |
+
 ## Multiplayer Mods
 
 BeamMP multiplayer mods have two distinct components that go to different places:
