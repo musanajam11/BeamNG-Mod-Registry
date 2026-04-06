@@ -1,11 +1,45 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://raw.githubusercontent.com/BeamMP/BeamNG-Mod-Registry/main/schema/beammod.schema.json",
-  "title": "BeamMod Metadata",
-  "description": "Metadata schema for BeamNG.drive / BeamMP mod packages",
+  "$id": "https://raw.githubusercontent.com/BeamMP/BeamNG-Mod-Registry/main/schema/netbeammod.schema.json",
+  "title": "NetBeamMod Template",
+  "description": "Template for automatic .beammod generation from upstream sources. The inflator fetches releases, computes hashes, and generates full .beammod files.",
   "type": "object",
-  "required": ["spec_version", "identifier", "name", "abstract", "author", "version", "license"],
+  "required": ["spec_version", "identifier", "name", "abstract", "author", "license", "$kref"],
   "properties": {
+    "$kref": {
+      "type": "string",
+      "pattern": "^#/(github/[^/]+/.+|beamng/[0-9]+)$",
+      "description": "Source reference. Supported: #/github/{owner}/{repo} or #/beamng/{resource_id}"
+    },
+    "$filter_asset": {
+      "type": "string",
+      "description": "Regex to match the desired release asset filename. If omitted, the first .zip asset is used."
+    },
+    "$version_strip_v": {
+      "type": "boolean",
+      "default": true,
+      "description": "Strip leading 'v' from version tags (default: true)."
+    },
+    "$version_transform": {
+      "type": "object",
+      "properties": {
+        "match": { "type": "string", "description": "Regex pattern to match in the version string." },
+        "replace": { "type": "string", "description": "Replacement string (supports $1, $2 capture groups)." }
+      },
+      "required": ["match", "replace"],
+      "description": "Regex find/replace applied to the version string after $version_strip_v."
+    },
+    "$include_prerelease": {
+      "type": "boolean",
+      "default": false,
+      "description": "Include GitHub pre-releases (default: false)."
+    },
+    "$max_releases": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 10,
+      "description": "Maximum number of releases to process (newest first, default: 10)."
+    },
     "spec_version": {
       "type": "integer",
       "minimum": 1,
@@ -15,65 +49,34 @@
       "type": "string",
       "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
       "minLength": 2,
-      "maxLength": 128,
-      "description": "Globally unique mod identifier (ASCII letters, digits, hyphens, underscores)."
+      "maxLength": 128
     },
     "name": {
       "type": "string",
       "minLength": 1,
-      "maxLength": 256,
-      "description": "Human-readable mod name."
+      "maxLength": 256
     },
     "abstract": {
       "type": "string",
       "minLength": 1,
-      "maxLength": 512,
-      "description": "One-line description."
+      "maxLength": 512
     },
     "author": {
       "oneOf": [
         { "type": "string", "minLength": 1 },
         { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
-      ],
-      "description": "Author or list of authors."
-    },
-    "version": {
-      "type": "string",
-      "pattern": "^([0-9]+:)?[A-Za-z0-9][A-Za-z0-9.+_-]*$",
-      "description": "Mod version. Optional epoch prefix (e.g. '2:1.0')."
+      ]
     },
     "license": {
       "oneOf": [
         { "type": "string" },
         { "type": "array", "items": { "type": "string" }, "minItems": 1 }
-      ],
-      "description": "SPDX license identifier(s)."
+      ]
     },
     "kind": {
       "type": "string",
       "enum": ["package", "metapackage", "dlc"],
       "default": "package"
-    },
-    "download": {
-      "oneOf": [
-        { "type": "string", "format": "uri" },
-        { "type": "array", "items": { "type": "string", "format": "uri" }, "minItems": 1 }
-      ]
-    },
-    "download_hash": {
-      "type": "object",
-      "properties": {
-        "sha256": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" }
-      },
-      "required": ["sha256"]
-    },
-    "download_size": {
-      "type": "integer",
-      "minimum": 0
-    },
-    "install_size": {
-      "type": "integer",
-      "minimum": 0
     },
     "mod_type": {
       "type": "string",
@@ -86,29 +89,21 @@
     },
     "description": {
       "type": "string",
-      "maxLength": 16384,
-      "description": "Long-form description (Markdown)."
+      "maxLength": 16384
     },
     "release_status": {
       "type": "string",
       "enum": ["stable", "testing", "development"],
       "default": "stable"
     },
-    "release_date": {
+    "beamng_version": { "type": "string" },
+    "beamng_version_min": { "type": "string" },
+    "beamng_version_max": { "type": "string" },
+    "beammp_version_min": { "type": "string" },
+    "multiplayer_scope": {
       "type": "string",
-      "format": "date"
-    },
-    "beamng_version": {
-      "type": "string"
-    },
-    "beamng_version_min": {
-      "type": "string"
-    },
-    "beamng_version_max": {
-      "type": "string"
-    },
-    "beammp_version_min": {
-      "type": "string"
+      "enum": ["client", "server", "both"],
+      "default": "client"
     },
     "install": {
       "type": "array",
@@ -136,21 +131,15 @@
             "oneOf": [
               { "type": "string" },
               { "type": "array", "items": { "type": "string" } }
-            ],
-            "description": "Whitelist: only install files matching these names (inverse of filter)."
+            ]
           },
           "include_only_regexp": {
             "oneOf": [
               { "type": "string" },
               { "type": "array", "items": { "type": "string" } }
-            ],
-            "description": "Whitelist: only install files matching these regex patterns."
+            ]
           },
-          "find_matches_files": {
-            "type": "boolean",
-            "default": false,
-            "description": "When true, find/find_regexp can match individual files, not just directories."
-          }
+          "find_matches_files": { "type": "boolean", "default": false }
         },
         "required": ["install_to"],
         "oneOf": [
@@ -163,7 +152,7 @@
     "depends": { "$ref": "#/definitions/relationship_list" },
     "recommends": { "$ref": "#/definitions/relationship_list" },
     "suggests": { "$ref": "#/definitions/relationship_list" },
-    "supports": { "$ref": "#/definitions/relationship_list", "description": "Mods this enhances when present (reverse-suggests). Informational only." },
+    "supports": { "$ref": "#/definitions/relationship_list" },
     "conflicts": { "$ref": "#/definitions/relationship_list" },
     "provides": {
       "type": "array",
@@ -182,15 +171,8 @@
       },
       "additionalProperties": false
     },
-    "thumbnail": {
-      "type": "string",
-      "format": "uri"
-    },
-    "comment": {
-      "type": "string",
-      "maxLength": 4096,
-      "description": "Free-form comment or note for the mod entry — not displayed to users."
-    },
+    "thumbnail": { "type": "string", "format": "uri" },
+    "comment": { "type": "string", "maxLength": 4096 },
     "localizations": {
       "type": "object",
       "additionalProperties": {
@@ -201,41 +183,8 @@
           "description": { "type": "string" }
         },
         "additionalProperties": false
-      },
-      "description": "Localized strings keyed by locale code (e.g. 'de', 'fr')."
-    },
-    "multiplayer_scope": {
-      "type": "string",
-      "enum": ["client", "server", "both"],
-      "default": "client",
-      "description": "Component scope: client = BeamNG client mod (mods/repo), server = BeamMP server plugin (Resources/Server/), both = has separate client and server components."
-    },
-    "server_download": {
-      "oneOf": [
-        { "type": "string", "format": "uri" },
-        { "type": "array", "items": { "type": "string", "format": "uri" }, "minItems": 1 }
-      ],
-      "description": "URL(s) to the server plugin archive. Used when multiplayer_scope is 'server' or 'both' and the server component is distributed separately from the client mod."
-    },
-    "server_download_hash": {
-      "type": "object",
-      "properties": {
-        "sha256": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" }
-      },
-      "required": ["sha256"],
-      "description": "SHA256 hash of the server_download archive."
-    },
-    "$kref": {
-      "type": "string",
-      "pattern": "^#/(github/[^/]+/.+|beamng/[0-9]+)$",
-      "description": "Optional source reference for automatic version tracking. Supported: #/github/{owner}/{repo} or #/beamng/{resource_id}. When present, the inflator can auto-update this mod."
+      }
     }
-  },
-  "if": {
-    "properties": { "kind": { "const": "package" } }
-  },
-  "then": {
-    "required": ["download"]
   },
   "definitions": {
     "relationship": {
@@ -272,7 +221,7 @@
   },
   "patternProperties": {
     "^x_": {
-      "description": "Extension fields prefixed with x_ are allowed for third-party tooling."
+      "description": "Extension fields for third-party tooling."
     }
   },
   "additionalProperties": false

@@ -4,7 +4,11 @@
   "type": "module",
   "scripts": {
     "validate": "node scripts/validate.mjs",
-    "build": "node scripts/build-index.mjs"
+    "build": "node scripts/build-index.mjs",
+    "inflate": "node scripts/inflate.mjs",
+    "inflate:dry": "node scripts/inflate.mjs --dry-run",
+    "verify": "node scripts/verify-downloads.mjs",
+    "verify:fix": "node scripts/verify-downloads.mjs --fix"
   },
   "devDependencies": {
     "ajv": "^8.17.0",

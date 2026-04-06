@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0    # Full history for --changed-only diff
 
       - uses: actions/setup-node@v4
         with:
@@ -22,6 +24,25 @@ jobs:
 
       - name: Validate metadata
         run: node scripts/validate.mjs
+
+  verify-downloads:
+    name: Verify download URLs & hashes
+    needs: validate
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Verify changed downloads
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/verify-downloads.mjs --changed-only
 
   build-and-release:
     name: Build & Release Index

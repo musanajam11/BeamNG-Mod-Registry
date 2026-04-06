@@ -22,7 +22,10 @@ This repository contains `.beammod` metadata files — one per mod version — o
 ## Repository Structure
 
 ```
-mods/
+netbeammod/                              ← inflator templates (one per mod)
+├── gta_radio.netbeammod
+└── drift_tires_pack.netbeammod
+mods/                                    ← generated/manual .beammod files
 ├── drift_tires_pack/
 │   └── drift_tires_pack-1.0.0.beammod
 ├── realistic_suspension/
@@ -31,8 +34,41 @@ mods/
 └── track_day_modpack/
     └── track_day_modpack-1.0.0.beammod     (kind: metapackage)
 schema/
-└── beammod.schema.json
+├── beammod.schema.json
+└── netbeammod.schema.json
+scripts/
+├── validate.mjs
+├── build-index.mjs
+├── inflate.mjs                          ← NetBeamMod inflator
+└── verify-downloads.mjs                 ← download & hash verification
 ```
+
+## Automated Mod Tracking (NetBeamMod)
+
+For mods hosted on GitHub, you can submit a small `.netbeammod` template instead of writing `.beammod` files by hand. The **inflator** (inspired by [CKAN's NetKAN](https://github.com/KSP-CKAN/NetKAN)) automatically:
+
+1. Monitors your GitHub releases for new versions
+2. Downloads the release asset and computes SHA256 + file size
+3. Generates a complete `.beammod` metadata file
+4. Commits it to the registry — triggering the index build pipeline
+
+**Example template** (`netbeammod/my_mod.netbeammod`):
+
+```json
+{
+  "spec_version": 1,
+  "identifier": "my_mod",
+  "$kref": "#/github/username/my-mod-repo",
+  "$filter_asset": "my-mod-.*\\.zip$",
+  "name": "My Mod",
+  "abstract": "A great mod",
+  "author": "You",
+  "license": "MIT",
+  "tags": ["vehicle"]
+}
+```
+
+This replaces hundreds of lines of manual metadata per release with a single ~10-line template. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide.
 
 ## The `.beammod` Format
 
@@ -104,6 +140,7 @@ A `.beammod` file is a JSON document (UTF-8) describing a single version of a mo
 | `multiplayer_scope` | string | `"client"` (default), `"server"`, or `"both"` — see [Multiplayer Scope](#multiplayer-scope) |
 | `server_download` | string / string[] | URL(s) to the server plugin archive (dual-component mode) |
 | `server_download_hash` | object | `{ "sha256": "..." }` — verified on server plugin install |
+| `$kref` | string | Source reference for auto-tracking: `#/github/{owner}/{repo}` or `#/beamng/{id}` |
 | `comment` | string | Internal note (not displayed to users, max 4KB) |
 | `localizations` | object | Localized strings — see [Localizations](#localizations) |
 | `thumbnail` | string | Preview image URL |
@@ -230,11 +267,14 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full submission guide.
 
 ### Quick Start
 
+**Automated (recommended):** Submit a `netbeammod/{id}.netbeammod` template with a `$kref` — the inflator handles everything after that.
+
+**Manual:**
 1. Fork this repository
 2. Create `mods/{your_mod_id}/{your_mod_id}-{version}.beammod`
 3. Fill in the metadata (see example above)
 4. Open a Pull Request
-5. GitHub Actions will validate your metadata automatically
+5. GitHub Actions validates metadata, cross-checks dependencies, and verifies downloads
 6. Once merged, your mod appears in the BeamMP Content Manager
 
 ### Embedding Metadata
@@ -245,10 +285,13 @@ You can also include a `.beammod` file inside your mod zip. The Content Manager 
 
 ### Building the Index
 
-The GitHub Actions workflow automatically:
-1. Validates all `.beammod` files against the JSON Schema
-2. Builds a compressed index (`registry-index.json.gz`)
-3. Uploads it as a GitHub Release
+The GitHub Actions pipeline automatically:
+1. **Validates** all `.beammod` files against the JSON Schema + cross-validates dependencies
+2. **Verifies downloads** on PRs — fetches each URL, confirms SHA256 hash matches
+3. **Builds** a compressed index (`registry-index.json.gz`)
+4. **Uploads** it as a GitHub Release
+
+The **inflator** runs daily (or on-demand) to check for new upstream releases and auto-opens PRs when new versions are found.
 
 ### Local Development
 
@@ -256,11 +299,23 @@ The GitHub Actions workflow automatically:
 # Install dependencies
 npm install
 
-# Validate all metadata files
+# Validate all metadata files (schema + dependency cross-validation)
 npm run validate
 
 # Build the index locally
 npm run build
+
+# Run inflator (dry-run — preview only)
+npm run inflate:dry
+
+# Run inflator (generate .beammod files from templates)
+GITHUB_TOKEN=ghp_... npm run inflate
+
+# Verify all download URLs and SHA256 hashes
+npm run verify
+
+# Auto-fix hashes and sizes from actual downloads
+npm run verify:fix
 ```
 
 ## License

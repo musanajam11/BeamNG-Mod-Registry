@@ -34,12 +34,17 @@ function findBeammodFiles(dir) {
 }
 
 let errors = 0
+let warnings = 0
 const files = findBeammodFiles(MODS_DIR)
 
 if (files.length === 0) {
   console.log('⚠ No .beammod files found in mods/')
   process.exit(0)
 }
+
+// --- Pass 1: Parse all files & collect identifiers + virtual provides ---
+const allMods = new Map()  // identifier → [parsed data objects]
+const virtualProvides = new Set()  // identifiers provided via "provides"
 
 for (const file of files) {
   const rel = relative(ROOT, file)
@@ -51,34 +56,94 @@ for (const file of files) {
     errors++
     continue
   }
+  if (!allMods.has(data.identifier)) allMods.set(data.identifier, [])
+  allMods.get(data.identifier).push({ data, file, rel })
 
-  // Check filename convention: {identifier}-{version}.beammod
-  const basename = file.split(/[\\/]/).pop()
-  const expectedName = `${data.identifier}-${data.version}.beammod`
-  if (basename !== expectedName) {
-    console.error(`✗ ${rel}: Filename should be "${expectedName}", got "${basename}"`)
-    errors++
-  }
-
-  // Check directory convention: mods/{identifier}/
-  const parentDir = file.split(/[\\/]/).slice(-2, -1)[0]
-  if (parentDir !== data.identifier) {
-    console.error(`✗ ${rel}: Should be in directory "mods/${data.identifier}/"`)
-    errors++
-  }
-
-  // Schema validation
-  const valid = validate(data)
-  if (!valid) {
-    console.error(`✗ ${rel}: Schema validation failed:`)
-    for (const err of validate.errors) {
-      console.error(`    ${err.instancePath || '/'} ${err.message}`)
-    }
-    errors++
-  } else {
-    console.log(`✓ ${rel}`)
+  // Collect virtual provides
+  if (Array.isArray(data.provides)) {
+    for (const v of data.provides) virtualProvides.add(v)
   }
 }
 
-console.log(`\n${files.length} file(s) checked, ${errors} error(s)`)
+/** Check if an identifier exists in the registry (real mod or virtual provide). */
+function identifierExists(id) {
+  return allMods.has(id) || virtualProvides.has(id)
+}
+
+/** Extract all dependency identifiers from a relationship list. */
+function extractDepIds(relList) {
+  if (!Array.isArray(relList)) return []
+  const ids = []
+  for (const entry of relList) {
+    if (entry.identifier) {
+      ids.push(entry.identifier)
+    }
+    if (Array.isArray(entry.any_of)) {
+      for (const alt of entry.any_of) {
+        if (alt.identifier) ids.push(alt.identifier)
+      }
+    }
+  }
+  return ids
+}
+
+// --- Pass 2: Schema validation + cross-validation ---
+for (const [identifier, entries] of allMods) {
+  for (const { data, file, rel } of entries) {
+    // Check filename convention: {identifier}-{version}.beammod
+    const basename = file.split(/[\\/]/).pop()
+    const expectedName = `${data.identifier}-${data.version}.beammod`
+    if (basename !== expectedName) {
+      console.error(`✗ ${rel}: Filename should be "${expectedName}", got "${basename}"`)
+      errors++
+    }
+
+    // Check directory convention: mods/{identifier}/
+    const parentDir = file.split(/[\\/]/).slice(-2, -1)[0]
+    if (parentDir !== data.identifier) {
+      console.error(`✗ ${rel}: Should be in directory "mods/${data.identifier}/"`)
+      errors++
+    }
+
+    // Schema validation
+    const valid = validate(data)
+    if (!valid) {
+      console.error(`✗ ${rel}: Schema validation failed:`)
+      for (const err of validate.errors) {
+        console.error(`    ${err.instancePath || '/'} ${err.message}`)
+      }
+      errors++
+    }
+
+    // --- Dependency cross-validation ---
+    const depFields = ['depends', 'recommends', 'suggests', 'supports', 'conflicts']
+    for (const field of depFields) {
+      const depIds = extractDepIds(data[field])
+      for (const depId of depIds) {
+        if (!identifierExists(depId)) {
+          // depends = error (hard requirement), others = warning
+          if (field === 'depends') {
+            console.error(`✗ ${rel}: ${field} references unknown identifier "${depId}"`)
+            errors++
+          } else {
+            console.warn(`⚠ ${rel}: ${field} references unknown identifier "${depId}"`)
+            warnings++
+          }
+        }
+      }
+    }
+
+    // Check replaced_by
+    if (data.replaced_by?.identifier && !identifierExists(data.replaced_by.identifier)) {
+      console.warn(`⚠ ${rel}: replaced_by references unknown identifier "${data.replaced_by.identifier}"`)
+      warnings++
+    }
+
+    if (valid) {
+      console.log(`✓ ${rel}`)
+    }
+  }
+}
+
+console.log(`\n${files.length} file(s) checked, ${errors} error(s), ${warnings} warning(s)`)
 process.exit(errors > 0 ? 1 : 0)

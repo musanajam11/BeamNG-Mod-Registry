@@ -1,0 +1,87 @@
+name: Inflate NetBeamMod Templates
+
+on:
+  schedule:
+    - cron: '0 6 * * *'           # Daily at 06:00 UTC
+  workflow_dispatch:               # Manual trigger
+    inputs:
+      identifier:
+        description: 'Process a specific mod identifier (leave empty for all)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Preview only — do not write files'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  inflate:
+    name: Check for new upstream releases
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run inflator
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ARGS=""
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          if [ -n "${{ inputs.identifier }}" ]; then
+            ARGS="$ARGS --id ${{ inputs.identifier }}"
+          fi
+          node scripts/inflate.mjs $ARGS
+
+      - name: Check for new .beammod files
+        id: changes
+        run: |
+          git add mods/
+          if git diff --cached --quiet; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            # Collect new version list for PR body
+            NEW_FILES=$(git diff --cached --name-only)
+            echo "new_files<<EOF" >> "$GITHUB_OUTPUT"
+            echo "$NEW_FILES" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
+            echo "### New versions detected" >> "$GITHUB_STEP_SUMMARY"
+            echo "$NEW_FILES" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Validate generated files
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          npm install ajv ajv-formats
+          node scripts/validate.mjs
+
+      - name: Create Pull Request
+        if: steps.changes.outputs.has_changes == 'true' && inputs.dry_run != 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: auto/inflate-${{ github.run_number }}
+          commit-message: "auto: inflate new mod versions"
+          title: "auto: new upstream mod versions detected"
+          body: |
+            The inflator detected new releases upstream and generated updated `.beammod` files.
+
+            ### New files
+            ```
+            ${{ steps.changes.outputs.new_files }}
+            ```
+
+            This PR was created automatically by the [inflate workflow](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+            Review the generated metadata and merge when ready.
+          labels: automated,inflate
+          delete-branch: true

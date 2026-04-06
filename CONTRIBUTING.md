@@ -2,7 +2,103 @@
 
 Thank you for contributing! This guide explains how to add your mod to the registry.
 
-## Adding a Mod
+There are two ways to add a mod:
+
+- **Manual** — write a `.beammod` metadata file by hand (works for any hosting)
+- **Automated (NetBeamMod)** — submit a small template with a `$kref` source reference and let the inflator auto-generate metadata from your GitHub releases
+
+## Option A: Automated via NetBeamMod (Recommended for GitHub / BeamNG.com)
+
+If your mod is hosted on **GitHub** (with releases) or **BeamNG.com/resources**, the inflator can automatically detect new versions, download the asset, compute its SHA256 hash and file size, and generate the `.beammod` file — no manual work per release.
+
+### 1. Create a Template
+
+Create `netbeammod/{identifier}.netbeammod` with a `$kref` pointing to your source:
+
+**GitHub:**
+```json
+{
+  "spec_version": 1,
+  "identifier": "my_cool_mod",
+  "$kref": "#/github/your_username/your_repo",
+  "name": "My Cool Mod",
+  "abstract": "A short description of the mod",
+  "author": "YourName",
+  "license": "MIT",
+  "mod_type": "vehicle",
+  "tags": ["drift", "physics"]
+}
+```
+
+**BeamNG.com/resources:**
+```json
+{
+  "spec_version": 1,
+  "identifier": "my_beamng_mod",
+  "$kref": "#/beamng/12345",
+  "name": "My BeamNG Mod",
+  "abstract": "A mod from the BeamNG portal",
+  "author": "YourName",
+  "license": "CC-BY-4.0",
+  "mod_type": "vehicle"
+}
+```
+The number after `#/beamng/` is the resource ID from the URL (e.g. `beamng.com/resources/my-mod.12345/` → `12345`).
+
+### 2. Template Directives
+
+These `$`-prefixed fields control how the inflator processes your releases:
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `$kref` | *(required)* | Source: `#/github/{owner}/{repo}` or `#/beamng/{resource_id}` |
+| `$filter_asset` | first `.zip` | Regex to pick the right release asset (GitHub only) |
+| `$version_strip_v` | `true` | Strip leading `v` from git tags (`v1.0` → `1.0`) |
+| `$version_transform` | — | Regex `{ "match": "...", "replace": "..." }` applied to version |
+| `$include_prerelease` | `false` | Include GitHub pre-releases |
+| `$max_releases` | `10` | Max releases to process (newest first) |
+
+All other fields (name, abstract, tags, mod_type, install, depends, etc.) are passed through to every generated `.beammod` file as-is.
+
+### 3. Open a Pull Request
+
+Submit only the `.netbeammod` file. The inflator will generate `.beammod` files automatically.
+
+### 4. How It Works
+
+```
+netbeammod/my_mod.netbeammod          ← your template (5-15 lines)
+        │
+        ▼  inflate.mjs (daily cron or manual trigger)
+        │
+        ├── Fetches releases from GitHub API
+        ├── Downloads each asset, computes SHA256 + size
+        ├── Merges template fields + computed fields
+        └── Writes mods/my_mod/my_mod-{version}.beammod
+                │
+                ▼  build-index.yml (triggered by push)
+                │
+                └── Validates → Builds index → Publishes GitHub Release
+```
+
+### 5. Testing Locally
+
+```bash
+# Dry run — shows what would be generated without writing files
+npm run inflate:dry
+
+# Actually generate .beammod files
+GITHUB_TOKEN=ghp_... npm run inflate
+
+# Process a specific mod only
+node scripts/inflate.mjs --id my_cool_mod
+```
+
+Set `GITHUB_TOKEN` to avoid the 60 requests/hour unauthenticated API limit.
+
+---
+
+## Option B: Manual .beammod File
 
 ### 1. Fork & Clone
 
@@ -59,7 +155,13 @@ npm run validate
 
 ### 5. Open a Pull Request
 
-Push your branch and open a PR against `main`. GitHub Actions will automatically validate your `.beammod` file against the schema. Fix any errors it reports.
+Push your branch and open a PR against `main`. GitHub Actions will automatically:
+
+1. **Validate** your `.beammod` file against the JSON schema
+2. **Cross-validate dependencies** — checks that all `depends` identifiers exist in the registry
+3. **Verify downloads** — fetches your download URL, confirms it's reachable, and verifies the SHA256 hash matches
+
+Fix any errors it reports.
 
 ### 6. After Merge
 
@@ -169,7 +271,21 @@ To create a modpack that bundles other mods without a download of its own:
 - **Host your download reliably.** GitHub Releases, Google Drive (direct link), or other permanent URLs.
 - **Don't change existing versions.** If you need to fix something, publish a new version.
 - **Keep `abstract` short.** Use `description` for longer explanations.
-- **Test your download URL.** The Content Manager will verify the SHA256 hash on install.
+- **Test your download URL.** CI will download your file and verify the SHA256 hash before merge.
+- **Dependencies must exist.** If your mod declares `depends`, all referenced identifiers must already be in the registry. Use `recommends` or `suggests` for optional dependencies that may not be registered yet.
+- **Add `$kref` to your `.beammod`** if your mod is on GitHub or BeamNG.com — this enables the inflator to auto-detect future versions even without a `.netbeammod` template.
+
+## Verification
+
+CI automatically verifies all download URLs on pull requests:
+
+```bash
+# Run locally to check your downloads
+npm run verify
+
+# Auto-fix hashes and sizes from actual downloads
+npm run verify:fix
+```
 
 ## Questions?
 
