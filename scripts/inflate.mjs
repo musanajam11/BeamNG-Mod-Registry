@@ -103,7 +103,8 @@ async function fetchBeamNGResource(resourceId) {
                         html.match(/"version"\s*:\s*"([^"]+)"/)
 
   if (!versionMatch) {
-    throw new Error(`Could not extract version from BeamNG.com resource ${resourceId}`)
+    console.warn(`  ⚠ Could not extract version from BeamNG.com resource ${resourceId} — skipping`)
+    return []
   }
   const version = versionMatch[1].trim()
 
@@ -348,7 +349,8 @@ async function inflateTemplate(templatePath) {
     newVersions++
   }
 
-  return { id, skipped: false, newVersions }
+  const warning = kref.source === 'beamng' && releases.length === 0
+  return { id, skipped: false, newVersions, warning }
 }
 
 // ─── Main ────────────────────────────────────────────────────────────────────
@@ -389,12 +391,14 @@ if (!GITHUB_TOKEN) console.log('(tip: set GITHUB_TOKEN to avoid API rate limits)
 
 let totalNew = 0
 let totalErrors = 0
+let totalWarnings = 0
 
 for (const tpl of deduped) {
   try {
     const result = await inflateTemplate(tpl)
     totalNew += result.newVersions
     if (result.error) totalErrors++
+    if (result.warning) totalWarnings++
   } catch (err) {
     console.error(`\n✗ Fatal error processing ${tpl}: ${err.message}`)
     totalErrors++
@@ -404,6 +408,7 @@ for (const tpl of deduped) {
 console.log(`\n━━━ Summary ━━━`)
 console.log(`Templates: ${templates.length}`)
 console.log(`New versions: ${totalNew}`)
+if (totalWarnings > 0) console.log(`Warnings: ${totalWarnings}`)
 if (totalErrors > 0) console.log(`Errors: ${totalErrors}`)
 if (DRY_RUN) console.log('(dry-run — nothing was written)')
 
