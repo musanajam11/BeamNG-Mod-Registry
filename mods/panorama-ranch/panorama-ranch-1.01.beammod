@@ -14,5 +14,6 @@
   "resources": {
     "beamng_resource": "https://www.beamng.com/resources/33497/"
   },
-  "x_verified": false
+  "x_verified": false,
+  "thumbnail": "https://cdn.discordapp.com/attachments/1136045125039050782/1334743260043939925/theTerrain_layerMap_2_groundmodel_asphalt1.png?ex=679da407&amp;is=679c5287&amp;hm=c25719bcbfaf118fcfc6efdba9e96814ef9120e809a4eb630eb97511235352e7&amp;="
 }

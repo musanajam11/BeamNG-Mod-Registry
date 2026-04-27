@@ -14,5 +14,6 @@
   "resources": {
     "beamng_resource": "https://www.beamng.com/resources/24486/"
   },
-  "x_verified": false
+  "x_verified": false,
+  "thumbnail": "https://oscarliang.com/wp-content/uploads/2015/01/radio.jpg"
 }

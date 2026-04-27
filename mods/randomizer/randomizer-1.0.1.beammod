@@ -14,5 +14,6 @@
   "resources": {
     "beamng_resource": "https://www.beamng.com/resources/37497/"
   },
-  "x_verified": false
+  "x_verified": false,
+  "thumbnail": "https://media.discordapp.net/attachments/1301879689660334100/1488207868229324910/preview_final_v4.png?ex=69cbf115&amp;is=69ca9f95&amp;hm=c6a9aa38c8d68037ba26faef26bd958de8801519dff3a7264d7216b7b07d8f35&amp;=&amp;format=webp&amp;quality=lossless"
 }

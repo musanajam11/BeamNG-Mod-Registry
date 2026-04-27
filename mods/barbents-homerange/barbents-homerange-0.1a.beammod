@@ -2,7 +2,7 @@
   "spec_version": 1,
   "identifier": "barbents-homerange",
   "name": "Barbent's Homerange",
-  "abstract": "~70km² of realistic and funny action for all kind of vehicles",
+  "abstract": "~70kmÂ² of realistic and funny action for all kind of vehicles",
   "author": "Barbent Servo GT",
   "license": "restricted",
   "kind": "package",
@@ -14,5 +14,6 @@
   "resources": {
     "beamng_resource": "https://www.beamng.com/resources/33614/"
   },
-  "x_verified": false
+  "x_verified": false,
+  "thumbnail": "https://www.beamng.com/data/attachments/1188/1188315-cf534aa324a06eacb3f3a1db6ba87d1e.jpg"
 }

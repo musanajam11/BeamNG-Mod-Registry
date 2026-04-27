@@ -2,7 +2,7 @@
   "spec_version": 1,
   "identifier": "vehicle-parts-painting",
   "name": "Vehicle Parts Painting",
-  "abstract": "Let's paint any vehicle part with any color—previously possible only in Career mode",
+  "abstract": "Let's paint any vehicle part with any colorâ€”previously possible only in Career mode",
   "author": "KRtekTM",
   "license": "restricted",
   "kind": "package",
@@ -14,5 +14,6 @@
   "resources": {
     "beamng_resource": "https://www.beamng.com/resources/35874/"
   },
-  "x_verified": false
+  "x_verified": false,
+  "thumbnail": "https://www.beamng.com/oldicons/smile.png"
 }

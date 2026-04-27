@@ -14,5 +14,6 @@
   "resources": {
     "beamng_resource": "https://www.beamng.com/resources/36191/"
   },
-  "x_verified": false
+  "x_verified": false,
+  "thumbnail": "https://s3.bmp.ovh/imgs/2025/11/13/4b14507485c8620b.png"
 }

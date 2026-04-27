@@ -14,5 +14,6 @@
   "resources": {
     "beamng_resource": "https://www.beamng.com/resources/33601/"
   },
-  "x_verified": false
+  "x_verified": false,
+  "thumbnail": "https://apache.neverless.dev/pwu/mainpage/main3.jpg"
 }
