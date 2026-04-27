@@ -8,6 +8,7 @@
   "license": "MIT",
   "mod_type": "sound",
   "download": "https://github.com/musanajam11/GTA-Radio/releases/download/v0.7.9/beamradio-v0.7.9-stable.zip",
+  "download_size": 328419647,
   "thumbnail": "https://raw.githubusercontent.com/musanajam11/GTA-Radio/refs/heads/main/radioicon.png",
   "tags": [
     "radio",
@@ -28,6 +29,5 @@
   },
   "download_hash": {
     "sha256": "c140ddec7236374226a5e74aafebb3f0eaa0f14e7e2582a6850a17f86b3c5e0c"
-  },
-  "download_size": 328419647
+  }
 }
