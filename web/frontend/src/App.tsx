@@ -72,22 +72,14 @@ export function App() {
       padding="md"
     >
       <AppShell.Header>
-        <Group h="100%" px="md" justify="space-between" wrap="nowrap" pos="relative">
-          <Group wrap="nowrap" style={{ zIndex: 1 }}>
+        <Group h="100%" px="md" justify="space-between" wrap="nowrap">
+          <Group wrap="nowrap" gap="sm">
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+            <span style={{ fontWeight: 700, fontSize: 18, letterSpacing: 0.2 }}>
+              {theme?.app_name ?? 'BeamNG Mod Registry'}
+            </span>
           </Group>
-          <Image
-            src="/logo.png"
-            alt={theme?.app_name ?? 'BeamNG Mod Registry'}
-            h={40}
-            w="auto"
-            fit="contain"
-            pos="absolute"
-            top={8}
-            left="50%"
-            style={{ transform: 'translateX(-50%)', pointerEvents: 'none' }}
-          />
-          <Group gap="sm" wrap="nowrap" style={{ zIndex: 1 }}>
+          <Group gap="sm" wrap="nowrap">
             <Group gap={6}>
               <TrustDot trust={user.trust} />
               <span>{user.display_name}</span>
@@ -96,12 +88,31 @@ export function App() {
           </Group>
         </Group>
       </AppShell.Header>
-      <AppShell.Navbar p="md">
+      <AppShell.Navbar p="md" style={{ position: 'relative' }}>
         <NavLink component={Link} to="/" label="Dashboard" />
         <NavLink component={Link} to="/registry" label="Registry browser" />
         <NavLink component={Link} to="/submit/manual" label="Submit (manual)" />
         {user.role === 'admin' && <NavLink component={Link} to="/admin" label="Admin" />}
         {user.role === 'admin' && <NavLink component={Link} to="/admin/settings" label="Settings" />}
+        <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 12,
+            display: 'flex',
+            justifyContent: 'center',
+            pointerEvents: 'none',
+          }}
+        >
+          <Image
+            src="/logo.png"
+            alt={theme?.app_name ?? 'BeamNG Mod Registry'}
+            h={180}
+            w="auto"
+            fit="contain"
+          />
+        </div>
       </AppShell.Navbar>
       <AppShell.Main>
         <Routes>
