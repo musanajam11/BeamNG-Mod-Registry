@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { Anchor, Button, Container, Paper, PasswordInput, Stack, TextInput, Title, Alert } from '@mantine/core'
+import { Anchor, Button, Container, Image, Paper, PasswordInput, Stack, TextInput, Alert } from '@mantine/core'
 import { api, ApiError, type User } from '../api/client'
 import { Turnstile } from '../components/Turnstile'
 
@@ -50,7 +50,15 @@ export function LoginPage({ onSuccess }: { onSuccess: () => void }) {
   return (
     <div className="auth-bg">
       <Container size={420} w="100%">
-        <Title order={2} ta="center" mb="lg" c="white">Sign in</Title>
+        <Image
+          src="/logo.png"
+          alt="BeamNG Mod Registry"
+          w={180}
+          h={180}
+          fit="contain"
+          mx="auto"
+          mb="md"
+        />
         <Paper withBorder shadow="sm" p={30} radius="md">
           <form onSubmit={submit}>
             <Stack>

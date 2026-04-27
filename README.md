@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo.png" alt="BeamNG Mod Registry" width="300">
+  <img src="assets/logo.png" alt="BeamNG Mod Registry" width="300">
 </p>
 
 # BeamNG Mod Registry
