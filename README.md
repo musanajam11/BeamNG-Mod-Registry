@@ -273,7 +273,20 @@ Verified mods display a **Registry Verified** badge in the Content Manager and a
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the full submission guide.
 
-### Quick Start
+### Submit via the Web UI (easiest)
+
+The registry has a hosted submission portal that handles everything for you — no Git, no JSON, no PRs.
+
+**➤ [bmr.musanet.xyz](https://bmr.musanet.xyz)**
+
+1. Sign up with email (Cloudflare Turnstile-protected)
+2. Paste a download URL **or** upload a `.zip` directly — metadata is auto-detected from the archive
+3. Review the auto-filled fields, edit anything, and submit
+4. Submissions enter an admin review queue and, once approved, are committed to this repo automatically
+
+Drafts are preserved across tabs and you can edit existing entries to publish new versions.
+
+### Quick Start (Git/PR workflow)
 
 **Automated (recommended):** Submit a `netbeammod/{id}.netbeammod` template with a `$kref` — the inflator handles everything after that.
 

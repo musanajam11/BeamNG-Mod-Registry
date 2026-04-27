@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Navigate, Route, Routes, Link } from 'react-router-dom'
-import { AppShell, Burger, Group, NavLink, Title, Button } from '@mantine/core'
+import { AppShell, Burger, Group, NavLink, Image, Button } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { api, type User } from './api/client'
 import { TrustDot } from './components/TrustDot'
@@ -72,12 +72,22 @@ export function App() {
       padding="md"
     >
       <AppShell.Header>
-        <Group h="100%" px="md" justify="space-between">
-          <Group>
+        <Group h="100%" px="md" justify="space-between" wrap="nowrap" pos="relative">
+          <Group wrap="nowrap" style={{ zIndex: 1 }}>
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-            <Title order={4}>{theme?.app_name ?? 'BeamNG Mod Registry'}</Title>
           </Group>
-          <Group gap="sm">
+          <Image
+            src="/logo.png"
+            alt={theme?.app_name ?? 'BeamNG Mod Registry'}
+            h={40}
+            w="auto"
+            fit="contain"
+            pos="absolute"
+            top={8}
+            left="50%"
+            style={{ transform: 'translateX(-50%)', pointerEvents: 'none' }}
+          />
+          <Group gap="sm" wrap="nowrap" style={{ zIndex: 1 }}>
             <Group gap={6}>
               <TrustDot trust={user.trust} />
               <span>{user.display_name}</span>
