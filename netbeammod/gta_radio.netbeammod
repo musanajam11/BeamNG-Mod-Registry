@@ -29,7 +29,9 @@
   "x_audio_format": "ogg",
   "thumbnail": "https://raw.githubusercontent.com/musanajam11/GTA-Radio/refs/heads/main/radioicon.png",
   "resources": {
+    "homepage": "https://github.com/musanajam11/GTA-Radio",
     "repository": "https://github.com/musanajam11/GTA-Radio"
   },
-  "x_verified": true
+  "x_verified": true,
+  "install_size": 330000
 }
