@@ -41,10 +41,24 @@ async function buildApp() {
       directives: {
         defaultSrc: ["'self'"],
         // Turnstile loads its widget from challenges.cloudflare.com.
-        scriptSrc: ["'self'", 'https://challenges.cloudflare.com'],
+        // Cloudflare proxy auto-injects a beacon from static.cloudflareinsights.com
+        // (Web Analytics) — allow it so the console isn't full of CSP noise.
+        scriptSrc: [
+          "'self'",
+          'https://challenges.cloudflare.com',
+          // Cloudflare Web Analytics (manual install via index.html). Loads
+          // beacon.min.js from this host with no inline bootstrap, so we only
+          // need to whitelist the host — no rotating SHA-256 to maintain.
+          'https://static.cloudflareinsights.com',
+        ],
         styleSrc: ["'self'", "'unsafe-inline'"], // Mantine emits some inline styles
         imgSrc: ["'self'", 'data:', 'https:'],
-        connectSrc: ["'self'", 'https://challenges.cloudflare.com'],
+        connectSrc: [
+          "'self'",
+          'https://challenges.cloudflare.com',
+          'https://cloudflareinsights.com',
+          'https://*.cloudflareinsights.com',
+        ],
         frameSrc: ["'self'", 'https://challenges.cloudflare.com'],
         fontSrc: ["'self'", 'data:'],
         objectSrc: ["'none'"],
