@@ -10,7 +10,7 @@
  */
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
-import { DEFAULT_FORM, type FormState } from '../pages/submit/formState'
+import { DEFAULT_FORM, krefToUrl, type FormState } from '../pages/submit/formState'
 import { loadFromBeammod } from '../pages/submit/loadFromBeammod'
 
 const STORAGE_KEY = 'submit-draft-v1'
@@ -57,7 +57,10 @@ export interface SubmitDraft {
   resubmittingId: number | null
   setResubmittingId: (v: number | null) => void
   /** Pre-fill the form from an existing `.beammod` raw payload. */
-  loadFromExisting: (raw: Record<string, unknown>, opts?: { bumpVersion?: boolean }) => void
+  loadFromExisting: (
+    raw: Record<string, unknown>,
+    opts?: { bumpVersion?: boolean; watch?: { kref?: string; filter_asset?: string } | null },
+  ) => void
   /** Wipe the draft (called after a successful submission). */
   reset: () => void
 }
@@ -147,6 +150,13 @@ export function SubmitDraftProvider({ children }: { children: ReactNode }) {
             parts[lastIdx] = String(lastNum + 1)
             next.version = parts.join('.')
           }
+        }
+        // Pre-check the auto-update box if the registry already tracks this
+        // mod via a netbeammod template.
+        if (opts?.watch?.kref) {
+          next.watch_enabled = true
+          next.watch_source_url = krefToUrl(opts.watch.kref) ?? opts.watch.kref
+          next.watch_filter_asset = opts.watch.filter_asset ?? ''
         }
         setForm(next)
         setEditingExisting(typeof raw.identifier === 'string' ? raw.identifier : null)

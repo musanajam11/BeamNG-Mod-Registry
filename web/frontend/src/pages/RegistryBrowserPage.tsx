@@ -49,6 +49,11 @@ interface ModDetail extends ModListItem {
   raw: Record<string, unknown>
 }
 
+interface ModDetailResponse {
+  mod: ModDetail
+  watch?: { kref?: string; filter_asset?: string }
+}
+
 const PAGE_SIZE = 24
 
 function isHttpUrl(s: string | undefined): s is string {
@@ -103,9 +108,9 @@ export function RegistryBrowserPage() {
     placeholderData: (prev) => prev,
   })
 
-  const detail = useQuery<{ mod: ModDetail }>({
+  const detail = useQuery<ModDetailResponse>({
     queryKey: ['mod', selected],
-    queryFn: () => api.get<{ mod: ModDetail }>(`/mods/${encodeURIComponent(selected!)}`),
+    queryFn: () => api.get<ModDetailResponse>(`/mods/${encodeURIComponent(selected!)}`),
     enabled: !!selected,
   })
 
@@ -230,6 +235,7 @@ export function RegistryBrowserPage() {
         {detail.data && (
           <ModDetailView
             mod={detail.data.mod}
+            watch={detail.data.watch}
             onClose={() => setSelected(null)}
           />
         )}
@@ -238,12 +244,12 @@ export function RegistryBrowserPage() {
   )
 }
 
-function ModDetailView({ mod, onClose }: { mod: ModDetail; onClose: () => void }) {
+function ModDetailView({ mod, watch, onClose }: { mod: ModDetail; watch?: { kref?: string; filter_asset?: string }; onClose: () => void }) {
   const draft = useSubmitDraft()
   const navigate = useNavigate()
 
   const proposeEdit = (bumpVersion: boolean) => {
-    draft.loadFromExisting(mod.raw, { bumpVersion })
+    draft.loadFromExisting(mod.raw, { bumpVersion, watch })
     onClose()
     navigate('/submit/manual')
   }

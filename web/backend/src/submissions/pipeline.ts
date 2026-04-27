@@ -61,6 +61,15 @@ export async function runPipeline(submissionId: number): Promise<PipelineResult>
       // this for github-sourced auto-generated entries.)
       payload.x_verified = true
 
+      // Watch-source hints set by the manual submit form. We promote these
+      // into a netbeammod template so the inflator picks up future releases
+      // automatically. They're stripped from the version .beammod (purely
+      // internal hints, not metadata).
+      const watchKref = typeof payload.x_watch_kref === 'string' ? payload.x_watch_kref : null
+      const watchFilter = typeof payload.x_watch_filter_asset === 'string' ? payload.x_watch_filter_asset : null
+      delete payload.x_watch_kref
+      delete payload.x_watch_filter_asset
+
       // Peek at the netbeammod template (if any) so we can also propagate
       // metadata back into it below.
       let existingTmpl: Record<string, unknown> | null = null
@@ -82,6 +91,7 @@ export async function runPipeline(submissionId: number): Promise<PipelineResult>
 
       const stagedPaths: string[] = [relPath]
       let templateUpdated = false
+      let templateCreated = false
 
       // If this submission targets a mod that already has a netbeammod
       // template, also update the template so future inflator runs inherit
@@ -90,6 +100,9 @@ export async function runPipeline(submissionId: number): Promise<PipelineResult>
       // time the inflator generates a new .beammod from the template.
       if ((sub.kind === 'manual_beammod' || sub.kind === 'new_version') && existingTmpl) {
         const merged = mergeIntoTemplate(existingTmpl, payload)
+        // Update template directives if the user changed them via the watch fields.
+        if (watchKref) merged.$kref = watchKref
+        if (watchFilter) merged.$filter_asset = watchFilter
         const newTmpl = JSON.stringify(merged, null, 2) + '\n'
         const oldTmpl = JSON.stringify(existingTmpl, null, 2) + '\n'
         if (newTmpl !== oldTmpl) {
@@ -97,21 +110,43 @@ export async function runPipeline(submissionId: number): Promise<PipelineResult>
           stagedPaths.push(tmplRel)
           templateUpdated = true
         }
+      } else if (
+        (sub.kind === 'manual_beammod' || sub.kind === 'new_version') &&
+        !existingTmpl &&
+        watchKref
+      ) {
+        // No existing template, but the user opted in to upstream watching.
+        // Generate a fresh template seeded from the curated metadata.
+        const newTmplObj = mergeIntoTemplate({}, payload)
+        newTmplObj.$kref = watchKref
+        if (watchFilter) newTmplObj.$filter_asset = watchFilter
+        // Default to a sensible release window so the first inflator run
+        // doesn't try to backfill years of history.
+        newTmplObj.$max_releases = 10
+        const newTmpl = JSON.stringify(newTmplObj, null, 2) + '\n'
+        mkdirSync(join(tmplAbs, '..'), { recursive: true })
+        writeFileSync(tmplAbs, newTmpl)
+        stagedPaths.push(tmplRel)
+        templateCreated = true
       }
 
       const branch = `submission/${sub.kind}/${sub.identifier}/${Date.now()}`
       await git.checkoutLocalBranch(branch)
       for (const p of stagedPaths) await git.add(p)
-      const finalCommitMessage = templateUpdated
-        ? `${commitMessage}\n\nAlso updates netbeammod/${sub.identifier}.netbeammod so future inflator runs inherit the new metadata.`
-        : commitMessage
-      await git.commit(finalCommitMessage)
+      const tmplNote = templateCreated
+        ? `\n\nAlso creates netbeammod/${sub.identifier}.netbeammod so the inflator will pick up future releases automatically.`
+        : templateUpdated
+          ? `\n\nAlso updates netbeammod/${sub.identifier}.netbeammod so future inflator runs inherit the new metadata.`
+          : ''
+      await git.commit(`${commitMessage}${tmplNote}`)
       await git.push('origin', branch, ['--set-upstream'])
 
-      const finalPrBody = templateUpdated
-        ? `${prBody}\n\n_Also updates \`netbeammod/${sub.identifier}.netbeammod\` so future inflator-generated versions inherit this metadata._`
-        : prBody
-      const pr = await openPullRequest({ branch, title: prTitle, body: finalPrBody })
+      const tmplBodyNote = templateCreated
+        ? `\n\n_Also creates \`netbeammod/${sub.identifier}.netbeammod\` — the inflator will auto-publish future releases from \`${watchKref}\`._`
+        : templateUpdated
+          ? `\n\n_Also updates \`netbeammod/${sub.identifier}.netbeammod\` so future inflator-generated versions inherit this metadata._`
+          : ''
+      const pr = await openPullRequest({ branch, title: prTitle, body: `${prBody}${tmplBodyNote}` })
       return { branch, prUrl: pr.url }
     })
 

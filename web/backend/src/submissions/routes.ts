@@ -28,6 +28,16 @@ const ManualSchema = z.object({
   // If true, server fetches the URL and computes SHA256 / size, overriding
   // any client-provided values. Recommended.
   hash_server_side: z.boolean().default(true),
+  // Optional upstream-watch hints. When set, the pipeline also creates (or
+  // updates) a netbeammod/<id>.netbeammod template so the inflator auto-
+  // publishes future releases from this source.
+  //   watch_kref: '#/github/owner/repo' or '#/beamng/12345'
+  //   watch_filter_asset: optional regex matched against release asset names
+  watch_kref: z
+    .string()
+    .regex(/^#\/(github\/[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+|beamng\/\d+)$/)
+    .optional(),
+  watch_filter_asset: z.string().min(1).max(256).optional(),
 })
 
 function publicSubmission(s: SubmissionRow) {
@@ -172,6 +182,18 @@ export async function submissionRoutes(app: FastifyInstance): Promise<void> {
     const { identifier, version, payload, hash_server_side } = parsed.data
     const isAdmin = ctx.user.role === 'admin'
 
+    // Stash the optional upstream-watch hints on the payload so the
+    // pipeline can promote them into a netbeammod template. The `x_`
+    // prefix matches the schema's extension-fields escape hatch, so the
+    // .beammod schema still validates. The pipeline strips them before
+    // writing the version .beammod.
+    if (parsed.data.watch_kref) {
+      ;(payload as Record<string, unknown>).x_watch_kref = parsed.data.watch_kref
+    }
+    if (parsed.data.watch_filter_asset) {
+      ;(payload as Record<string, unknown>).x_watch_filter_asset = parsed.data.watch_filter_asset
+    }
+
     // Identifier consistency.
     if (typeof payload.identifier !== 'string' || payload.identifier !== identifier) {
       return reply.code(400).send({ error: 'identifier_mismatch' })
@@ -282,6 +304,14 @@ export async function submissionRoutes(app: FastifyInstance): Promise<void> {
       return reply.code(400).send({ error: 'invalid_input', issues: parsed.error.issues })
     }
     const { identifier, version, payload, hash_server_side } = parsed.data
+
+    // Same watch-hint plumbing as /manual.
+    if (parsed.data.watch_kref) {
+      ;(payload as Record<string, unknown>).x_watch_kref = parsed.data.watch_kref
+    }
+    if (parsed.data.watch_filter_asset) {
+      ;(payload as Record<string, unknown>).x_watch_filter_asset = parsed.data.watch_filter_asset
+    }
 
     const existing = db
       .prepare<[number], SubmissionRow>('SELECT * FROM submissions WHERE id = ?')

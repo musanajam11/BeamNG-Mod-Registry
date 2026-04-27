@@ -14,7 +14,8 @@ import {
 } from '@mantine/core'
 import { useMutation } from '@tanstack/react-query'
 import { api, ApiError, type Submission } from '../api/client'
-import { buildPayload, type FormState } from './submit/formState'
+import { buildPayload, buildWatchFields, type FormState } from './submit/formState'
+import { AutoUpdateSection } from './submit/AutoUpdateSection'
 import { useSubmitDraft, type InspectResult } from '../state/SubmitDraftContext'
 import { BasicsSection } from './submit/BasicsSection'
 import { DownloadSection } from './submit/DownloadSection'
@@ -86,6 +87,7 @@ export function SubmitManualPage() {
         version: f.version,
         payload: buildPayload(f),
         hash_server_side: hashServerSide,
+        ...buildWatchFields(f),
       }
       const url = draft.resubmittingId
         ? `/submissions/mine/${draft.resubmittingId}/resubmit`
@@ -194,6 +196,7 @@ export function SubmitManualPage() {
             <ResourcesSection f={f} update={update} />
             <RelationshipsSection f={f} update={update} />
             <InstallSection f={f} update={update} />
+            <AutoUpdateSection f={f} update={update} />
             <AdvancedSection f={f} update={update} />
           </Accordion>
           <Divider />

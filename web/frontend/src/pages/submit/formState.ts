@@ -61,6 +61,12 @@ export interface FormState {
   provides: string[]
   install: InstallDirective[]
   kref: string
+  // Upstream-watch options. When `watch_enabled` is true and a kref is set,
+  // the backend creates/updates a netbeammod template so the inflator
+  // auto-publishes future releases.
+  watch_enabled: boolean
+  watch_source_url: string
+  watch_filter_asset: string
   comment: string
 }
 
@@ -74,7 +80,9 @@ export const DEFAULT_FORM: FormState = {
   multiplayer_scope: 'client', server_download: '',
   homepage: '', repository: '', bugtracker: '', beamng_resource: '', beammp_forum: '',
   depends: [], recommends: [], suggests: [], supports: [], conflicts: [], provides: [],
-  install: [], kref: '', comment: '',
+  install: [], kref: '',
+  watch_enabled: false, watch_source_url: '', watch_filter_asset: '',
+  comment: '',
 }
 
 export type Updater = <K extends keyof FormState>(key: K, value: FormState[K]) => void
@@ -149,7 +157,56 @@ export function buildPayload(f: FormState): Record<string, unknown> {
         return o
       })
   }
-  if (f.kref) p.$kref = f.kref
+  if (f.kref) {
+    // Note: $kref is NOT a valid .beammod field (schema rejects it). It's
+    // passed via the request body's `watch_kref` instead — see
+    // buildWatchFields(). The form-state field is kept for the Advanced
+    // section's power-user input + backwards-compat with restored drafts.
+  }
   if (f.comment) p.comment = f.comment
   return p
+}
+
+/**
+ * Parse a user-friendly source URL into a kref. Returns null if unparseable.
+ *   https://github.com/owner/repo[/...]            → '#/github/owner/repo'
+ *   https://www.beamng.com/resources/<slug>.<id>/  → '#/beamng/<id>'
+ */
+export function parseSourceUrl(url: string): string | null {
+  const trimmed = url.trim()
+  if (!trimmed) return null
+  const gh = trimmed.match(/^https?:\/\/github\.com\/([A-Za-z0-9._-]+)\/([A-Za-z0-9._-]+?)(?:\/|\.git|$)/i)
+  if (gh) return `#/github/${gh[1]}/${gh[2]}`
+  const bn = trimmed.match(/^https?:\/\/(?:www\.)?beamng\.com\/resources\/[^/]*?\.?(\d+)\/?/i)
+  if (bn) return `#/beamng/${bn[1]}`
+  // Already a kref?
+  if (/^#\/(github\/[^/]+\/[^/]+|beamng\/\d+)$/.test(trimmed)) return trimmed
+  return null
+}
+
+/**
+ * Inverse of parseSourceUrl: turn a stored kref back into the user-facing
+ * URL form so the field shows what the user originally pasted.
+ */
+export function krefToUrl(kref: string): string | null {
+  const gh = kref.match(/^#\/github\/([^/]+)\/([^/]+)$/)
+  if (gh) return `https://github.com/${gh[1]}/${gh[2]}`
+  // BeamNG resource URLs require a slug we don't store. The form's
+  // parseSourceUrl() round-trips bare krefs, so leave it as-is.
+  if (/^#\/beamng\/\d+$/.test(kref)) return kref
+  return null
+}
+
+/**
+ * Derive the request-body `watch_kref` / `watch_filter_asset` fields from
+ * the form state. Returns null if watching is disabled or the URL can't be
+ * parsed (the UI surfaces validation errors separately).
+ */
+export function buildWatchFields(f: FormState): { watch_kref?: string; watch_filter_asset?: string } {
+  if (!f.watch_enabled) return {}
+  const kref = parseSourceUrl(f.watch_source_url) ?? (f.kref || null)
+  const out: { watch_kref?: string; watch_filter_asset?: string } = {}
+  if (kref) out.watch_kref = kref
+  if (f.watch_filter_asset.trim()) out.watch_filter_asset = f.watch_filter_asset.trim()
+  return out
 }

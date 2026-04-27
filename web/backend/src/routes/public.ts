@@ -4,8 +4,11 @@
  * scraping endpoint, but does not require admin.
  */
 import type { FastifyInstance } from 'fastify'
+import { promises as fs } from 'node:fs'
+import { join } from 'node:path'
 import { z } from 'zod'
 import { requireAuth } from '../auth/plugin.js'
+import { config } from '../config.js'
 import { getRegistry, summarize } from '../registry/index.js'
 import { getTheme } from '../settings.js'
 
@@ -78,6 +81,22 @@ export async function publicRoutes(app: FastifyInstance): Promise<void> {
     const { byId } = await getRegistry()
     const found = byId.get(identifier)
     if (!found) return reply.code(404).send({ error: 'not_found' })
-    return { mod: found }
+
+    // Best-effort: surface the netbeammod template (if any) so the submit
+    // form can pre-check the "watch upstream releases" box and prefill the
+    // source URL when an author proposes an edit.
+    let watch: { kref?: string; filter_asset?: string } | undefined
+    try {
+      const tmplPath = join(config.repoWorkdir, 'netbeammod', `${identifier}.netbeammod`)
+      const text = await fs.readFile(tmplPath, 'utf-8')
+      const tmpl = JSON.parse(text) as Record<string, unknown>
+      const kref = typeof tmpl.$kref === 'string' ? tmpl.$kref : undefined
+      const filterAsset = typeof tmpl.$filter_asset === 'string' ? tmpl.$filter_asset : undefined
+      if (kref || filterAsset) watch = { kref, filter_asset: filterAsset }
+    } catch {
+      /* no template — that's fine */
+    }
+
+    return { mod: found, watch }
   })
 }
