@@ -8,11 +8,11 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   ActionIcon, Alert, Anchor, Avatar, Badge, Button, Card, CloseButton, Collapse,
   Container, CopyButton, Divider, Drawer, Grid, Group, Image, Loader, Paper,
-  ScrollArea, Select, Stack, Text, TextInput, Title, Tooltip, UnstyledButton,
+  Rating, ScrollArea, Select, Stack, Text, TextInput, Title, Tooltip, UnstyledButton,
 } from '@mantine/core'
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks'
 import { api } from '../api/client'
@@ -26,6 +26,12 @@ interface LastEdit {
   kind: string
   version: string | null
   decided_at: number | null
+}
+
+interface RatingInfo {
+  avg: number
+  count: number
+  mine: number | null
 }
 
 interface ModListItem {
@@ -46,6 +52,7 @@ interface ModListItem {
   resources?: Record<string, unknown>
   versions: string[]
   last_edit: LastEdit | null
+  rating: RatingInfo
 }
 
 interface ModListResponse {
@@ -64,6 +71,7 @@ interface ModDetailResponse {
   mod: ModDetail
   watch?: { kref?: string; filter_asset?: string }
   last_edit: LastEdit | null
+  rating: RatingInfo
 }
 
 const PAGE_SIZE = 24
@@ -111,6 +119,31 @@ function LastEditedBadge({ edit, compact }: { edit: LastEdit; compact?: boolean 
           edited by {edit.display_name}
           {when ? ` · ${when}` : ''}
         </Text>
+      </Group>
+    </Tooltip>
+  )
+}
+
+function RatingBadge({ rating }: { rating: RatingInfo }) {
+  if (rating.count === 0) {
+    return (
+      <Tooltip label="No ratings yet — be the first to rate this mod" withArrow openDelay={300}>
+        <Text size="xs" c="dimmed">
+          ☆ unrated
+        </Text>
+      </Tooltip>
+    )
+  }
+  const label = `Average ${rating.avg.toFixed(1)} from ${rating.count} rating${rating.count === 1 ? '' : 's'}${rating.mine ? ` · you rated ${rating.mine}` : ''}`
+  return (
+    <Tooltip label={label} withArrow openDelay={300}>
+      <Group gap={4} wrap="nowrap" align="center" style={{ minWidth: 0 }}>
+        <Text size="xs" c="yellow.5" lh={1}>★</Text>
+        <Text size="xs" fw={600} lh={1}>{rating.avg.toFixed(1)}</Text>
+        <Text size="xs" c="dimmed" lh={1}>({rating.count})</Text>
+        {rating.mine ? (
+          <Text size="xs" c="blue.4" lh={1} ml={2}>· you: {rating.mine}</Text>
+        ) : null}
       </Group>
     </Tooltip>
   )
@@ -285,6 +318,7 @@ export function RegistryBrowserPage() {
                   <Text size="xs" c="dimmed" lineClamp={1}>by {m.author}</Text>
                 )}
                 {m.last_edit && <LastEditedBadge edit={m.last_edit} compact />}
+                <RatingBadge rating={m.rating} />
                 {m.abstract && (
                   <Text size="xs" lineClamp={2}>{m.abstract}</Text>
                 )}
@@ -332,6 +366,7 @@ export function RegistryBrowserPage() {
             mod={detail.data.mod}
             watch={detail.data.watch}
             lastEdit={detail.data.last_edit}
+            rating={detail.data.rating}
             onClose={() => setSelected(null)}
           />
         )}
@@ -340,9 +375,10 @@ export function RegistryBrowserPage() {
   )
 }
 
-function ModDetailView({ mod, watch, lastEdit, onClose }: { mod: ModDetail; watch?: { kref?: string; filter_asset?: string }; lastEdit: LastEdit | null; onClose: () => void }) {
+function ModDetailView({ mod, watch, lastEdit, rating, onClose }: { mod: ModDetail; watch?: { kref?: string; filter_asset?: string }; lastEdit: LastEdit | null; rating: RatingInfo; onClose: () => void }) {
   const draft = useSubmitDraft()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const [historyOpen, historyToggle] = useDisclosure(false)
 
   // History is fetched lazily the first time the user expands the dropdown
@@ -351,6 +387,54 @@ function ModDetailView({ mod, watch, lastEdit, onClose }: { mod: ModDetail; watc
     queryKey: ['mod-history', mod.identifier],
     queryFn: () => api.get<{ history: LastEdit[] }>(`/mods/${encodeURIComponent(mod.identifier)}/history`),
     enabled: historyOpen,
+  })
+
+  // Local rating state so the UI reflects the user's choice immediately
+  // while the mutation is in flight.
+  const [localRating, setLocalRating] = useState<RatingInfo>(rating)
+  useEffect(() => { setLocalRating(rating) }, [rating])
+
+  function patchListCaches(next: RatingInfo) {
+    // Update every cached /mods page that contains this identifier so the
+    // grid card reflects the new aggregate without a full refetch.
+    queryClient.setQueriesData<{ pages?: ModListResponse[] } | undefined>(
+      { queryKey: ['mods'] },
+      (old) => {
+        if (!old?.pages) return old
+        return {
+          ...old,
+          pages: old.pages.map((p) => ({
+            ...p,
+            items: p.items.map((it) =>
+              it.identifier === mod.identifier ? { ...it, rating: next } : it,
+            ),
+          })),
+        }
+      },
+    )
+    // Also patch the detail cache so re-opening the drawer is consistent.
+    queryClient.setQueryData<ModDetailResponse | undefined>(
+      ['mod', mod.identifier],
+      (old) => (old ? { ...old, rating: next } : old),
+    )
+  }
+
+  const setRating = useMutation({
+    mutationFn: (stars: number) =>
+      api.put<{ rating: RatingInfo }>(`/mods/${encodeURIComponent(mod.identifier)}/rating`, { stars }),
+    onSuccess: (data) => {
+      setLocalRating(data.rating)
+      patchListCaches(data.rating)
+    },
+  })
+
+  const clearRating = useMutation({
+    mutationFn: () =>
+      api.delete<{ rating: RatingInfo }>(`/mods/${encodeURIComponent(mod.identifier)}/rating`),
+    onSuccess: (data) => {
+      setLocalRating(data.rating)
+      patchListCaches(data.rating)
+    },
   })
 
   const proposeEdit = (bumpVersion: boolean) => {
@@ -408,6 +492,48 @@ function ModDetailView({ mod, watch, lastEdit, onClose }: { mod: ModDetail; watc
 
       {mod.author && <Text size="sm"><strong>Author:</strong> {mod.author}</Text>}
       {mod.abstract && <Text size="sm">{mod.abstract}</Text>}
+
+      <Paper withBorder p="sm" radius="sm">
+        <Stack gap={6}>
+          <Group justify="space-between" align="center" wrap="wrap">
+            <Stack gap={2}>
+              <Text size="sm" fw={600}>Your rating</Text>
+              <Text size="xs" c="dimmed">
+                {localRating.count === 0
+                  ? 'No ratings yet — be the first.'
+                  : `Average ${localRating.avg.toFixed(1)} from ${localRating.count} rating${localRating.count === 1 ? '' : 's'}.`}
+              </Text>
+            </Stack>
+            <Group gap={6} wrap="nowrap" align="center">
+              <Rating
+                value={localRating.mine ?? 0}
+                onChange={(v) => {
+                  setLocalRating({ ...localRating, mine: v })
+                  setRating.mutate(v)
+                }}
+                readOnly={setRating.isPending || clearRating.isPending}
+              />
+              {localRating.mine ? (
+                <Tooltip label="Clear your rating" withArrow>
+                  <ActionIcon
+                    size="sm"
+                    variant="subtle"
+                    color="gray"
+                    onClick={() => clearRating.mutate()}
+                    disabled={setRating.isPending || clearRating.isPending}
+                    aria-label="Clear rating"
+                  >
+                    ✕
+                  </ActionIcon>
+                </Tooltip>
+              ) : null}
+            </Group>
+          </Group>
+          {(setRating.isError || clearRating.isError) && (
+            <Text size="xs" c="red">Failed to save rating. Try again.</Text>
+          )}
+        </Stack>
+      </Paper>
 
       {lastEdit && (
         <Paper withBorder p="sm" radius="sm">

@@ -65,6 +65,62 @@ function loadHistory(identifier: string): LastEditRow[] {
     .all(identifier) as LastEditRow[]
 }
 
+/**
+ * Aggregate ratings for every mod identifier that has at least one rating.
+ * Used by the listing endpoint to attach `{avg, count}` per card. SQLite
+ * AVG returns a float; we round to one decimal at the API boundary so the
+ * frontend doesn't have to deal with `4.333333…`.
+ */
+interface RatingAggRow {
+  identifier: string
+  avg: number
+  count: number
+}
+function loadRatingAggregates(): Map<string, { avg: number; count: number }> {
+  const rows = db
+    .prepare(
+      `SELECT identifier, AVG(stars) AS avg, COUNT(*) AS count
+         FROM mod_ratings
+        GROUP BY identifier`
+    )
+    .all() as RatingAggRow[]
+  const out = new Map<string, { avg: number; count: number }>()
+  for (const r of rows) {
+    out.set(r.identifier, { avg: Math.round(r.avg * 10) / 10, count: r.count })
+  }
+  return out
+}
+
+function getRatingAggregate(identifier: string): { avg: number; count: number } {
+  const row = db
+    .prepare(
+      `SELECT AVG(stars) AS avg, COUNT(*) AS count
+         FROM mod_ratings
+        WHERE identifier = ?`
+    )
+    .get(identifier) as { avg: number | null; count: number }
+  return {
+    avg: row.avg ? Math.round(row.avg * 10) / 10 : 0,
+    count: row.count,
+  }
+}
+
+function loadUserRatings(userId: number): Map<string, number> {
+  const rows = db
+    .prepare(`SELECT identifier, stars FROM mod_ratings WHERE user_id = ?`)
+    .all(userId) as Array<{ identifier: string; stars: number }>
+  const out = new Map<string, number>()
+  for (const r of rows) out.set(r.identifier, r.stars)
+  return out
+}
+
+function getUserRating(userId: number, identifier: string): number | null {
+  const row = db
+    .prepare(`SELECT stars FROM mod_ratings WHERE user_id = ? AND identifier = ?`)
+    .get(userId, identifier) as { stars: number } | undefined
+  return row ? row.stars : null
+}
+
 const QuerySchema = z.object({
   q: z.string().trim().max(128).optional(),
   type: z.string().trim().max(32).optional(),
@@ -268,12 +324,22 @@ export async function publicRoutes(app: FastifyInstance): Promise<void> {
     // Single SQL pass for last-editor attribution; cheap (one indexed scan)
     // and avoids N+1 lookups from the client.
     const lastEdits = loadLastEdits()
+    const ratings = loadRatingAggregates()
+    const userRatings = loadUserRatings(ctx.user.id)
 
     return {
-      items: slice.map((m) => ({
-        ...summarize(m),
-        last_edit: lastEdits.get(m.identifier) ?? null,
-      })),
+      items: slice.map((m) => {
+        const agg = ratings.get(m.identifier) ?? { avg: 0, count: 0 }
+        return {
+          ...summarize(m),
+          last_edit: lastEdits.get(m.identifier) ?? null,
+          rating: {
+            avg: agg.avg,
+            count: agg.count,
+            mine: userRatings.get(m.identifier) ?? null,
+          },
+        }
+      }),
       total,
       page,
       pageSize,
@@ -316,6 +382,62 @@ export async function publicRoutes(app: FastifyInstance): Promise<void> {
     }
 
     const lastEdits = loadLastEdits()
-    return { mod: found, watch, last_edit: lastEdits.get(identifier) ?? null }
+    return {
+      mod: found,
+      watch,
+      last_edit: lastEdits.get(identifier) ?? null,
+      rating: {
+        ...getRatingAggregate(identifier),
+        mine: getUserRating(ctx.user.id, identifier),
+      },
+    }
+  })
+
+  // ─── Ratings ───────────────────────────────────────────────────────────
+  // 1-5 stars per (user, identifier). PUT upserts; DELETE clears the user's
+  // own rating. Aggregate is returned in the response so the client can
+  // optimistically refresh without a second round-trip.
+  const RatingSchema = z.object({ stars: z.number().int().min(1).max(5) })
+
+  app.put('/mods/:identifier/rating', async (request, reply) => {
+    const ctx = requireAuth(request, reply)
+    if (!ctx) return
+    const { identifier } = request.params as { identifier: string }
+    const { byId } = await getRegistry()
+    if (!byId.has(identifier)) return reply.code(404).send({ error: 'not_found' })
+    const parsed = RatingSchema.safeParse(request.body)
+    if (!parsed.success) {
+      return reply.code(400).send({ error: 'invalid_input', issues: parsed.error.issues })
+    }
+    const now = Date.now()
+    db.prepare(
+      `INSERT INTO mod_ratings (user_id, identifier, stars, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?)
+       ON CONFLICT(user_id, identifier) DO UPDATE SET
+         stars = excluded.stars,
+         updated_at = excluded.updated_at`
+    ).run(ctx.user.id, identifier, parsed.data.stars, now, now)
+    return {
+      rating: {
+        ...getRatingAggregate(identifier),
+        mine: parsed.data.stars,
+      },
+    }
+  })
+
+  app.delete('/mods/:identifier/rating', async (request, reply) => {
+    const ctx = requireAuth(request, reply)
+    if (!ctx) return
+    const { identifier } = request.params as { identifier: string }
+    db.prepare(`DELETE FROM mod_ratings WHERE user_id = ? AND identifier = ?`).run(
+      ctx.user.id,
+      identifier,
+    )
+    return {
+      rating: {
+        ...getRatingAggregate(identifier),
+        mine: null,
+      },
+    }
   })
 }

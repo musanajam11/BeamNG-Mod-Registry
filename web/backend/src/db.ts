@@ -157,6 +157,22 @@ const MIGRATIONS: Migration[] = [
       ALTER TABLE users ADD COLUMN avatar_url TEXT;
     `,
   },
+  {
+    id: '005-mod-ratings',
+    // One rating per user per mod identifier. Aggregated on read (cheap at
+    // current scale; can be denormalised later if the registry grows).
+    up: `
+      CREATE TABLE mod_ratings (
+        user_id     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        identifier  TEXT NOT NULL,
+        stars       INTEGER NOT NULL CHECK (stars BETWEEN 1 AND 5),
+        created_at  INTEGER NOT NULL,
+        updated_at  INTEGER NOT NULL,
+        PRIMARY KEY (user_id, identifier)
+      );
+      CREATE INDEX idx_mod_ratings_identifier ON mod_ratings(identifier);
+    `,
+  },
 ]
 
 function runMigrations(): void {
