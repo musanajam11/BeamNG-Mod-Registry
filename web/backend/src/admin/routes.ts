@@ -298,7 +298,15 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
         setSetting(GITHUB_KEYS.privateKey, '', actor)
         changed.push(GITHUB_KEYS.privateKey)
       } else if (b.private_key.trim()) {
-        setSetting(GITHUB_KEYS.privateKey, b.private_key, actor)
+        // Normalize PEM: strip BOM/CR, trim, ensure trailing newline. Pasted
+        // keys often arrive with Windows line endings or smart quotes that
+        // break @octokit/app's JWT signer with cryptic errors.
+        const normalized = b.private_key
+          .replace(/^\uFEFF/, '')
+          .replace(/\r\n?/g, '\n')
+          .replace(/[\u2018\u2019\u201C\u201D]/g, '"')
+          .trim() + '\n'
+        setSetting(GITHUB_KEYS.privateKey, normalized, actor)
         changed.push(GITHUB_KEYS.privateKey)
       }
     }
@@ -338,9 +346,15 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
         repo: { full_name: data.full_name, default_branch: data.default_branch, private: data.private },
       }
     } catch (err) {
+      // Surface the underlying cause to both the server log and the admin UI.
+      // Most failures here are PEM parse errors, wrong installation ID, or the
+      // App not being installed on the target repo.
+      const e = err as { message?: string; status?: number; code?: string; name?: string }
+      request.log.error({ err: e, msg: 'github test_connection failed' }, 'github_test_failed')
       return reply.code(502).send({
         error: 'github_test_failed',
-        message: err instanceof Error ? err.message : String(err),
+        message: e?.message || e?.code || e?.name || 'unknown error',
+        status: e?.status,
       })
     }
   })
