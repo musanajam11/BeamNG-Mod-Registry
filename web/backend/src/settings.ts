@@ -95,3 +95,62 @@ export function isGithubReady(): boolean {
   const g = getGithubConfig()
   return Boolean(g.appId && g.privateKey && g.installationId && g.repoOwner)
 }
+
+// ─── Theme / appearance ─────────────────────────────────────────────────
+// Admin-controlled visual customisation persisted in the settings table and
+// served unauthenticated via /api/theme so it can be applied before login.
+
+export const THEME_KEYS = {
+  backgroundUrl: 'theme.background_url',
+  backgroundBlurPx: 'theme.background_blur_px',
+  backgroundDimPct: 'theme.background_dim_pct',
+  primaryColor: 'theme.primary_color',
+  colorScheme: 'theme.color_scheme', // 'auto' | 'light' | 'dark'
+  appName: 'theme.app_name',
+  applyToAuthOnly: 'theme.apply_to_auth_only', // '0' | '1'
+} as const
+
+export interface ResolvedTheme {
+  background_url: string
+  background_blur_px: number
+  background_dim_pct: number
+  primary_color: string
+  color_scheme: 'auto' | 'light' | 'dark'
+  app_name: string
+  apply_to_auth_only: boolean
+}
+
+const THEME_DEFAULTS: ResolvedTheme = {
+  background_url: 'https://images6.alphacoders.com/134/thumb-1920-1340333.jpeg',
+  background_blur_px: 14,
+  background_dim_pct: 45,
+  primary_color: 'blue',
+  color_scheme: 'auto',
+  app_name: 'BeamNG Mod Registry',
+  apply_to_auth_only: false,
+}
+
+function clampNum(v: string | undefined, min: number, max: number, fallback: number): number {
+  if (v === undefined) return fallback
+  const n = Number(v)
+  if (!Number.isFinite(n)) return fallback
+  return Math.max(min, Math.min(max, n))
+}
+
+export function getTheme(): ResolvedTheme {
+  const m = getMap()
+  const get = (k: string) => m.get(k)
+  const scheme = get(THEME_KEYS.colorScheme)
+  return {
+    background_url: get(THEME_KEYS.backgroundUrl) ?? THEME_DEFAULTS.background_url,
+    background_blur_px: clampNum(get(THEME_KEYS.backgroundBlurPx), 0, 60, THEME_DEFAULTS.background_blur_px),
+    background_dim_pct: clampNum(get(THEME_KEYS.backgroundDimPct), 0, 90, THEME_DEFAULTS.background_dim_pct),
+    primary_color: get(THEME_KEYS.primaryColor) ?? THEME_DEFAULTS.primary_color,
+    color_scheme:
+      scheme === 'light' || scheme === 'dark' || scheme === 'auto'
+        ? scheme
+        : THEME_DEFAULTS.color_scheme,
+    app_name: get(THEME_KEYS.appName) ?? THEME_DEFAULTS.app_name,
+    apply_to_auth_only: get(THEME_KEYS.applyToAuthOnly) === '1',
+  }
+}

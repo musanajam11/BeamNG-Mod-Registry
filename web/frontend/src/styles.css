@@ -1,3 +1,11 @@
+/* Theme variables — defaults are overridden at runtime by state/theme.ts
+ * once the admin's theme is fetched. */
+:root {
+  --bg-image: url('https://images6.alphacoders.com/134/thumb-1920-1340333.jpeg');
+  --bg-blur: 14px;
+  --bg-brightness: 0.55;
+}
+
 /* Auth pages: blurred background image. Image lives behind a
  * pseudo-element so the form content stays sharp and the blur radius
  * doesn't bleed into card text. */
@@ -15,10 +23,10 @@
   content: '';
   position: absolute;
   inset: -40px; /* expand so blur edge isn't visible */
-  background-image: url('https://images6.alphacoders.com/134/thumb-1920-1340333.jpeg');
+  background-image: var(--bg-image);
   background-size: cover;
   background-position: center;
-  filter: blur(14px) brightness(0.55);
+  filter: blur(var(--bg-blur)) brightness(var(--bg-brightness));
   z-index: 0;
   pointer-events: none;
 }
@@ -26,6 +34,29 @@
 .auth-bg > * {
   position: relative;
   z-index: 1;
+}
+
+/* Logged-in pages: same blurred image as a fixed full-viewport backdrop.
+ * Applied via <body class="app-bg-on"> so it's easy to toggle. */
+body.app-bg-on::before {
+  content: '';
+  position: fixed;
+  inset: -40px;
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  filter: blur(var(--bg-blur)) brightness(var(--bg-brightness));
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Make Mantine AppShell surfaces translucent so the background shows
+ * through. */
+body.app-bg-on .mantine-AppShell-header,
+body.app-bg-on .mantine-AppShell-navbar,
+body.app-bg-on .mantine-AppShell-main {
+  background-color: rgba(20, 22, 28, 0.55) !important;
+  backdrop-filter: blur(6px);
 }
 
 /* Center the Cloudflare Turnstile widget inside the auth card. The widget

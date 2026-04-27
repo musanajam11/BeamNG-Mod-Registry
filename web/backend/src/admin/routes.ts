@@ -8,7 +8,7 @@ import { db, type SubmissionRow, type UserRow } from '../db.js'
 import { audit } from '../audit.js'
 import { requireAdmin } from '../auth/plugin.js'
 import { runPipeline } from '../submissions/pipeline.js'
-import { getGithubConfig, isGithubReady, setSetting, GITHUB_KEYS } from '../settings.js'
+import { getGithubConfig, isGithubReady, setSetting, GITHUB_KEYS, getTheme, THEME_KEYS } from '../settings.js'
 import { invalidateGithubCache, getInstallationOctokit } from '../github/app.js'
 
 const TrustEnum = z.enum(['green', 'yellow', 'red'])
@@ -343,5 +343,65 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
         message: err instanceof Error ? err.message : String(err),
       })
     }
+  })
+
+  // ─── Settings: theme / appearance ───────────────────────────────────────
+  app.get('/settings/theme', async (request, reply) => {
+    const ctx = requireAdmin(request, reply)
+    if (!ctx) return
+    return getTheme()
+  })
+
+  const ThemeSettingsSchema = z.object({
+    background_url: z.string().trim().max(2048).url().or(z.literal('')).optional(),
+    background_blur_px: z.number().int().min(0).max(60).optional(),
+    background_dim_pct: z.number().int().min(0).max(90).optional(),
+    primary_color: z
+      .enum([
+        'blue', 'cyan', 'teal', 'green', 'lime', 'yellow', 'orange', 'red',
+        'pink', 'grape', 'violet', 'indigo', 'gray', 'dark',
+      ])
+      .optional(),
+    color_scheme: z.enum(['auto', 'light', 'dark']).optional(),
+    app_name: z.string().trim().min(1).max(64).optional(),
+    apply_to_auth_only: z.boolean().optional(),
+  })
+
+  app.post('/settings/theme', async (request, reply) => {
+    const ctx = requireAdmin(request, reply)
+    if (!ctx) return
+    const parsed = ThemeSettingsSchema.safeParse(request.body)
+    if (!parsed.success) {
+      return reply.code(400).send({ error: 'invalid_input', issues: parsed.error.issues })
+    }
+    const b = parsed.data
+    const actor = ctx.user.id
+    const changed: string[] = []
+    const setStr = (k: string, v: string | undefined) => {
+      if (v === undefined) return
+      setSetting(k, v.trim(), actor)
+      changed.push(k)
+    }
+    const setNum = (k: string, v: number | undefined) => {
+      if (v === undefined) return
+      setSetting(k, String(v), actor)
+      changed.push(k)
+    }
+    setStr(THEME_KEYS.backgroundUrl, b.background_url)
+    setNum(THEME_KEYS.backgroundBlurPx, b.background_blur_px)
+    setNum(THEME_KEYS.backgroundDimPct, b.background_dim_pct)
+    setStr(THEME_KEYS.primaryColor, b.primary_color)
+    setStr(THEME_KEYS.colorScheme, b.color_scheme)
+    setStr(THEME_KEYS.appName, b.app_name)
+    if (b.apply_to_auth_only !== undefined) {
+      setSetting(THEME_KEYS.applyToAuthOnly, b.apply_to_auth_only ? '1' : '0', actor)
+      changed.push(THEME_KEYS.applyToAuthOnly)
+    }
+    audit({
+      actorId: actor,
+      action: 'admin.settings.theme_updated',
+      details: { keys: changed },
+    })
+    return { ok: true, theme: getTheme() }
   })
 }

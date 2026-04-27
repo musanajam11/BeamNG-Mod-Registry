@@ -7,6 +7,7 @@ import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { requireAuth } from '../auth/plugin.js'
 import { getRegistry, summarize } from '../registry/index.js'
+import { getTheme } from '../settings.js'
 
 const QuerySchema = z.object({
   q: z.string().trim().max(128).optional(),
@@ -18,6 +19,10 @@ const QuerySchema = z.object({
 
 export async function publicRoutes(app: FastifyInstance): Promise<void> {
   app.get('/health', async () => ({ ok: true }))
+
+  // Public theme so unauthenticated pages (login/signup) can apply admin
+  // customizations before the user has a session.
+  app.get('/theme', async () => getTheme())
 
   app.get('/mods', async (request, reply) => {
     const ctx = requireAuth(request, reply)

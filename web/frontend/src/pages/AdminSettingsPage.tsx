@@ -6,10 +6,11 @@
 import { useEffect, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
-  Alert, Badge, Button, Container, Divider, Group, Paper, Stack,
-  Switch, Text, TextInput, Textarea, Title,
+  Alert, Badge, Button, Container, Divider, Group, Paper, Slider, Stack,
+  Switch, Select, Text, TextInput, Textarea, Title,
 } from '@mantine/core'
 import { api, ApiError } from '../api/client'
+import { THEME_QUERY_KEY, type ThemeConfig, applyThemeVars } from '../state/theme'
 
 interface GithubSettings {
   configured: boolean
@@ -213,6 +214,174 @@ export function AdminSettingsPage() {
           </form>
         </Stack>
       </Paper>
+
+      <AppearancePanel />
     </Container>
+  )
+}
+
+const PRIMARY_COLORS = [
+  'blue', 'cyan', 'teal', 'green', 'lime', 'yellow', 'orange', 'red',
+  'pink', 'grape', 'violet', 'indigo', 'gray', 'dark',
+] as const
+
+function AppearancePanel() {
+  const qc = useQueryClient()
+  const themeQ = useQuery({
+    queryKey: ['admin', 'settings', 'theme'],
+    queryFn: () => api.get<ThemeConfig>('/admin/settings/theme'),
+  })
+
+  const [appName, setAppName] = useState('')
+  const [bgUrl, setBgUrl] = useState('')
+  const [blurPx, setBlurPx] = useState(14)
+  const [dimPct, setDimPct] = useState(45)
+  const [primary, setPrimary] = useState<string>('blue')
+  const [scheme, setScheme] = useState<'auto' | 'light' | 'dark'>('auto')
+  const [authOnly, setAuthOnly] = useState(false)
+
+  useEffect(() => {
+    if (!themeQ.data) return
+    setAppName(themeQ.data.app_name)
+    setBgUrl(themeQ.data.background_url)
+    setBlurPx(themeQ.data.background_blur_px)
+    setDimPct(themeQ.data.background_dim_pct)
+    setPrimary(themeQ.data.primary_color)
+    setScheme(themeQ.data.color_scheme)
+    setAuthOnly(themeQ.data.apply_to_auth_only)
+  }, [themeQ.data])
+
+  // Live preview: write the in-flight values to :root before saving so the
+  // admin can see the result instantly.
+  useEffect(() => {
+    applyThemeVars({
+      background_url: bgUrl,
+      background_blur_px: blurPx,
+      background_dim_pct: dimPct,
+      primary_color: primary,
+      color_scheme: scheme,
+      app_name: appName,
+      apply_to_auth_only: authOnly,
+    })
+  }, [bgUrl, blurPx, dimPct, primary, scheme, appName, authOnly])
+
+  const save = useMutation({
+    mutationFn: () =>
+      api.post<{ ok: true; theme: ThemeConfig }>('/admin/settings/theme', {
+        app_name: appName,
+        background_url: bgUrl,
+        background_blur_px: blurPx,
+        background_dim_pct: dimPct,
+        primary_color: primary,
+        color_scheme: scheme,
+        apply_to_auth_only: authOnly,
+      }),
+    onSuccess: (res) => {
+      qc.setQueryData(['admin', 'settings', 'theme'], res.theme)
+      qc.setQueryData(THEME_QUERY_KEY, res.theme)
+    },
+  })
+
+  if (themeQ.isLoading) return null
+
+  return (
+    <Paper withBorder p="lg" radius="md" mt="xl">
+      <Stack>
+        <Title order={4}>Appearance</Title>
+        <Text c="dimmed" size="sm">
+          Customize the look of the app for everyone. Changes are previewed live
+          before saving and applied to all users on save.
+        </Text>
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            save.mutate()
+          }}
+        >
+          <Stack>
+            <TextInput
+              label="App name"
+              description="Shown in the header and browser tab"
+              value={appName}
+              onChange={(e) => setAppName(e.currentTarget.value)}
+              maxLength={64}
+            />
+
+            <Divider label="Background" labelPosition="left" />
+            <TextInput
+              label="Background image URL"
+              description="Direct https:// link to an image. Leave blank to disable."
+              value={bgUrl}
+              onChange={(e) => setBgUrl(e.currentTarget.value)}
+              placeholder="https://example.com/wallpaper.jpg"
+            />
+            <Stack gap={4}>
+              <Text size="sm" fw={500}>Blur ({blurPx}px)</Text>
+              <Slider min={0} max={60} step={1} value={blurPx} onChange={setBlurPx} />
+            </Stack>
+            <Stack gap={4}>
+              <Text size="sm" fw={500}>Dim ({dimPct}%)</Text>
+              <Slider min={0} max={90} step={1} value={dimPct} onChange={setDimPct} />
+            </Stack>
+            <Switch
+              label="Apply background to login/signup pages only"
+              checked={authOnly}
+              onChange={(e) => setAuthOnly(e.currentTarget.checked)}
+            />
+
+            <Divider label="Color" labelPosition="left" />
+            <Group grow align="flex-start">
+              <Select
+                label="Primary color"
+                data={PRIMARY_COLORS.map((c) => ({ value: c, label: c }))}
+                value={primary}
+                onChange={(v) => v && setPrimary(v)}
+                allowDeselect={false}
+              />
+              <Select
+                label="Color scheme"
+                data={[
+                  { value: 'auto', label: 'Auto (follow OS)' },
+                  { value: 'light', label: 'Light' },
+                  { value: 'dark', label: 'Dark' },
+                ]}
+                value={scheme}
+                onChange={(v) => v && setScheme(v as 'auto' | 'light' | 'dark')}
+                allowDeselect={false}
+              />
+            </Group>
+
+            {save.isError && (
+              <Alert color="red">
+                {save.error instanceof ApiError
+                  ? JSON.stringify(save.error.body)
+                  : 'Save failed'}
+              </Alert>
+            )}
+            {save.isSuccess && <Alert color="green">Theme updated.</Alert>}
+
+            <Group>
+              <Button type="submit" loading={save.isPending}>Save appearance</Button>
+              <Button
+                variant="subtle"
+                onClick={() => {
+                  if (!themeQ.data) return
+                  setAppName(themeQ.data.app_name)
+                  setBgUrl(themeQ.data.background_url)
+                  setBlurPx(themeQ.data.background_blur_px)
+                  setDimPct(themeQ.data.background_dim_pct)
+                  setPrimary(themeQ.data.primary_color)
+                  setScheme(themeQ.data.color_scheme)
+                  setAuthOnly(themeQ.data.apply_to_auth_only)
+                }}
+              >
+                Revert
+              </Button>
+            </Group>
+          </Stack>
+        </form>
+      </Stack>
+    </Paper>
   )
 }

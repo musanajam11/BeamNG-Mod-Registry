@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Navigate, Route, Routes, Link } from 'react-router-dom'
 import { AppShell, Burger, Group, NavLink, Title, Button } from '@mantine/core'
@@ -13,6 +14,7 @@ import { AdminPage } from './pages/AdminPage'
 import { AdminSettingsPage } from './pages/AdminSettingsPage'
 import { RegistryBrowserPage } from './pages/RegistryBrowserPage'
 import { SubmitDraftProvider } from './state/SubmitDraftContext'
+import { useApplyTheme } from './state/theme'
 
 export function App() {
   const qc = useQueryClient()
@@ -21,6 +23,17 @@ export function App() {
     queryKey: ['me'],
     queryFn: () => api.get<{ user: User | null }>('/auth/me'),
   })
+  const theme = useApplyTheme()
+
+  // Toggle the body background depending on whether the admin opted to
+  // restrict it to the auth pages only.
+  useEffect(() => {
+    const enable =
+      Boolean(me.data?.user) &&
+      Boolean(theme && !theme.apply_to_auth_only && theme.background_url)
+    document.body.classList.toggle('app-bg-on', enable)
+    return () => { document.body.classList.remove('app-bg-on') }
+  }, [me.data?.user, theme])
 
   if (me.isLoading) return null
 
@@ -62,7 +75,7 @@ export function App() {
         <Group h="100%" px="md" justify="space-between">
           <Group>
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-            <Title order={4}>BeamNG Mod Registry</Title>
+            <Title order={4}>{theme?.app_name ?? 'BeamNG Mod Registry'}</Title>
           </Group>
           <Group gap="sm">
             <Group gap={6}>
