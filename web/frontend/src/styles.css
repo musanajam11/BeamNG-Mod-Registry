@@ -1,0 +1,37 @@
+/* Auth pages: blurred background image. Image lives behind a
+ * pseudo-element so the form content stays sharp and the blur radius
+ * doesn't bleed into card text. */
+.auth-bg {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.auth-bg::before {
+  content: '';
+  position: absolute;
+  inset: -40px; /* expand so blur edge isn't visible */
+  background-image: url('https://images6.alphacoders.com/134/thumb-1920-1340333.jpeg');
+  background-size: cover;
+  background-position: center;
+  filter: blur(14px) brightness(0.55);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.auth-bg > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Center the Cloudflare Turnstile widget inside the auth card. The widget
+ * renders into a sized iframe (~300x65) inside our wrapper div; centering
+ * its parent puts the whole challenge inline with the form. */
+.turnstile-wrap {
+  display: flex;
+  justify-content: center;
+}

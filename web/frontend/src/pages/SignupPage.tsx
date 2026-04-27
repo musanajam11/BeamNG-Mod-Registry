@@ -48,9 +48,10 @@ export function SignupPage({ onSuccess }: { onSuccess: () => void }) {
   }
 
   return (
-    <Container size={420} my={60}>
-      <Title order={2} ta="center" mb="lg">Create an account</Title>
-      <Paper withBorder shadow="sm" p={30} radius="md">
+    <div className="auth-bg">
+      <Container size={420} w="100%" py="xl">
+        <Title order={2} ta="center" mb="lg" c="white">Create an account</Title>
+        <Paper withBorder shadow="sm" p={30} radius="md">
         <form onSubmit={submit}>
           <Stack>
             <TextInput label="Display name" required minLength={2} maxLength={64}
@@ -81,7 +82,8 @@ export function SignupPage({ onSuccess }: { onSuccess: () => void }) {
             </Anchor>
           </Stack>
         </form>
-      </Paper>
-    </Container>
+        </Paper>
+      </Container>
+    </div>
   )
 }

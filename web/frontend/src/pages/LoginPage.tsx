@@ -48,28 +48,30 @@ export function LoginPage({ onSuccess }: { onSuccess: () => void }) {
   }
 
   return (
-    <Container size={420} my={60}>
-      <Title order={2} ta="center" mb="lg">Sign in</Title>
-      <Paper withBorder shadow="sm" p={30} radius="md">
-        <form onSubmit={submit}>
-          <Stack>
-            <TextInput label="Email" type="email" required value={email} onChange={(e) => setEmail(e.currentTarget.value)} />
-            <PasswordInput label="Password" required value={password} onChange={(e) => setPassword(e.currentTarget.value)} />
-            {siteKey && (
-              <Turnstile
-                siteKey={siteKey}
-                onToken={setTurnstileToken}
-                onExpire={() => setTurnstileToken(null)}
-              />
-            )}
-            {error && <Alert color="red">{error}</Alert>}
-            <Button type="submit" loading={busy} disabled={Boolean(siteKey) && !turnstileToken}>Sign in</Button>
-            <Anchor component={Link} to="/signup" ta="center" size="sm">
-              Don't have an account? Sign up
-            </Anchor>
-          </Stack>
-        </form>
-      </Paper>
-    </Container>
+    <div className="auth-bg">
+      <Container size={420} w="100%">
+        <Title order={2} ta="center" mb="lg" c="white">Sign in</Title>
+        <Paper withBorder shadow="sm" p={30} radius="md">
+          <form onSubmit={submit}>
+            <Stack>
+              <TextInput label="Email" type="email" required value={email} onChange={(e) => setEmail(e.currentTarget.value)} />
+              <PasswordInput label="Password" required value={password} onChange={(e) => setPassword(e.currentTarget.value)} />
+              {siteKey && (
+                <Turnstile
+                  siteKey={siteKey}
+                  onToken={setTurnstileToken}
+                  onExpire={() => setTurnstileToken(null)}
+                />
+              )}
+              {error && <Alert color="red">{error}</Alert>}
+              <Button type="submit" loading={busy} disabled={Boolean(siteKey) && !turnstileToken}>Sign in</Button>
+              <Anchor component={Link} to="/signup" ta="center" size="sm">
+                Don't have an account? Sign up
+              </Anchor>
+            </Stack>
+          </form>
+        </Paper>
+      </Container>
+    </div>
   )
 }

@@ -80,5 +80,5 @@ export function Turnstile({ siteKey, onToken, onExpire, theme = 'auto' }: Turnst
     }
   }, [siteKey, theme])
 
-  return <div ref={ref} />
+  return <div className="turnstile-wrap" ref={ref} />
 }
