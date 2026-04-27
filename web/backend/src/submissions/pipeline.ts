@@ -14,7 +14,7 @@
  * The CI in the registry repo is the final gate (download verification,
  * cross-validation, index build).
  */
-import { writeFileSync, mkdirSync, existsSync } from 'node:fs'
+import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { db, type SubmissionRow } from '../db.js'
 import { audit } from '../audit.js'
@@ -54,19 +54,64 @@ export async function runPipeline(submissionId: number): Promise<PipelineResult>
   try {
     const result = await withRepoLock(async (git) => {
       const payload = JSON.parse(sub.payload_json) as Record<string, unknown>
+
+      // All submissions made through the authenticated web UI go through
+      // admin/auto review and CI download verification, so they earn the
+      // x_verified blue check by definition. (The inflator separately sets
+      // this for github-sourced auto-generated entries.)
+      payload.x_verified = true
+
+      // Peek at the netbeammod template (if any) so we can also propagate
+      // metadata back into it below.
+      let existingTmpl: Record<string, unknown> | null = null
+      const tmplRel = `netbeammod/${sub.identifier}.netbeammod`
+      const tmplAbs = join(config.repoWorkdir, tmplRel)
+      if (existsSync(tmplAbs)) {
+        try {
+          existingTmpl = JSON.parse(readFileSync(tmplAbs, 'utf-8')) as Record<string, unknown>
+        } catch {
+          existingTmpl = null
+        }
+      }
+
       const { relPath, content, commitMessage, prTitle, prBody } = renderFiles(sub, payload)
 
       const absPath = join(config.repoWorkdir, relPath)
       mkdirSync(join(absPath, '..'), { recursive: true })
       writeFileSync(absPath, content)
 
+      const stagedPaths: string[] = [relPath]
+      let templateUpdated = false
+
+      // If this submission targets a mod that already has a netbeammod
+      // template, also update the template so future inflator runs inherit
+      // the new metadata (thumbnail, description, tags, etc.). Without this
+      // a manual edit to a single version is silently overwritten the next
+      // time the inflator generates a new .beammod from the template.
+      if ((sub.kind === 'manual_beammod' || sub.kind === 'new_version') && existingTmpl) {
+        const merged = mergeIntoTemplate(existingTmpl, payload)
+        const newTmpl = JSON.stringify(merged, null, 2) + '\n'
+        const oldTmpl = JSON.stringify(existingTmpl, null, 2) + '\n'
+        if (newTmpl !== oldTmpl) {
+          writeFileSync(tmplAbs, newTmpl)
+          stagedPaths.push(tmplRel)
+          templateUpdated = true
+        }
+      }
+
       const branch = `submission/${sub.kind}/${sub.identifier}/${Date.now()}`
       await git.checkoutLocalBranch(branch)
-      await git.add(relPath)
-      await git.commit(commitMessage)
+      for (const p of stagedPaths) await git.add(p)
+      const finalCommitMessage = templateUpdated
+        ? `${commitMessage}\n\nAlso updates netbeammod/${sub.identifier}.netbeammod so future inflator runs inherit the new metadata.`
+        : commitMessage
+      await git.commit(finalCommitMessage)
       await git.push('origin', branch, ['--set-upstream'])
 
-      const pr = await openPullRequest({ branch, title: prTitle, body: prBody })
+      const finalPrBody = templateUpdated
+        ? `${prBody}\n\n_Also updates \`netbeammod/${sub.identifier}.netbeammod\` so future inflator-generated versions inherit this metadata._`
+        : prBody
+      const pr = await openPullRequest({ branch, title: prTitle, body: finalPrBody })
       return { branch, prUrl: pr.url }
     })
 
@@ -153,4 +198,37 @@ function prFooter(sub: SubmissionRow): string {
     `- Kind: \`${sub.kind}\``,
     `- Submitter: user #${sub.user_id}`,
   ].join('\n')
+}
+
+// Fields owned by the inflator (computed per-release). Never copy these
+// from a version .beammod payload back into the netbeammod template.
+// `x_verified` is intentionally NOT here: web-UI submissions set it on the
+// template too, so future inflator runs keep the badge (the inflator
+// honors `template.x_verified === true` for non-github sources).
+const INFLATOR_OWNED_FIELDS = new Set([
+  'version',
+  'download',
+  'download_hash',
+  'download_size',
+  'release_date',
+])
+
+/**
+ * Merge metadata fields from a manual .beammod submission into the existing
+ * netbeammod template. Preserves all `$`-prefixed directives (kref, filter,
+ * max_releases, etc.) from the template and drops version-specific fields
+ * the inflator computes itself.
+ */
+function mergeIntoTemplate(
+  template: Record<string, unknown>,
+  payload: Record<string, unknown>
+): Record<string, unknown> {
+  // Start from the template so $-fields and unknown extras stay put.
+  const out: Record<string, unknown> = { ...template }
+  for (const [key, value] of Object.entries(payload)) {
+    if (key.startsWith('$')) continue
+    if (INFLATOR_OWNED_FIELDS.has(key)) continue
+    out[key] = value
+  }
+  return out
 }

@@ -339,8 +339,11 @@ async function inflateTemplate(templatePath) {
       beammod.resources.beamng_resource = `https://www.beamng.com/resources/${kref.resourceId}/`
     }
 
-    // Mark manually-curated entries as verified
-    beammod.x_verified = kref.source === 'github'
+    // Mark manually-curated entries as verified. GitHub-sourced templates
+    // are always verified; for other sources, honor an explicit
+    // `x_verified: true` set in the template body (e.g. mods promoted via
+    // the web UI that have been admin-reviewed).
+    beammod.x_verified = kref.source === 'github' || template.x_verified === true
 
     // Write the .beammod file
     mkdirSync(modDir, { recursive: true })
