@@ -33,6 +33,7 @@ const SignupSchema = z.object({
 const LoginSchema = z.object({
   email: z.string().email().max(254).transform((s) => s.toLowerCase()),
   password: z.string().min(1).max(256),
+  turnstile_token: z.string().max(4096).optional(),
 })
 
 function setSessionCookie(reply: import('fastify').FastifyReply, sid: string): void {
@@ -127,7 +128,12 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
     if (!parsed.success) {
       return reply.code(400).send({ error: 'invalid_input' })
     }
-    const { email, password } = parsed.data
+    const { email, password, turnstile_token } = parsed.data
+
+    const captcha = await verifyTurnstile(turnstile_token, request.ip)
+    if (!captcha.ok) {
+      return reply.code(400).send({ error: 'captcha_failed', reason: captcha.reason })
+    }
 
     const user = db.prepare<[string], UserRow>('SELECT * FROM users WHERE email = ?').get(email)
     if (!user) {

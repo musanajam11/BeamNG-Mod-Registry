@@ -1,21 +1,43 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 import { Anchor, Button, Container, Paper, PasswordInput, Stack, TextInput, Title, Alert } from '@mantine/core'
 import { api, ApiError, type User } from '../api/client'
+import { Turnstile } from '../components/Turnstile'
+
+interface AuthConfig {
+  turnstile_site_key: string | null
+  email_verification_required: boolean
+}
 
 export function LoginPage({ onSuccess }: { onSuccess: () => void }) {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+
+  const cfg = useQuery({
+    queryKey: ['auth', 'config'],
+    queryFn: () => api.get<AuthConfig>('/auth/config'),
+  })
+  const siteKey = cfg.data?.turnstile_site_key ?? null
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    if (siteKey && !turnstileToken) {
+      setError('Please complete the verification challenge')
+      return
+    }
     setBusy(true)
     try {
-      await api.post<{ user: User }>('/auth/login', { email, password })
+      await api.post<{ user: User }>('/auth/login', {
+        email,
+        password,
+        turnstile_token: turnstileToken ?? undefined,
+      })
       onSuccess()
       navigate('/')
     } catch (err) {
@@ -33,8 +55,15 @@ export function LoginPage({ onSuccess }: { onSuccess: () => void }) {
           <Stack>
             <TextInput label="Email" type="email" required value={email} onChange={(e) => setEmail(e.currentTarget.value)} />
             <PasswordInput label="Password" required value={password} onChange={(e) => setPassword(e.currentTarget.value)} />
+            {siteKey && (
+              <Turnstile
+                siteKey={siteKey}
+                onToken={setTurnstileToken}
+                onExpire={() => setTurnstileToken(null)}
+              />
+            )}
             {error && <Alert color="red">{error}</Alert>}
-            <Button type="submit" loading={busy}>Sign in</Button>
+            <Button type="submit" loading={busy} disabled={Boolean(siteKey) && !turnstileToken}>Sign in</Button>
             <Anchor component={Link} to="/signup" ta="center" size="sm">
               Don't have an account? Sign up
             </Anchor>
