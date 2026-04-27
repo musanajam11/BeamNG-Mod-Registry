@@ -58,9 +58,11 @@ export async function getInstallationOctokit(): Promise<Octokit> {
   ) {
     return cachedOctokit.value
   }
-  const app = getApp()
-  const installationId = Number(g.installationId)
-  const octokit = (await app.getInstallationOctokit(installationId)) as unknown as Octokit
+  // Mint an installation token via the App, then build a *real* @octokit/rest
+  // Octokit so the `.repos`, `.pulls`, `.git`, etc. namespaces are attached.
+  // (`app.getInstallationOctokit()` returns a bare @octokit/core instance.)
+  const token = await getInstallationToken()
+  const octokit = new Octokit({ auth: token })
   cachedOctokit = {
     value: octokit,
     expiresAt: Date.now() + 50 * 60 * 1000,
