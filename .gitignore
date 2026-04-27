@@ -1,6 +1,9 @@
 node_modules/
 dist/
 
+# Local Unraid deployment (host-specific compose, secrets, data)
+unraid/
+
 # OS
 .DS_Store
 Thumbs.db
