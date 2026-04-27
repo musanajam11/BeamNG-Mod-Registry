@@ -96,6 +96,32 @@ export function isGithubReady(): boolean {
   return Boolean(g.appId && g.privateKey && g.installationId && g.repoOwner)
 }
 
+// ─── Cloudflare Turnstile ───────────────────────────────────────────────
+// DB-backed override of TURNSTILE_SITE_KEY / TURNSTILE_SECRET_KEY env vars.
+
+export const TURNSTILE_KEYS = {
+  siteKey: 'turnstile.site_key',
+  secretKey: 'turnstile.secret_key',
+} as const
+
+export interface ResolvedTurnstileConfig {
+  siteKey?: string
+  secretKey?: string
+}
+
+export function getTurnstileConfig(): ResolvedTurnstileConfig {
+  const m = getMap()
+  return {
+    siteKey: m.get(TURNSTILE_KEYS.siteKey) ?? config.turnstile.siteKey,
+    secretKey: m.get(TURNSTILE_KEYS.secretKey) ?? config.turnstile.secretKey,
+  }
+}
+
+export function isTurnstileReady(): boolean {
+  const t = getTurnstileConfig()
+  return Boolean(t.siteKey && t.secretKey)
+}
+
 // ─── Theme / appearance ─────────────────────────────────────────────────
 // Admin-controlled visual customisation persisted in the settings table and
 // served unauthenticated via /api/theme so it can be applied before login.

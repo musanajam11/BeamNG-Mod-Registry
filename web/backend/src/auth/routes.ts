@@ -18,6 +18,7 @@ import {
   verifyPassword,
 } from './session.js'
 import { verifyTurnstile } from './turnstile.js'
+import { getTurnstileConfig } from '../settings.js'
 import { sendVerificationEmail } from './email.js'
 import { createEmailVerificationToken } from './emailTokens.js'
 import { consumeEmailVerificationToken } from './emailTokens.js'
@@ -170,7 +171,7 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
   // without leaking secrets. Cheap (handful of strings) and unauthenticated
   // by design.
   app.get('/config', async () => ({
-    turnstile_site_key: config.turnstile.siteKey ?? null,
+    turnstile_site_key: getTurnstileConfig().siteKey ?? null,
     email_verification_required: config.email.verificationRequired,
   }))
 

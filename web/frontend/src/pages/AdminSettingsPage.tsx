@@ -216,6 +216,7 @@ export function AdminSettingsPage() {
       </Paper>
 
       <AppearancePanel />
+      <TurnstilePanel />
     </Container>
   )
 }
@@ -378,6 +379,122 @@ function AppearancePanel() {
               >
                 Revert
               </Button>
+            </Group>
+          </Stack>
+        </form>
+      </Stack>
+    </Paper>
+  )
+}
+
+interface TurnstileSettings {
+  configured: boolean
+  site_key: string
+  secret_key_set: boolean
+}
+
+function TurnstilePanel() {
+  const qc = useQueryClient()
+  const tQ = useQuery({
+    queryKey: ['admin', 'settings', 'turnstile'],
+    queryFn: () => api.get<TurnstileSettings>('/admin/settings/turnstile'),
+  })
+
+  const [siteKey, setSiteKey] = useState('')
+  const [secretKey, setSecretKey] = useState('')
+  const [clearSecret, setClearSecret] = useState(false)
+
+  useEffect(() => {
+    if (!tQ.data) return
+    setSiteKey(tQ.data.site_key)
+  }, [tQ.data])
+
+  const save = useMutation({
+    mutationFn: () => {
+      const body: Record<string, unknown> = { site_key: siteKey }
+      if (clearSecret) body.secret_key = '__clear__'
+      else if (secretKey.trim()) body.secret_key = secretKey
+      return api.post<{ ok: true; configured: boolean }>('/admin/settings/turnstile', body)
+    },
+    onSuccess: () => {
+      setSecretKey('')
+      setClearSecret(false)
+      qc.invalidateQueries({ queryKey: ['admin', 'settings', 'turnstile'] })
+    },
+  })
+
+  if (tQ.isLoading) return null
+  const t = tQ.data!
+
+  return (
+    <Paper withBorder p="lg" radius="md" mt="xl">
+      <Stack>
+        <Group justify="space-between">
+          <Title order={4}>Cloudflare Turnstile</Title>
+          <Badge color={t.configured ? 'green' : 'yellow'}>
+            {t.configured ? 'Enabled' : 'Disabled'}
+          </Badge>
+        </Group>
+        <Text c="dimmed" size="sm">
+          Adds a Cloudflare Turnstile challenge to the login and signup forms to
+          deter bots. Create a widget at{' '}
+          <a href="https://dash.cloudflare.com/?to=/:account/turnstile" target="_blank" rel="noreferrer">
+            dash.cloudflare.com → Turnstile
+          </a>
+          {' '}for this site's hostname, then paste the site key and secret key here.
+          When either field is blank the challenge is skipped entirely.
+        </Text>
+
+        <form onSubmit={(e) => { e.preventDefault(); save.mutate() }}>
+          <Stack>
+            <TextInput
+              label="Site key"
+              description="Public key embedded in the login/signup pages (starts with 0x4AAA…)"
+              value={siteKey}
+              onChange={(e) => setSiteKey(e.currentTarget.value)}
+              placeholder="0x4AAAAAAA..."
+            />
+            <Divider label="Secret key" labelPosition="center" />
+            <Text size="xs" c="dimmed">
+              Used server-side to validate challenge responses. Stored in the local
+              SQLite database; never echoed back to the UI.{' '}
+              {t.secret_key_set
+                ? <Badge color="green" size="sm">Secret key on file</Badge>
+                : <Badge color="red" size="sm">No secret key on file</Badge>}
+            </Text>
+            <TextInput
+              type="password"
+              autoComplete="off"
+              placeholder={t.secret_key_set
+                ? 'Leave blank to keep the existing secret, or paste a new one to replace it'
+                : '0x4AAAAAAA...'}
+              value={secretKey}
+              onChange={(e) => { setSecretKey(e.currentTarget.value); if (e.currentTarget.value) setClearSecret(false) }}
+              disabled={clearSecret}
+            />
+            {t.secret_key_set && (
+              <Switch
+                label="Clear stored secret key on save (revert to env var, if any)"
+                checked={clearSecret}
+                onChange={(e) => setClearSecret(e.currentTarget.checked)}
+              />
+            )}
+
+            {save.isError && (
+              <Alert color="red">
+                {save.error instanceof ApiError ? JSON.stringify(save.error.body) : 'Save failed'}
+              </Alert>
+            )}
+            {save.isSuccess && (
+              <Alert color="green">
+                Saved. {save.data.configured
+                  ? 'Turnstile is now enabled — reload the login page to see the widget.'
+                  : 'Turnstile is still disabled (site key or secret key missing).'}
+              </Alert>
+            )}
+
+            <Group>
+              <Button type="submit" loading={save.isPending}>Save</Button>
             </Group>
           </Stack>
         </form>

@@ -8,7 +8,7 @@ import { db, type SubmissionRow, type UserRow } from '../db.js'
 import { audit } from '../audit.js'
 import { requireAdmin } from '../auth/plugin.js'
 import { runPipeline } from '../submissions/pipeline.js'
-import { getGithubConfig, isGithubReady, setSetting, GITHUB_KEYS, getTheme, THEME_KEYS } from '../settings.js'
+import { getGithubConfig, isGithubReady, setSetting, GITHUB_KEYS, getTheme, THEME_KEYS, getTurnstileConfig, isTurnstileReady, TURNSTILE_KEYS } from '../settings.js'
 import { invalidateGithubCache, getInstallationOctokit } from '../github/app.js'
 
 const TrustEnum = z.enum(['green', 'yellow', 'red'])
@@ -417,5 +417,55 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
       details: { keys: changed },
     })
     return { ok: true, theme: getTheme() }
+  })
+
+  // ─── Settings: Cloudflare Turnstile ─────────────────────────────────────
+  app.get('/settings/turnstile', async (request, reply) => {
+    const ctx = requireAdmin(request, reply)
+    if (!ctx) return
+    const t = getTurnstileConfig()
+    return {
+      configured: isTurnstileReady(),
+      site_key: t.siteKey ?? '',
+      // Never echo the secret; just whether one is set.
+      secret_key_set: Boolean(t.secretKey),
+    }
+  })
+
+  const TurnstileSettingsSchema = z.object({
+    site_key: z.string().trim().max(128).optional(),
+    // Send '__clear__' to wipe the stored secret. Empty/undefined keeps it.
+    secret_key: z.string().max(256).optional(),
+  })
+
+  app.post('/settings/turnstile', async (request, reply) => {
+    const ctx = requireAdmin(request, reply)
+    if (!ctx) return
+    const parsed = TurnstileSettingsSchema.safeParse(request.body)
+    if (!parsed.success) {
+      return reply.code(400).send({ error: 'invalid_input', issues: parsed.error.issues })
+    }
+    const b = parsed.data
+    const actor = ctx.user.id
+    const changed: string[] = []
+    if (b.site_key !== undefined) {
+      setSetting(TURNSTILE_KEYS.siteKey, b.site_key.trim(), actor)
+      changed.push(TURNSTILE_KEYS.siteKey)
+    }
+    if (b.secret_key !== undefined) {
+      if (b.secret_key === '__clear__') {
+        setSetting(TURNSTILE_KEYS.secretKey, '', actor)
+        changed.push(TURNSTILE_KEYS.secretKey)
+      } else if (b.secret_key.trim()) {
+        setSetting(TURNSTILE_KEYS.secretKey, b.secret_key.trim(), actor)
+        changed.push(TURNSTILE_KEYS.secretKey)
+      }
+    }
+    audit({
+      actorId: actor,
+      action: 'admin.settings.turnstile_updated',
+      details: { keys: changed },
+    })
+    return { ok: true, configured: isTurnstileReady() }
   })
 }
