@@ -10,6 +10,7 @@
 import { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../api/client'
+import { usePersonalTheme, type PersonalThemeOverrides } from './personalTheme'
 
 export interface ThemeConfig {
   background_url: string
@@ -31,6 +32,24 @@ export function useTheme() {
   })
 }
 
+/**
+ * Merge admin theme + per-user overrides. Personal values win when set;
+ * `null` falls through to the admin default.
+ */
+export function mergeTheme(
+  base: ThemeConfig | undefined,
+  personal: PersonalThemeOverrides,
+): ThemeConfig | undefined {
+  if (!base) return base
+  return {
+    ...base,
+    background_url: personal.background_url ?? base.background_url,
+    background_blur_px: personal.background_blur_px ?? base.background_blur_px,
+    background_dim_pct: personal.background_dim_pct ?? base.background_dim_pct,
+    primary_color: personal.primary_color ?? base.primary_color,
+  }
+}
+
 export function applyThemeVars(theme: ThemeConfig | undefined): void {
   if (typeof document === 'undefined') return
   const root = document.documentElement
@@ -48,11 +67,13 @@ function cssEscapeUrl(url: string): string {
 }
 
 /** Side-effect hook: applies the theme to :root every time the query
- *  data changes. */
+ *  data or personal overrides change. */
 export function useApplyTheme(): ThemeConfig | undefined {
   const q = useTheme()
+  const personal = usePersonalTheme()
+  const merged = mergeTheme(q.data, personal)
   useEffect(() => {
-    applyThemeVars(q.data)
-  }, [q.data])
-  return q.data
+    applyThemeVars(merged)
+  }, [merged])
+  return merged
 }

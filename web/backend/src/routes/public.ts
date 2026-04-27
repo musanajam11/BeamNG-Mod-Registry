@@ -9,8 +9,61 @@ import { join } from 'node:path'
 import { z } from 'zod'
 import { requireAuth } from '../auth/plugin.js'
 import { config } from '../config.js'
+import { db } from '../db.js'
 import { getRegistry, summarize } from '../registry/index.js'
 import { getTheme } from '../settings.js'
+
+/**
+ * Lightweight per-mod edit attribution: the most recent merged submission
+ * (manual_beammod / new_version / netbeammod_*) per identifier, joined with
+ * the submitting user. Used to show "last edited by" on listing cards and
+ * detail views without requiring a separate request per card.
+ */
+interface LastEditRow {
+  identifier: string
+  user_id: number
+  display_name: string
+  avatar_url: string | null
+  kind: string
+  version: string | null
+  decided_at: number | null
+}
+
+// Treat both `pr_opened` (PR awaiting/landed on GitHub) and `merged`
+// as "contribution accepted" for attribution purposes. We don't currently
+// poll GitHub to flip pr_opened -> merged, so restricting to 'merged'
+// would hide every edit a contributor has actually made.
+const CONTRIBUTION_STATUSES = "('pr_opened','merged')"
+
+function loadLastEdits(): Map<string, LastEditRow> {
+  const rows = db
+    .prepare(
+      `SELECT s.identifier, s.user_id, s.kind, s.version, s.decided_at,
+              u.display_name, u.avatar_url
+         FROM submissions s
+         JOIN users u ON u.id = s.user_id
+        WHERE s.status IN ${CONTRIBUTION_STATUSES}
+        ORDER BY COALESCE(s.decided_at, s.created_at) DESC`
+    )
+    .all() as LastEditRow[]
+  const out = new Map<string, LastEditRow>()
+  for (const r of rows) if (!out.has(r.identifier)) out.set(r.identifier, r)
+  return out
+}
+
+function loadHistory(identifier: string): LastEditRow[] {
+  return db
+    .prepare(
+      `SELECT s.identifier, s.user_id, s.kind, s.version, s.decided_at,
+              u.display_name, u.avatar_url
+         FROM submissions s
+         JOIN users u ON u.id = s.user_id
+        WHERE s.status IN ${CONTRIBUTION_STATUSES} AND s.identifier = ?
+        ORDER BY COALESCE(s.decided_at, s.created_at) DESC
+        LIMIT 50`
+    )
+    .all(identifier) as LastEditRow[]
+}
 
 const QuerySchema = z.object({
   q: z.string().trim().max(128).optional(),
@@ -26,6 +79,153 @@ export async function publicRoutes(app: FastifyInstance): Promise<void> {
   // Public theme so unauthenticated pages (login/signup) can apply admin
   // customizations before the user has a session.
   app.get('/theme', async () => getTheme())
+
+  // ─── News feed (BeamNG Steam RSS + BeamMP GitHub releases) ──────────────
+  // Mirrors the widget used by BeamMP Content Manager. Cached for 30 min so
+  // we don't hammer Steam / GitHub on every dashboard load. Public so the
+  // login screen could surface it later if desired.
+  type NewsItem = {
+    id: string
+    source: 'steam' | 'beammp'
+    title: string
+    url: string
+    date: number
+    summary: string
+  }
+  const NEWS_TTL_MS = 30 * 60 * 1000
+  let newsCache: { items: NewsItem[]; fetchedAt: number } | null = null
+
+  async function fetchNewsFeed(): Promise<NewsItem[]> {
+    const items: NewsItem[] = []
+    let steamOk = false
+    let ghOk = false
+
+    try {
+      const res = await fetch('https://store.steampowered.com/feeds/news/app/284160')
+      if (res.ok) {
+        const xml = await res.text()
+        const itemRe = /<item>([\s\S]*?)<\/item>/g
+        let m: RegExpExecArray | null
+        let count = 0
+        while ((m = itemRe.exec(xml)) !== null && count < 4) {
+          const block = m[1] ?? ''
+          const title = block.match(/<title>(.*?)<\/title>/)?.[1] ?? ''
+          const link =
+            block.match(/<link><!\[CDATA\[(.*?)\]\]><\/link>/)?.[1] ??
+            block.match(/<link>(.*?)<\/link>/)?.[1] ?? ''
+          const pubDate = block.match(/<pubDate>(.*?)<\/pubDate>/)?.[1] ?? ''
+          const desc = block.match(/<description>([\s\S]*?)<\/description>/)?.[1] ?? ''
+          let cleaned = desc.replace(/<!\[CDATA\[|\]\]>/g, '')
+          let prev = cleaned
+          do { prev = cleaned; cleaned = cleaned.replace(/<[^>]+>/g, '') } while (cleaned !== prev)
+          const summary = cleaned
+            .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+            .replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, '&')
+            .trim().slice(0, 240)
+          if (title) {
+            items.push({
+              id: `steam-${count}`,
+              source: 'steam',
+              title,
+              url: link,
+              date: pubDate ? Math.floor(new Date(pubDate).getTime() / 1000) : 0,
+              summary,
+            })
+            count++
+          }
+        }
+        steamOk = true
+      }
+    } catch { /* network error, skip */ }
+
+    try {
+      const res = await fetch(
+        'https://api.github.com/repos/BeamMP/BeamMP-Launcher/releases?per_page=4',
+        { headers: { 'User-Agent': 'BeamNG-Mod-Registry', Accept: 'application/vnd.github+json' } },
+      )
+      if (res.ok) {
+        const releases = (await res.json()) as Array<{
+          id: number; name: string | null; tag_name: string
+          html_url: string; published_at: string; body: string | null
+        }>
+        for (const rel of releases) {
+          items.push({
+            id: `gh-${rel.id}`,
+            source: 'beammp',
+            title: rel.name?.trim() || rel.tag_name || 'BeamMP Release',
+            url: rel.html_url,
+            date: Math.floor(new Date(rel.published_at).getTime() / 1000),
+            summary: (rel.body ?? '').slice(0, 240).replace(/[#*_\r]/g, '').trim(),
+          })
+        }
+        ghOk = true
+      }
+    } catch { /* network error, skip */ }
+
+    items.sort((a, b) => b.date - a.date)
+    if (steamOk && ghOk) newsCache = { items, fetchedAt: Date.now() }
+    return items
+  }
+
+  app.get('/news', async () => {
+    if (newsCache && Date.now() - newsCache.fetchedAt < NEWS_TTL_MS) {
+      return { items: newsCache.items, cached: true }
+    }
+    const items = await fetchNewsFeed()
+    return { items, cached: false }
+  })
+
+  // ─── BeamNG Content Manager latest release proxy ────────────────────────
+  // The dashboard "Content Manager" page surfaces download links per OS.
+  // Cached 30 min so we don't hit the GitHub API on every page load.
+  type CMRelease = {
+    version: string
+    html_url: string
+    published_at: string
+    assets: {
+      windows?: { name: string; size: number; url: string }
+      linux_appimage?: { name: string; size: number; url: string }
+      linux_deb?: { name: string; size: number; url: string }
+      macos?: { name: string; size: number; url: string }
+    }
+  }
+  const CM_TTL_MS = 30 * 60 * 1000
+  let cmCache: { release: CMRelease; fetchedAt: number } | null = null
+
+  app.get('/content-manager/latest', async (_req, reply) => {
+    if (cmCache && Date.now() - cmCache.fetchedAt < CM_TTL_MS) {
+      return { release: cmCache.release, cached: true }
+    }
+    try {
+      const res = await fetch(
+        'https://api.github.com/repos/musanajam11/BeamNG-Content-Manager/releases/latest',
+        { headers: { 'User-Agent': 'BeamNG-Mod-Registry', Accept: 'application/vnd.github+json' } },
+      )
+      if (!res.ok) return reply.code(502).send({ error: 'github_unavailable' })
+      const data = (await res.json()) as {
+        tag_name: string; html_url: string; published_at: string
+        assets: Array<{ name: string; size: number; browser_download_url: string }>
+      }
+      const release: CMRelease = {
+        version: data.tag_name,
+        html_url: data.html_url,
+        published_at: data.published_at,
+        assets: {},
+      }
+      for (const a of data.assets) {
+        const entry = { name: a.name, size: a.size, url: a.browser_download_url }
+        const lower = a.name.toLowerCase()
+        if (lower.endsWith('-setup.exe')) release.assets.windows = entry
+        else if (lower.endsWith('.appimage')) release.assets.linux_appimage = entry
+        else if (lower.endsWith('.deb')) release.assets.linux_deb = entry
+        else if (lower.endsWith('.dmg')) release.assets.macos = entry
+      }
+      cmCache = { release, fetchedAt: Date.now() }
+      return { release, cached: false }
+    } catch {
+      return reply.code(502).send({ error: 'fetch_failed' })
+    }
+  })
 
   app.get('/mods', async (request, reply) => {
     const ctx = requireAuth(request, reply)
@@ -65,13 +265,31 @@ export async function publicRoutes(app: FastifyInstance): Promise<void> {
       if (m.mod_type) typeCounts[m.mod_type] = (typeCounts[m.mod_type] ?? 0) + 1
     }
 
+    // Single SQL pass for last-editor attribution; cheap (one indexed scan)
+    // and avoids N+1 lookups from the client.
+    const lastEdits = loadLastEdits()
+
     return {
-      items: slice.map(summarize),
+      items: slice.map((m) => ({
+        ...summarize(m),
+        last_edit: lastEdits.get(m.identifier) ?? null,
+      })),
       total,
       page,
       pageSize,
       facets: { mod_types: typeCounts },
     }
+  })
+
+  // Edit history for one mod — every accepted submission, newest first.
+  // Used by the registry browser drawer to show who has touched the entry.
+  app.get('/mods/:identifier/history', async (request, reply) => {
+    const ctx = requireAuth(request, reply)
+    if (!ctx) return
+    const { identifier } = request.params as { identifier: string }
+    const { byId } = await getRegistry()
+    if (!byId.has(identifier)) return reply.code(404).send({ error: 'not_found' })
+    return { history: loadHistory(identifier) }
   })
 
   app.get('/mods/:identifier', async (request, reply) => {
@@ -97,6 +315,7 @@ export async function publicRoutes(app: FastifyInstance): Promise<void> {
       /* no template — that's fine */
     }
 
-    return { mod: found, watch }
+    const lastEdits = loadLastEdits()
+    return { mod: found, watch, last_edit: lastEdits.get(identifier) ?? null }
   })
 }

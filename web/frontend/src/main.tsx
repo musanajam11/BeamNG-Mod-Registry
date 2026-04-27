@@ -9,6 +9,7 @@ import '@mantine/notifications/styles.css'
 import './styles.css'
 import { App } from './App'
 import { useTheme } from './state/theme'
+import { usePersonalTheme } from './state/personalTheme'
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false, refetchOnWindowFocus: false } },
@@ -16,8 +17,10 @@ const queryClient = new QueryClient({
 
 function ThemedApp() {
   const t = useTheme()
+  const personal = usePersonalTheme()
+  // Personal primary color wins over admin default; falls through to 'blue'.
   const mantineTheme = createTheme({
-    primaryColor: t.data?.primary_color ?? 'blue',
+    primaryColor: personal.primary_color ?? t.data?.primary_color ?? 'blue',
   })
   return (
     <MantineProvider

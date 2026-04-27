@@ -1,0 +1,32 @@
+# Keep the build context small. Build only needs web/, schema/, scripts/.
+**/.git
+**/.github
+**/node_modules
+**/dist
+**/build
+**/.cache
+**/.vite
+**/.turbo
+**/.next
+**/coverage
+**/*.log
+**/npm-debug.log*
+**/.DS_Store
+**/Thumbs.db
+
+# Repo content not consumed by the image
+mods/
+netbeammod/
+assets/
+unraid/
+docker-compose.yml
+README.md
+CONTRIBUTING.md
+LICENSE
+.editorconfig
+.gitignore
+
+# Editor / OS noise
+.vscode/
+.idea/
+*.swp

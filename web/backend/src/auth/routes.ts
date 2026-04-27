@@ -57,6 +57,7 @@ function publicUser(u: UserRow) {
     trust: u.trust,
     github_username: u.github_username,
     email_verified: !!u.email_verified,
+    avatar_url: u.avatar_url,
     created_at: u.created_at,
   }
 }
@@ -200,6 +201,76 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
       request.log.warn({ err }, 'failed to resend verification email')
       return reply.code(500).send({ error: 'send_failed' })
     }
+    return { ok: true }
+  })
+
+  // ─── Profile self-service ──────────────────────────────────────────────
+  // Avatar is a data: URL stored in the users row. Capped at ~700 KB of raw
+  // string (≈512 KB of binary image once base64-decoded) to keep /auth/me
+  // responses small and avoid bloating SQLite.
+  const ProfileSchema = z.object({
+    display_name: z.string().min(2).max(64).regex(/^[A-Za-z0-9 _.\-]+$/).optional(),
+    avatar_url: z
+      .union([
+        z.string().regex(/^data:image\/(png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=]+$/).max(700 * 1024),
+        z.literal(''),
+        z.null(),
+      ])
+      .optional(),
+  })
+  app.patch('/profile', async (request, reply) => {
+    const ctx = request.ctx
+    if (!ctx) return reply.code(401).send({ error: 'auth_required' })
+    const parsed = ProfileSchema.safeParse(request.body)
+    if (!parsed.success) {
+      return reply.code(400).send({ error: 'invalid_input', issues: parsed.error.issues })
+    }
+    const updates: string[] = []
+    const params: Array<string | null> = []
+    if (parsed.data.display_name !== undefined) {
+      updates.push('display_name = ?')
+      params.push(parsed.data.display_name)
+    }
+    if (parsed.data.avatar_url !== undefined) {
+      updates.push('avatar_url = ?')
+      params.push(parsed.data.avatar_url ? parsed.data.avatar_url : null)
+    }
+    if (updates.length === 0) return { user: publicUser(ctx.user) }
+    params.push(String(ctx.user.id))
+    db.prepare(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`).run(...params)
+    audit({
+      actorId: ctx.user.id,
+      action: 'user.profile_update',
+      target: `user:${ctx.user.id}`,
+      details: {
+        display_name_changed: parsed.data.display_name !== undefined,
+        avatar_changed: parsed.data.avatar_url !== undefined,
+      },
+    })
+    const fresh = db.prepare<[number], UserRow>('SELECT * FROM users WHERE id = ?').get(ctx.user.id)!
+    return { user: publicUser(fresh) }
+  })
+
+  const PasswordSchema = z.object({
+    current_password: z.string().min(1).max(256),
+    new_password: z.string().min(12).max(256),
+  })
+  app.post('/change-password', async (request, reply) => {
+    const ctx = request.ctx
+    if (!ctx) return reply.code(401).send({ error: 'auth_required' })
+    const parsed = PasswordSchema.safeParse(request.body)
+    if (!parsed.success) {
+      return reply.code(400).send({ error: 'invalid_input', issues: parsed.error.issues })
+    }
+    const { current_password, new_password } = parsed.data
+    const ok = await verifyPassword(ctx.user.password_hash, current_password)
+    if (!ok) {
+      audit({ actorId: ctx.user.id, action: 'user.password_change_failed' })
+      return reply.code(401).send({ error: 'invalid_credentials' })
+    }
+    const hash = await hashPassword(new_password)
+    db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(hash, ctx.user.id)
+    audit({ actorId: ctx.user.id, action: 'user.password_changed' })
     return { ok: true }
   })
 }

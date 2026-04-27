@@ -114,3 +114,18 @@ export function requireAdmin(request: FastifyRequest, reply: FastifyReply): Sess
   }
   return ctx
 }
+
+/**
+ * Reviewer gate: admins or green-trust users. Used for the moderation
+ * surface (list pending queue, approve / reject / request-changes). Lower-
+ * trust users still can't see or moderate the queue.
+ */
+export function requireReviewer(request: FastifyRequest, reply: FastifyReply): SessionContext | null {
+  const ctx = requireAuth(request, reply)
+  if (!ctx) return null
+  if (ctx.user.role !== 'admin' && ctx.user.trust !== 'green') {
+    reply.code(403).send({ error: 'reviewer_required' })
+    return null
+  }
+  return ctx
+}

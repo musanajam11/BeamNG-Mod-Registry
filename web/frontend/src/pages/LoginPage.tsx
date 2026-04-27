@@ -76,6 +76,9 @@ export function LoginPage({ onSuccess }: { onSuccess: () => void }) {
               <Anchor component={Link} to="/signup" ta="center" size="sm">
                 Don't have an account? Sign up
               </Anchor>
+              <Anchor component={Link} to="/content-manager" ta="center" size="sm" c="dimmed">
+                Get the BeamNG Content Manager desktop app
+              </Anchor>
             </Stack>
           </form>
         </Paper>

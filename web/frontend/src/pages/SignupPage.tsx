@@ -80,6 +80,9 @@ export function SignupPage({ onSuccess }: { onSuccess: () => void }) {
             <Anchor component={Link} to="/login" ta="center" size="sm">
               Already have an account? Sign in
             </Anchor>
+            <Anchor component={Link} to="/content-manager" ta="center" size="sm" c="dimmed">
+              Get the BeamNG Content Manager desktop app
+            </Anchor>
           </Stack>
         </form>
         </Paper>

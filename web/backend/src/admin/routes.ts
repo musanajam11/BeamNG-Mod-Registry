@@ -6,7 +6,7 @@ import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { db, type SubmissionRow, type UserRow } from '../db.js'
 import { audit } from '../audit.js'
-import { requireAdmin } from '../auth/plugin.js'
+import { requireAdmin, requireReviewer } from '../auth/plugin.js'
 import { runPipeline } from '../submissions/pipeline.js'
 import { getGithubConfig, isGithubReady, setSetting, GITHUB_KEYS, getTheme, THEME_KEYS, getTurnstileConfig, isTurnstileReady, TURNSTILE_KEYS } from '../settings.js'
 import { invalidateGithubCache, getInstallationOctokit } from '../github/app.js'
@@ -89,7 +89,7 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
   })
 
   app.get('/submissions', async (request, reply) => {
-    const ctx = requireAdmin(request, reply)
+    const ctx = requireReviewer(request, reply)
     if (!ctx) return
     const status = (request.query as { status?: string } | undefined)?.status
     const rows = status
@@ -107,7 +107,7 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
   })
 
   app.get('/submissions/:id', async (request, reply) => {
-    const ctx = requireAdmin(request, reply)
+    const ctx = requireReviewer(request, reply)
     if (!ctx) return
     const id = Number((request.params as { id: string }).id)
     if (!id) return reply.code(400).send({ error: 'invalid_input' })
@@ -151,7 +151,7 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
   })
 
   app.post('/submissions/:id/approve', async (request, reply) => {
-    const ctx = requireAdmin(request, reply)
+    const ctx = requireReviewer(request, reply)
     if (!ctx) return
     const id = Number((request.params as { id: string }).id)
     if (!id) return reply.code(400).send({ error: 'invalid_input' })
@@ -161,6 +161,9 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
       .prepare<[number], SubmissionRow>('SELECT * FROM submissions WHERE id = ?')
       .get(id)
     if (!sub) return reply.code(404).send({ error: 'not_found' })
+    if (sub.user_id === ctx.user.id && ctx.user.role !== 'admin') {
+      return reply.code(403).send({ error: 'cannot_review_own' })
+    }
     if (sub.status !== 'pending_review' && sub.status !== 'changes_requested') {
       return reply.code(409).send({ error: 'wrong_status', status: sub.status })
     }
@@ -181,11 +184,19 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
   })
 
   app.post('/submissions/:id/reject', async (request, reply) => {
-    const ctx = requireAdmin(request, reply)
+    const ctx = requireReviewer(request, reply)
     if (!ctx) return
     const id = Number((request.params as { id: string }).id)
     const note = (request.body as { note?: string } | null)?.note ?? null
     if (!id) return reply.code(400).send({ error: 'invalid_input' })
+    if (ctx.user.role !== 'admin') {
+      const owner = db
+        .prepare<[number], { user_id: number }>('SELECT user_id FROM submissions WHERE id = ?')
+        .get(id)
+      if (owner && owner.user_id === ctx.user.id) {
+        return reply.code(403).send({ error: 'cannot_review_own' })
+      }
+    }
     const result = db
       .prepare(
         `UPDATE submissions
@@ -207,7 +218,7 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
   // submitter is expected to update payload via POST /submissions/mine/:id/resubmit
   // which moves the row back to `pending_review` for another round.
   app.post('/submissions/:id/request-changes', async (request, reply) => {
-    const ctx = requireAdmin(request, reply)
+    const ctx = requireReviewer(request, reply)
     if (!ctx) return
     const id = Number((request.params as { id: string }).id)
     if (!id) return reply.code(400).send({ error: 'invalid_input' })
@@ -216,6 +227,14 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
       .safeParse(request.body)
     if (!body.success) {
       return reply.code(400).send({ error: 'note_required', issues: body.error.issues })
+    }
+    if (ctx.user.role !== 'admin') {
+      const owner = db
+        .prepare<[number], { user_id: number }>('SELECT user_id FROM submissions WHERE id = ?')
+        .get(id)
+      if (owner && owner.user_id === ctx.user.id) {
+        return reply.code(403).send({ error: 'cannot_review_own' })
+      }
     }
     const result = db
       .prepare(

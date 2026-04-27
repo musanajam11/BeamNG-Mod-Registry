@@ -21,6 +21,7 @@ import { submissionRoutes } from './submissions/routes.js'
 import { adminRoutes } from './admin/routes.js'
 import { publicRoutes } from './routes/public.js'
 import { pruneExpiredSessions } from './auth/session.js'
+import { startMergePoller } from './submissions/merge-poller.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -46,10 +47,13 @@ async function buildApp() {
         scriptSrc: [
           "'self'",
           'https://challenges.cloudflare.com',
-          // Cloudflare Web Analytics (manual install via index.html). Loads
-          // beacon.min.js from this host with no inline bootstrap, so we only
-          // need to whitelist the host — no rotating SHA-256 to maintain.
+          // Cloudflare Web Analytics. We ship a manual <script> tag in
+          // index.html, but when the zone has "Automatic Setup" enabled the
+          // CF proxy also injects a tiny inline bootstrap. Allow its hash
+          // so CSP doesn't block it. If CF rotates the bootstrap, copy the
+          // new sha256-... value from the browser console error.
           'https://static.cloudflareinsights.com',
+          "'sha256-ieoeWczDHkReVBsRBqaal5AFMlBtNjMzgwKvLqi/tSU='",
         ],
         styleSrc: ["'self'", "'unsafe-inline'"], // Mantine emits some inline styles
         imgSrc: ["'self'", 'data:', 'https:'],
@@ -82,6 +86,13 @@ async function buildApp() {
       files: 1,
       fields: 10,
     },
+  })
+  // Passthrough parser for raw binary chunked uploads (used by
+  // /submissions/inspect-upload-chunk to bypass Cloudflare's 100 MB per-
+  // request body cap). Each chunk is streamed straight to disk; the route
+  // sets its own bodyLimit.
+  app.addContentTypeParser('application/octet-stream', (_req, payload, done) => {
+    done(null, payload)
   })
   await app.register(authPlugin)
 
@@ -135,6 +146,10 @@ async function main() {
   // Periodic session GC.
   const interval = setInterval(pruneExpiredSessions, 60 * 60 * 1000).unref()
   void interval
+
+  // Poll GitHub for PR merges so submissions transition pr_opened -> merged
+  // (powers contribution attribution + history on the registry browser).
+  startMergePoller()
 
   try {
     await app.listen({ port: config.port, host: config.host })

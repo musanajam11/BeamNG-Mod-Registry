@@ -157,22 +157,60 @@ function findFirst<T>(arr: T[], pred: (t: T) => boolean): T | undefined {
   return undefined
 }
 
-export async function inspectZip(filePath: string): Promise<InspectResult> {
+export interface InspectProgressHook {
+  (e: {
+    phase: 'received' | 'hashing' | 'listing' | 'analyzing' | 'reading_metadata' | 'done'
+    percent?: number
+    detail?: string
+    /** Bytes per second during the hashing phase. */
+    bytes_per_sec?: number
+    /** Seconds remaining for the current phase, when computable. */
+    eta_sec?: number
+  }): void
+}
+
+export async function inspectZip(
+  filePath: string,
+  opts: { onProgress?: InspectProgressHook } = {}
+): Promise<InspectResult> {
   const warnings: string[] = []
   const stats = await stat(filePath)
+  const onProgress = opts.onProgress ?? (() => {})
+  onProgress({ phase: 'received', detail: `${(stats.size / (1024 * 1024)).toFixed(1)} MiB` })
 
   // Hash + size pass — independent of zip parsing so we always return them.
   const hash = createHash('sha256')
   await new Promise<void>((resolve, reject) => {
     const s = createReadStream(filePath)
+    let hashed = 0
+    let lastEmit = 0
+    const start = Date.now()
     s.on('data', (c: string | Buffer) => {
-      hash.update(typeof c === 'string' ? Buffer.from(c) : c)
+      const buf = typeof c === 'string' ? Buffer.from(c) : c
+      hash.update(buf)
+      hashed += buf.length
+      const pct = stats.size > 0 ? Math.floor((hashed / stats.size) * 100) : 0
+      // Throttle to ~10 events/s worth of meaningful jumps.
+      if (pct >= lastEmit + 2 || pct === 100) {
+        lastEmit = pct
+        const elapsedMs = Math.max(1, Date.now() - start)
+        const bps = (hashed / elapsedMs) * 1000
+        const remainingBytes = Math.max(0, stats.size - hashed)
+        const etaSec = bps > 0 ? Math.round(remainingBytes / bps) : undefined
+        onProgress({
+          phase: 'hashing',
+          percent: pct,
+          bytes_per_sec: Math.round(bps),
+          eta_sec: etaSec,
+        })
+      }
     })
     s.on('end', () => resolve())
     s.on('error', reject)
   })
   const sha256 = hash.digest('hex')
 
+  onProgress({ phase: 'listing', detail: 'reading central directory' })
   let entries: ZipEntryLite[] = []
   try {
     entries = await listEntries(filePath)
@@ -190,6 +228,8 @@ export async function inspectZip(filePath: string): Promise<InspectResult> {
   const filePaths = entries.map((e) => e.fileName)
   const suggestions: InspectSuggestions = {}
 
+  onProgress({ phase: 'analyzing', detail: `${entries.length.toLocaleString()} entries` })
+
   const mp = detectMultiplayerScope(filePaths)
   if (mp.scope) suggestions.multiplayer_scope = mp.scope
   suggestions.has_resources_layout = mp.hasResources
@@ -204,6 +244,7 @@ export async function inspectZip(filePath: string): Promise<InspectResult> {
     (e) => /(^|\/)(vehicles|levels|scenarios)\/[^/]+\/info\.json$/i.test(e.fileName)
   )
   if (infoEntry) {
+    onProgress({ phase: 'reading_metadata', detail: infoEntry.fileName })
     const raw = await readEntry(filePath, infoEntry.fileName, MAX_INFO_JSON_BYTES)
     if (raw) {
       const parsed = safeJsonParse(raw)
@@ -235,6 +276,7 @@ export async function inspectZip(filePath: string): Promise<InspectResult> {
   // Provide a small sample of detected files for the UI.
   suggestions.detected_files = filePaths.slice(0, 50)
 
+  onProgress({ phase: 'done' })
   return {
     sha256,
     size: stats.size,

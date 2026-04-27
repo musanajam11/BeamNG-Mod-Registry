@@ -6,17 +6,27 @@
  * Selecting a card opens a drawer with full details and a copy-to-clipboard
  * button on the identifier.
  */
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import {
-  ActionIcon, Alert, Anchor, Badge, Button, Card, CloseButton, Container, CopyButton,
-  Drawer, Grid, Group, Image, Pagination, Paper, ScrollArea, Select, Stack,
-  Text, TextInput, Title, Tooltip,
+  ActionIcon, Alert, Anchor, Avatar, Badge, Button, Card, CloseButton, Collapse,
+  Container, CopyButton, Divider, Drawer, Grid, Group, Image, Loader, Paper,
+  ScrollArea, Select, Stack, Text, TextInput, Title, Tooltip, UnstyledButton,
 } from '@mantine/core'
-import { useDebouncedValue } from '@mantine/hooks'
+import { useDebouncedValue, useDisclosure } from '@mantine/hooks'
 import { api } from '../api/client'
 import { useSubmitDraft } from '../state/SubmitDraftContext'
+
+interface LastEdit {
+  identifier: string
+  user_id: number
+  display_name: string
+  avatar_url: string | null
+  kind: string
+  version: string | null
+  decided_at: number | null
+}
 
 interface ModListItem {
   identifier: string
@@ -35,6 +45,7 @@ interface ModListItem {
   verified: boolean
   resources?: Record<string, unknown>
   versions: string[]
+  last_edit: LastEdit | null
 }
 
 interface ModListResponse {
@@ -52,12 +63,57 @@ interface ModDetail extends ModListItem {
 interface ModDetailResponse {
   mod: ModDetail
   watch?: { kref?: string; filter_asset?: string }
+  last_edit: LastEdit | null
 }
 
 const PAGE_SIZE = 24
 
 function isHttpUrl(s: string | undefined): s is string {
   return !!s && /^https?:\/\//i.test(s)
+}
+
+function initialsOf(name: string): string {
+  return name.slice(0, 2).toUpperCase()
+}
+
+function formatRelativeTime(ts: number | null | undefined): string {
+  if (!ts) return ''
+  const diff = Date.now() - ts
+  const sec = Math.round(diff / 1000)
+  if (sec < 60) return 'just now'
+  const min = Math.round(sec / 60)
+  if (min < 60) return `${min}\u00a0min ago`
+  const hr = Math.round(min / 60)
+  if (hr < 24) return `${hr}\u00a0hr ago`
+  const day = Math.round(hr / 24)
+  if (day < 30) return `${day}\u00a0day${day === 1 ? '' : 's'} ago`
+  return new Date(ts).toLocaleDateString()
+}
+
+const KIND_LABEL: Record<string, string> = {
+  manual_beammod: 'Manual edit',
+  netbeammod_github: 'GitHub watcher',
+  netbeammod_beamng: 'BeamNG watcher',
+  claim: 'Claimed',
+  new_version: 'New version',
+}
+
+function LastEditedBadge({ edit, compact }: { edit: LastEdit; compact?: boolean }) {
+  const when = formatRelativeTime(edit.decided_at)
+  const label = `${KIND_LABEL[edit.kind] ?? 'Edited'} by ${edit.display_name}${when ? ` — ${when}` : ''}`
+  return (
+    <Tooltip label={label} withArrow openDelay={300}>
+      <Group gap={6} wrap="nowrap" align="center" style={{ minWidth: 0 }}>
+        <Avatar src={edit.avatar_url ?? undefined} size={compact ? 18 : 22} radius="xl">
+          {initialsOf(edit.display_name)}
+        </Avatar>
+        <Text size="xs" c="dimmed" lineClamp={1} style={{ minWidth: 0 }}>
+          edited by {edit.display_name}
+          {when ? ` · ${when}` : ''}
+        </Text>
+      </Group>
+    </Tooltip>
+  )
 }
 
 function ThumbBox({ src, alt }: { src?: string; alt: string }) {
@@ -90,23 +146,53 @@ export function RegistryBrowserPage() {
   const [q, setQ] = useState('')
   const [debouncedQ] = useDebouncedValue(q, 250)
   const [type, setType] = useState<string | null>(null)
-  const [page, setPage] = useState(1)
   const [selected, setSelected] = useState<string | null>(null)
 
-  // Reset to page 1 when filters change.
-  const queryKey = ['mods', { q: debouncedQ, type, page }]
-  const list = useQuery({
-    queryKey,
-    queryFn: () => {
+  // Infinite scroll: each page returns PAGE_SIZE items; we fetch the next
+  // page when the sentinel scrolls into view. Filter changes reset the
+  // scroll automatically because the query key changes.
+  const list = useInfiniteQuery({
+    queryKey: ['mods', { q: debouncedQ, type }],
+    initialPageParam: 1,
+    queryFn: ({ pageParam }) => {
       const params = new URLSearchParams()
       if (debouncedQ) params.set('q', debouncedQ)
       if (type) params.set('type', type)
-      params.set('page', String(page))
+      params.set('page', String(pageParam))
       params.set('pageSize', String(PAGE_SIZE))
       return api.get<ModListResponse>(`/mods?${params.toString()}`)
     },
-    placeholderData: (prev) => prev,
+    getNextPageParam: (last) => {
+      const loaded = last.page * last.pageSize
+      return loaded < last.total ? last.page + 1 : undefined
+    },
   })
+
+  // Flatten pages → single array for rendering. Memoised so the grid only
+  // re-renders when actual data changes.
+  const items = useMemo(
+    () => list.data?.pages.flatMap((p) => p.items) ?? [],
+    [list.data],
+  )
+  const total = list.data?.pages[0]?.total ?? 0
+  const facets = list.data?.pages[0]?.facets ?? { mod_types: {} }
+
+  // IntersectionObserver-based auto-load. Sentinel div sits below the grid.
+  const sentinelRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    const el = sentinelRef.current
+    if (!el || !list.hasNextPage) return
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting && !list.isFetchingNextPage) {
+          void list.fetchNextPage()
+        }
+      },
+      { rootMargin: '400px 0px' },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [list.hasNextPage, list.isFetchingNextPage, list.fetchNextPage, items.length])
 
   const detail = useQuery<ModDetailResponse>({
     queryKey: ['mod', selected],
@@ -115,13 +201,10 @@ export function RegistryBrowserPage() {
   })
 
   const typeOptions = useMemo(() => {
-    const facets = list.data?.facets.mod_types ?? {}
-    return Object.entries(facets)
+    return Object.entries(facets.mod_types ?? {})
       .sort((a, b) => b[1] - a[1])
       .map(([value, count]) => ({ value, label: `${value} (${count})` }))
-  }, [list.data])
-
-  const totalPages = list.data ? Math.max(1, Math.ceil(list.data.total / PAGE_SIZE)) : 1
+  }, [facets])
 
   return (
     <Container size={1200}>
@@ -129,7 +212,7 @@ export function RegistryBrowserPage() {
         <Title order={2}>Registry browser</Title>
         {list.data && (
           <Text c="dimmed" size="sm">
-            {list.data.total.toLocaleString()} mod{list.data.total === 1 ? '' : 's'} indexed
+            {total.toLocaleString()} mod{total === 1 ? '' : 's'} indexed
           </Text>
         )}
       </Group>
@@ -139,16 +222,16 @@ export function RegistryBrowserPage() {
           <TextInput
             placeholder="Search by name, identifier, author, tag…"
             value={q}
-            onChange={(e) => { setQ(e.currentTarget.value); setPage(1) }}
+            onChange={(e) => setQ(e.currentTarget.value)}
             style={{ flex: 1, minWidth: 240 }}
             rightSection={
-              q ? <CloseButton onClick={() => { setQ(''); setPage(1) }} /> : null
+              q ? <CloseButton onClick={() => setQ('')} /> : null
             }
           />
           <Select
             placeholder="All types"
             value={type}
-            onChange={(v) => { setType(v); setPage(1) }}
+            onChange={(v) => setType(v)}
             data={typeOptions}
             clearable
             searchable
@@ -161,12 +244,12 @@ export function RegistryBrowserPage() {
         <Alert color="red" mb="md">Failed to load registry.</Alert>
       )}
 
-      {list.data && list.data.items.length === 0 && !list.isFetching && (
+      {list.data && items.length === 0 && !list.isFetching && (
         <Alert color="yellow">No mods match your filters.</Alert>
       )}
 
       <Grid>
-        {list.data?.items.map((m) => (
+        {items.map((m) => (
           <Grid.Col key={m.identifier} span={{ base: 12, sm: 6, md: 4, lg: 3 }}>
             <Card
               withBorder
@@ -201,6 +284,7 @@ export function RegistryBrowserPage() {
                 {m.author && (
                   <Text size="xs" c="dimmed" lineClamp={1}>by {m.author}</Text>
                 )}
+                {m.last_edit && <LastEditedBadge edit={m.last_edit} compact />}
                 {m.abstract && (
                   <Text size="xs" lineClamp={2}>{m.abstract}</Text>
                 )}
@@ -217,9 +301,20 @@ export function RegistryBrowserPage() {
         ))}
       </Grid>
 
-      {list.data && totalPages > 1 && (
-        <Group justify="center" mt="lg">
-          <Pagination value={page} onChange={setPage} total={totalPages} />
+      {/* Sentinel observed by IntersectionObserver to auto-load the next
+          page. Also acts as a manual fallback button so users on browsers
+          without IO support can still load more. */}
+      {items.length > 0 && (
+        <Group justify="center" mt="lg" ref={sentinelRef as React.Ref<HTMLDivElement>}>
+          {list.isFetchingNextPage ? (
+            <Loader size="sm" />
+          ) : list.hasNextPage ? (
+            <Button variant="subtle" onClick={() => list.fetchNextPage()}>
+              Load more
+            </Button>
+          ) : (
+            <Text c="dimmed" size="sm">End of results</Text>
+          )}
         </Group>
       )}
 
@@ -236,6 +331,7 @@ export function RegistryBrowserPage() {
           <ModDetailView
             mod={detail.data.mod}
             watch={detail.data.watch}
+            lastEdit={detail.data.last_edit}
             onClose={() => setSelected(null)}
           />
         )}
@@ -244,9 +340,18 @@ export function RegistryBrowserPage() {
   )
 }
 
-function ModDetailView({ mod, watch, onClose }: { mod: ModDetail; watch?: { kref?: string; filter_asset?: string }; onClose: () => void }) {
+function ModDetailView({ mod, watch, lastEdit, onClose }: { mod: ModDetail; watch?: { kref?: string; filter_asset?: string }; lastEdit: LastEdit | null; onClose: () => void }) {
   const draft = useSubmitDraft()
   const navigate = useNavigate()
+  const [historyOpen, historyToggle] = useDisclosure(false)
+
+  // History is fetched lazily the first time the user expands the dropdown
+  // so we don't pay for it on every drawer open.
+  const history = useQuery<{ history: LastEdit[] }>({
+    queryKey: ['mod-history', mod.identifier],
+    queryFn: () => api.get<{ history: LastEdit[] }>(`/mods/${encodeURIComponent(mod.identifier)}/history`),
+    enabled: historyOpen,
+  })
 
   const proposeEdit = (bumpVersion: boolean) => {
     draft.loadFromExisting(mod.raw, { bumpVersion, watch })
@@ -256,9 +361,15 @@ function ModDetailView({ mod, watch, onClose }: { mod: ModDetail; watch?: { kref
 
   const resources = mod.resources ?? {}
   return (
-    <Stack>
+    <Stack style={{ minWidth: 0 }}>
       {isHttpUrl(mod.thumbnail) && (
-        <Image src={mod.thumbnail} alt={mod.name} radius="md" />
+        <Image
+          src={mod.thumbnail}
+          alt={mod.name}
+          radius="md"
+          h={220}
+          fit="contain"
+        />
       )}
 
       <Group gap={6}>
@@ -297,6 +408,63 @@ function ModDetailView({ mod, watch, onClose }: { mod: ModDetail; watch?: { kref
 
       {mod.author && <Text size="sm"><strong>Author:</strong> {mod.author}</Text>}
       {mod.abstract && <Text size="sm">{mod.abstract}</Text>}
+
+      {lastEdit && (
+        <Paper withBorder p="sm" radius="sm">
+          <Stack gap="xs">
+            <Group justify="space-between" wrap="nowrap">
+              <Group gap="sm" wrap="nowrap" style={{ minWidth: 0 }}>
+                <Avatar src={lastEdit.avatar_url ?? undefined} size={32} radius="xl">
+                  {initialsOf(lastEdit.display_name)}
+                </Avatar>
+                <Stack gap={0} style={{ minWidth: 0 }}>
+                  <Text size="sm" fw={600} lineClamp={1}>
+                    Last edited by {lastEdit.display_name}
+                  </Text>
+                  <Text size="xs" c="dimmed">
+                    {KIND_LABEL[lastEdit.kind] ?? 'Edit'}
+                    {lastEdit.version ? ` · v${lastEdit.version}` : ''}
+                    {lastEdit.decided_at ? ` · ${formatRelativeTime(lastEdit.decided_at)}` : ''}
+                  </Text>
+                </Stack>
+              </Group>
+              <UnstyledButton onClick={historyToggle.toggle}>
+                <Text size="xs" c="blue">
+                  {historyOpen ? 'Hide history' : 'Show history'}
+                </Text>
+              </UnstyledButton>
+            </Group>
+            <Collapse in={historyOpen}>
+              <Divider mb="xs" />
+              {history.isLoading && <Text size="xs" c="dimmed">Loading history…</Text>}
+              {history.isError && <Text size="xs" c="red">Failed to load history.</Text>}
+              {history.data && history.data.history.length === 0 && (
+                <Text size="xs" c="dimmed">No prior edits recorded.</Text>
+              )}
+              {history.data && history.data.history.length > 0 && (
+                <Stack gap={6}>
+                  {history.data.history.map((h, idx) => (
+                    <Group key={`${h.user_id}-${h.decided_at}-${idx}`} gap="sm" wrap="nowrap" align="center">
+                      <Avatar src={h.avatar_url ?? undefined} size={24} radius="xl">
+                        {initialsOf(h.display_name)}
+                      </Avatar>
+                      <Stack gap={0} style={{ minWidth: 0, flex: 1 }}>
+                        <Text size="xs" lineClamp={1}>
+                          <strong>{h.display_name}</strong> · {KIND_LABEL[h.kind] ?? h.kind}
+                          {h.version ? ` · v${h.version}` : ''}
+                        </Text>
+                        <Text size="xs" c="dimmed">
+                          {h.decided_at ? new Date(h.decided_at).toLocaleString() : '—'}
+                        </Text>
+                      </Stack>
+                    </Group>
+                  ))}
+                </Stack>
+              )}
+            </Collapse>
+          </Stack>
+        </Paper>
+      )}
 
       {mod.tags.length > 0 && (
         <Group gap={4}>
@@ -339,16 +507,28 @@ function ModDetailView({ mod, watch, onClose }: { mod: ModDetail; watch?: { kref
 
       <Paper withBorder p="sm" radius="sm" bg="dark.7">
         <Stack gap="xs">
-          <Text size="sm" fw={600}>Are you the author of this mod?</Text>
+          <Text size="sm" fw={600}>Spotted something to improve?</Text>
           <Text size="xs" c="dimmed">
-            Propose changes (e.g. add a thumbnail, fix metadata, publish a new version).
-            Edits to existing entries always go through admin review so we can verify
-            authorship before publishing.
+            Anyone who's used this mod can suggest fixes — corrected metadata, a better
+            thumbnail, missing tags, broken download links, etc. Edits go through admin
+            review before publishing.
           </Text>
           <Group gap="xs">
             <Button size="xs" variant="light" onClick={() => proposeEdit(false)}>
               Propose edit
             </Button>
+          </Group>
+        </Stack>
+      </Paper>
+
+      <Paper withBorder p="sm" radius="sm" bg="dark.7">
+        <Stack gap="xs">
+          <Text size="sm" fw={600}>Are you the author of this mod?</Text>
+          <Text size="xs" c="dimmed">
+            Publish a new version (bumps the version number and creates a fresh release
+            entry). Admin review verifies authorship before publishing.
+          </Text>
+          <Group gap="xs">
             <Button size="xs" onClick={() => proposeEdit(true)}>
               Submit new version
             </Button>
@@ -356,7 +536,7 @@ function ModDetailView({ mod, watch, onClose }: { mod: ModDetail; watch?: { kref
         </Stack>
       </Paper>
 
-      <details>
+      <details style={{ minWidth: 0, width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
         <summary style={{ cursor: 'pointer', fontSize: 12, color: '#94a3b8' }}>
           Raw .beammod
         </summary>
@@ -364,6 +544,11 @@ function ModDetailView({ mod, watch, onClose }: { mod: ModDetail; watch?: { kref
           style={{
             background: '#0b1220', color: '#cbd5e1', padding: 12, borderRadius: 6,
             fontSize: 11, overflow: 'auto', maxHeight: 360, marginTop: 8,
+            width: '100%', maxWidth: '100%', boxSizing: 'border-box',
+            // pre-wrap + word-break keeps long URLs/strings from forcing the
+            // drawer to grow horizontally.
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
           }}
         >
           {JSON.stringify(mod.raw, null, 2)}

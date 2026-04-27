@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import {
-  Alert, Anchor, Badge, Button, Drawer, Group, Loader, Paper,
+  Alert, Anchor, Badge, Button, Divider, Drawer, Group, Loader, Paper,
   ScrollArea, Stack, Table, Text, Title,
 } from '@mantine/core'
 import { api, type Submission, type User } from '../api/client'
@@ -11,6 +11,73 @@ import { useSubmitDraft } from '../state/SubmitDraftContext'
 interface AuthConfig {
   turnstile_site_key: string | null
   email_verification_required: boolean
+}
+
+interface NewsItem {
+  id: string
+  source: 'steam' | 'beammp'
+  title: string
+  url: string
+  date: number
+  summary: string
+}
+
+function timeAgo(epochSec: number): string {
+  if (!epochSec) return ''
+  const diff = Date.now() / 1000 - epochSec
+  if (diff < 60) return 'just now'
+  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`
+  if (diff < 86400 * 7) return `${Math.floor(diff / 86400)}d ago`
+  if (diff < 86400 * 30) return `${Math.floor(diff / (86400 * 7))}w ago`
+  if (diff < 86400 * 365) return `${Math.floor(diff / (86400 * 30))}mo ago`
+  return `${Math.floor(diff / (86400 * 365))}y ago`
+}
+
+function NewsFeed() {
+  const news = useQuery({
+    queryKey: ['news'],
+    queryFn: () => api.get<{ items: NewsItem[]; cached: boolean }>('/news'),
+    // Server caches for 30 min, so no point fetching more often.
+    staleTime: 30 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  })
+  const items = (news.data?.items ?? []).slice(0, 6)
+  if (news.isLoading || items.length === 0) return null
+  return (
+    <Paper withBorder p="md" radius="md">
+      <Group justify="space-between" mb="sm">
+        <Text size="xs" c="dimmed">Latest from BeamNG · BeamMP</Text>
+      </Group>
+      <Stack gap="xs">
+        {items.map((item) => (
+          <Anchor
+            key={item.id}
+            href={item.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            underline="never"
+            style={{ display: 'block', color: 'inherit' }}
+          >
+            <Paper withBorder p="xs" radius="sm">
+              <Group gap="xs" mb={4} wrap="nowrap">
+                <Badge size="xs" variant="light" color={item.source === 'beammp' ? 'blue' : 'teal'}>
+                  {item.source === 'beammp' ? 'BeamMP' : 'BeamNG'}
+                </Badge>
+                <Text size="xs" c="dimmed">{timeAgo(item.date)}</Text>
+              </Group>
+              <Text size="sm" fw={600} lineClamp={1}>{item.title}</Text>
+              {item.summary && (
+                <Text size="xs" c="dimmed" lineClamp={2} mt={2}>
+                  {item.summary}
+                </Text>
+              )}
+            </Paper>
+          </Anchor>
+        ))}
+      </Stack>
+    </Paper>
+  )
 }
 
 function EmailVerificationBanner() {
@@ -124,6 +191,10 @@ export function DashboardPage() {
           </Table.Tbody>
         </Table>
       )}
+
+      <Divider my="md" />
+      <Title order={2}>News</Title>
+      <NewsFeed />
 
       <Drawer
         opened={viewing !== null}

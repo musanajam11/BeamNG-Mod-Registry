@@ -66,3 +66,15 @@ body.app-bg-on .mantine-AppShell-main {
   display: flex;
   justify-content: center;
 }
+
+/* Highlight empty required form fields so it's obvious what still needs
+ * to be filled. Mantine forwards the equired attribute to the underlying
+ * <input>/<textarea>, so :required:invalid matches when the field is empty. */
+.mantine-TextInput-input:required:invalid,
+.mantine-Textarea-input:required:invalid,
+.mantine-NumberInput-input:required:invalid,
+.mantine-PasswordInput-input:required:invalid {
+  border-color: var(--mantine-color-yellow-6) !important;
+  background-color: rgba(250, 176, 5, 0.06);
+  box-shadow: 0 0 0 1px rgba(250, 176, 5, 0.35) inset;
+}

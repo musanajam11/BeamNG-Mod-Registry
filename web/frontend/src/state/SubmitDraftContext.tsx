@@ -56,6 +56,13 @@ export interface SubmitDraft {
    */
   resubmittingId: number | null
   setResubmittingId: (v: number | null) => void
+  /**
+   * JSON snapshot of the FormState taken when an existing entry is loaded
+   * for editing (or when a resubmit is started). Used by the submit page
+   * to detect "no changes were made" and block a no-op submission.
+   */
+  originalSnapshot: string | null
+  setOriginalSnapshot: (v: string | null) => void
   /** Pre-fill the form from an existing `.beammod` raw payload. */
   loadFromExisting: (
     raw: Record<string, unknown>,
@@ -72,6 +79,7 @@ interface PersistedShape {
   inspectInfo: InspectResult | null
   editingExisting: string | null
   resubmittingId: number | null
+  originalSnapshot: string | null
 }
 
 function loadPersisted(): PersistedShape | null {
@@ -88,6 +96,7 @@ function loadPersisted(): PersistedShape | null {
       inspectInfo: parsed.inspectInfo ?? null,
       editingExisting: parsed.editingExisting ?? null,
       resubmittingId: parsed.resubmittingId ?? null,
+      originalSnapshot: parsed.originalSnapshot ?? null,
     }
   } catch {
     return null
@@ -108,6 +117,7 @@ export function SubmitDraftProvider({ children }: { children: ReactNode }) {
   const [inspectInfo, setInspectInfo] = useState<InspectResult | null>(initial.current?.inspectInfo ?? null)
   const [editingExisting, setEditingExisting] = useState<string | null>(initial.current?.editingExisting ?? null)
   const [resubmittingId, setResubmittingId] = useState<number | null>(initial.current?.resubmittingId ?? null)
+  const [originalSnapshot, setOriginalSnapshot] = useState<string | null>(initial.current?.originalSnapshot ?? null)
 
   // Throttle persistence to once per animation frame so rapid keystrokes
   // don't thrash sessionStorage.
@@ -116,14 +126,14 @@ export function SubmitDraftProvider({ children }: { children: ReactNode }) {
       try {
         sessionStorage.setItem(
           STORAGE_KEY,
-          JSON.stringify({ form, hashServerSide, autoUrl, inspectInfo, editingExisting, resubmittingId })
+          JSON.stringify({ form, hashServerSide, autoUrl, inspectInfo, editingExisting, resubmittingId, originalSnapshot })
         )
       } catch {
         /* quota exceeded — silently ignore */
       }
     })
     return () => window.cancelAnimationFrame(handle)
-  }, [form, hashServerSide, autoUrl, inspectInfo, editingExisting, resubmittingId])
+  }, [form, hashServerSide, autoUrl, inspectInfo, editingExisting, resubmittingId, originalSnapshot])
 
   const value = useMemo<SubmitDraft>(
     () => ({
@@ -139,6 +149,8 @@ export function SubmitDraftProvider({ children }: { children: ReactNode }) {
       editingExisting,
       resubmittingId,
       setResubmittingId,
+      originalSnapshot,
+      setOriginalSnapshot,
       loadFromExisting: (raw, opts) => {
         const next = loadFromBeammod(raw)
         if (opts?.bumpVersion && next.version) {
@@ -162,6 +174,8 @@ export function SubmitDraftProvider({ children }: { children: ReactNode }) {
         setEditingExisting(typeof raw.identifier === 'string' ? raw.identifier : null)
         setInspectInfo(null)
         setAutoUrl('')
+        // Snapshot the post-load form so we can detect no-op submissions.
+        setOriginalSnapshot(JSON.stringify(next))
       },
       reset: () => {
         setForm(DEFAULT_FORM)
@@ -170,10 +184,11 @@ export function SubmitDraftProvider({ children }: { children: ReactNode }) {
         setInspectInfo(null)
         setEditingExisting(null)
         setResubmittingId(null)
+        setOriginalSnapshot(null)
         try { sessionStorage.removeItem(STORAGE_KEY) } catch { /* noop */ }
       },
     }),
-    [form, hashServerSide, autoUrl, inspectInfo, editingExisting, resubmittingId]
+    [form, hashServerSide, autoUrl, inspectInfo, editingExisting, resubmittingId, originalSnapshot]
   )
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>

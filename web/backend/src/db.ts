@@ -149,6 +149,14 @@ const MIGRATIONS: Migration[] = [
       CREATE INDEX idx_submissions_identifier ON submissions(identifier);
     `,
   },
+  {
+    id: '004-user-avatar',
+    // Stored as a data: URL (base64) capped client-side at ~512 KB. Keeps the
+    // deployment a single SQLite file with no extra volume/static-serving setup.
+    up: `
+      ALTER TABLE users ADD COLUMN avatar_url TEXT;
+    `,
+  },
 ]
 
 function runMigrations(): void {
@@ -207,6 +215,7 @@ export interface UserRow {
   locked_until: number | null
   created_at: number
   last_login_at: number | null
+  avatar_url: string | null
 }
 
 export interface SessionRow {

@@ -5,18 +5,26 @@
  */
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
-import { createWriteStream, mkdtempSync, rmSync } from 'node:fs'
+import { createWriteStream, mkdirSync, mkdtempSync, rmSync, statSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pipeline } from 'node:stream/promises'
 import { db, type SubmissionRow } from '../db.js'
 import { audit } from '../audit.js'
+import { config } from '../config.js'
 import { requireAuth, requireVerifiedAuth } from '../auth/plugin.js'
 import { canSubmit, claimIfUnowned, getOwner } from './ownership.js'
 import { validateBeammod, validateNetbeammod } from './validate.js'
-import { downloadAndHash, probeUrl } from './probe.js'
+import { downloadAndHash, probeUrl, validateDownloadUrl } from './probe.js'
 import { runPipeline } from './pipeline.js'
 import { inspectZip } from './inspect.js'
+import {
+  emitInspectProgress,
+  isValidInspectId,
+  subscribeInspect,
+  closeInspectChannel,
+  type InspectProgressEvent,
+} from './progress.js'
 import { getRegistry } from '../registry/index.js'
 
 const ID_RE = /^[A-Za-z0-9_-]{2,128}$/
@@ -100,6 +108,8 @@ export async function submissionRoutes(app: FastifyInstance): Promise<void> {
     if (!ctx) return
     const body = z.object({ url: z.string().url() }).safeParse(request.body)
     if (!body.success) return reply.code(400).send({ error: 'invalid_input' })
+    const v = validateDownloadUrl(body.data.url)
+    if (!v.ok) return reply.code(400).send({ error: v.reason, message: v.message })
     try {
       const probe = await probeUrl(body.data.url)
       return probe
@@ -114,19 +124,29 @@ export async function submissionRoutes(app: FastifyInstance): Promise<void> {
   app.post('/inspect-url', async (request, reply) => {
     const ctx = requireAuth(request, reply)
     if (!ctx) return
-    const body = z.object({ url: z.string().url() }).safeParse(request.body)
+    const body = z.object({ url: z.string().url(), inspect_id: z.string().optional() }).safeParse(request.body)
     if (!body.success) return reply.code(400).send({ error: 'invalid_input' })
+    const inspectId = body.data.inspect_id
+    const emit = (e: InspectProgressEvent) => emitInspectProgress(inspectId, e)
+
+    const v = validateDownloadUrl(body.data.url)
+    if (!v.ok) {
+      emit({ phase: 'error', detail: v.message ?? v.reason ?? 'invalid_url' })
+      return reply.code(400).send({ error: v.reason, message: v.message })
+    }
 
     const dir = mkdtempSync(join(tmpdir(), 'inspect-'))
     const filePath = join(dir, 'mod.zip')
     try {
       const probe = await probeUrl(body.data.url)
       if (!probe.ok) {
+        emit({ phase: 'error', detail: `download_unreachable_${probe.status}` })
         return reply.code(400).send({ error: 'download_unreachable', status: probe.status })
       }
       const ctrl = new AbortController()
       const res = await fetch(body.data.url, { redirect: 'follow', signal: ctrl.signal })
       if (!res.ok || !res.body) {
+        emit({ phase: 'error', detail: `download_failed_${res.status}` })
         return reply.code(502).send({ error: 'download_failed', status: res.status })
       }
       // Convert Web ReadableStream → Node Readable for pipeline().
@@ -135,9 +155,10 @@ export async function submissionRoutes(app: FastifyInstance): Promise<void> {
         Readable.fromWeb(res.body as unknown as import('node:stream/web').ReadableStream),
         createWriteStream(filePath)
       )
-      const result = await inspectZip(filePath)
+      const result = await inspectZip(filePath, { onProgress: emit })
       return result
     } catch (err) {
+      emit({ phase: 'error', detail: (err as Error).message })
       return reply.code(500).send({ error: 'inspect_failed', message: (err as Error).message })
     } finally {
       try { rmSync(dir, { recursive: true, force: true }) } catch { /* ignore */ }
@@ -154,21 +175,144 @@ export async function submissionRoutes(app: FastifyInstance): Promise<void> {
     }
     const file = await request.file()
     if (!file) return reply.code(400).send({ error: 'no_file' })
+    // Inspect ID arrives as a query string param (?inspect_id=...) so the
+    // browser can correlate the multipart upload with its already-open SSE.
+    const inspectId = (request.query as { inspect_id?: string } | undefined)?.inspect_id
+    const emit = (e: InspectProgressEvent) => emitInspectProgress(inspectId, e)
 
     const dir = mkdtempSync(join(tmpdir(), 'inspect-'))
     const filePath = join(dir, 'mod.zip')
     try {
       await pipeline(file.file, createWriteStream(filePath))
       if (file.file.truncated) {
+        emit({ phase: 'error', detail: 'file_too_large' })
         return reply.code(413).send({ error: 'file_too_large' })
       }
-      const result = await inspectZip(filePath)
+      const result = await inspectZip(filePath, { onProgress: emit })
       return result
     } catch (err) {
+      emit({ phase: 'error', detail: (err as Error).message })
       return reply.code(500).send({ error: 'inspect_failed', message: (err as Error).message })
     } finally {
       try { rmSync(dir, { recursive: true, force: true }) } catch { /* ignore */ }
     }
+  })
+
+  // ─── Chunked upload (Cloudflare-friendly) ────────────────────────────────
+  // Cloudflare's free/pro plans cap a single request body at 100 MB. The
+  // browser slices the file into chunks (~80 MB) and POSTs each as raw
+  // application/octet-stream to this endpoint with ?upload_id, ?chunk_index,
+  // ?total_chunks, ?inspect_id. The server appends them to one temp file in
+  // order; on the final chunk it runs inspectZip and returns the result.
+  // Stale partial uploads are cleaned up by their per-user, per-id naming
+  // and the OS tmpdir; we also rm the file at the end whether or not it
+  // succeeded.
+  const CHUNK_ID_RE = /^[A-Za-z0-9_-]{8,64}$/
+  const PER_CHUNK_LIMIT = 100 * 1024 * 1024 // 100 MiB hard cap per request
+  app.post<{
+    Querystring: {
+      upload_id?: string
+      chunk_index?: string
+      total_chunks?: string
+      inspect_id?: string
+    }
+  }>('/inspect-upload-chunk', { bodyLimit: PER_CHUNK_LIMIT }, async (request, reply) => {
+    const ctx = requireAuth(request, reply)
+    if (!ctx) return
+    const q = request.query
+    const uploadId = q.upload_id ?? ''
+    const chunkIndex = Number(q.chunk_index)
+    const totalChunks = Number(q.total_chunks)
+    const inspectId = q.inspect_id
+    if (
+      !CHUNK_ID_RE.test(uploadId) ||
+      !Number.isInteger(chunkIndex) ||
+      !Number.isInteger(totalChunks) ||
+      chunkIndex < 0 ||
+      totalChunks < 1 ||
+      chunkIndex >= totalChunks ||
+      totalChunks > 10_000
+    ) {
+      return reply.code(400).send({ error: 'invalid_chunk_params' })
+    }
+    const emit = (e: InspectProgressEvent) => emitInspectProgress(inspectId, e)
+
+    const dir = join(tmpdir(), 'inspect-chunked')
+    mkdirSync(dir, { recursive: true })
+    const filePath = join(dir, `${ctx.user.id}-${uploadId}.zip`)
+
+    // Append (or truncate on the first chunk). Out-of-order arrivals would
+    // corrupt the file; the client uploads sequentially.
+    try {
+      // Reject if we'd exceed the configured server-wide max upload size.
+      // Approximate via sum of completed chunks: filesize before this write.
+      let priorSize = 0
+      try { priorSize = chunkIndex === 0 ? 0 : statSync(filePath).size } catch { priorSize = 0 }
+      if (priorSize + PER_CHUNK_LIMIT > config.submitMaxUploadBytes + PER_CHUNK_LIMIT) {
+        emit({ phase: 'error', detail: 'file_too_large' })
+        return reply.code(413).send({ error: 'file_too_large' })
+      }
+
+      await pipeline(
+        request.raw,
+        createWriteStream(filePath, { flags: chunkIndex === 0 ? 'w' : 'a' }),
+      )
+
+      if (chunkIndex < totalChunks - 1) {
+        return { ok: true, received: chunkIndex + 1, total: totalChunks }
+      }
+
+      // Final chunk → inspect.
+      try {
+        const result = await inspectZip(filePath, { onProgress: emit })
+        return result
+      } finally {
+        try { rmSync(filePath, { force: true }) } catch { /* ignore */ }
+      }
+    } catch (err) {
+      try { rmSync(filePath, { force: true }) } catch { /* ignore */ }
+      emit({ phase: 'error', detail: (err as Error).message })
+      return reply.code(500).send({ error: 'inspect_failed', message: (err as Error).message })
+    }
+  })
+
+  // ─── Live progress for an in-flight inspect (SSE) ────────────────────────
+  // Browser opens this BEFORE starting the upload, with the same UUID it
+  // will pass as ?inspect_id on the upload request. The server pushes phase
+  // events (hashing/listing/analyzing/reading_metadata/done) as they happen.
+  app.get('/inspect-progress/:id', async (request, reply) => {
+    const ctx = requireAuth(request, reply)
+    if (!ctx) return
+    const id = (request.params as { id: string }).id
+    if (!isValidInspectId(id)) return reply.code(400).send({ error: 'invalid_id' })
+
+    reply.raw.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache, no-transform',
+      Connection: 'keep-alive',
+      // Disable nginx/Cloudflare buffering so events flush immediately.
+      'X-Accel-Buffering': 'no',
+    })
+    reply.raw.write(`retry: 5000\n\n`)
+
+    const send = (e: InspectProgressEvent) => {
+      reply.raw.write(`data: ${JSON.stringify(e)}\n\n`)
+      if (e.phase === 'done' || e.phase === 'error') {
+        reply.raw.end()
+      }
+    }
+    const unsubscribe = subscribeInspect(id, send)
+    // Heartbeat so proxies don't kill the idle socket.
+    const heartbeat = setInterval(() => {
+      try { reply.raw.write(`: ping\n\n`) } catch { /* socket closed */ }
+    }, 15_000)
+
+    request.raw.on('close', () => {
+      clearInterval(heartbeat)
+      unsubscribe()
+      closeInspectChannel(id)
+    })
+    return reply
   })
 
   // Manual .beammod submission — the proof-of-pipeline flow.
@@ -213,6 +357,10 @@ export async function submissionRoutes(app: FastifyInstance): Promise<void> {
       const url = Array.isArray(downloadField) ? downloadField[0] : downloadField
       if (typeof url !== 'string') {
         return reply.code(400).send({ error: 'invalid_download_url' })
+      }
+      const dv = validateDownloadUrl(url)
+      if (!dv.ok) {
+        return reply.code(400).send({ error: dv.reason, message: dv.message })
       }
       try {
         const probe = await probeUrl(url)
@@ -340,6 +488,10 @@ export async function submissionRoutes(app: FastifyInstance): Promise<void> {
       const url = Array.isArray(downloadField) ? downloadField[0] : downloadField
       if (typeof url !== 'string') {
         return reply.code(400).send({ error: 'invalid_download_url' })
+      }
+      const dv = validateDownloadUrl(url)
+      if (!dv.ok) {
+        return reply.code(400).send({ error: dv.reason, message: dv.message })
       }
       try {
         const probe = await probeUrl(url)

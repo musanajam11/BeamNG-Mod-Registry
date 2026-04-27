@@ -4,7 +4,7 @@ import {
   Alert, Anchor, Badge, Button, Drawer, Group, Paper, ScrollArea,
   SegmentedControl, Stack, Table, Tabs, Text, Textarea, Title,
 } from '@mantine/core'
-import { api, ApiError } from '../api/client'
+import { api, ApiError, type User } from '../api/client'
 
 interface AdminUser {
   id: number; email: string; display_name: string
@@ -35,24 +35,38 @@ interface SubmissionDetailResponse {
 }
 
 export function AdminPage() {
+  const me = useQuery({
+    queryKey: ['me'],
+    queryFn: () => api.get<{ user: User | null }>('/auth/me'),
+  })
+  const isAdmin = me.data?.user?.role === 'admin'
+  const myUserId = me.data?.user?.id ?? null
   return (
     <Stack>
-      <Title order={2}>Admin</Title>
+      <Title order={2}>{isAdmin ? 'Admin' : 'Review queue'}</Title>
       <Tabs defaultValue="queue">
         <Tabs.List>
           <Tabs.Tab value="queue">Pending queue</Tabs.Tab>
-          <Tabs.Tab value="users">Users</Tabs.Tab>
-          <Tabs.Tab value="audit">Audit log</Tabs.Tab>
+          {isAdmin && <Tabs.Tab value="users">Users</Tabs.Tab>}
+          {isAdmin && <Tabs.Tab value="audit">Audit log</Tabs.Tab>}
         </Tabs.List>
-        <Tabs.Panel value="queue" pt="md"><PendingQueue /></Tabs.Panel>
-        <Tabs.Panel value="users" pt="md"><UsersTab /></Tabs.Panel>
-        <Tabs.Panel value="audit" pt="md"><AuditTab /></Tabs.Panel>
+        <Tabs.Panel value="queue" pt="md">
+          <PendingQueue selfUserId={myUserId} canReviewSelf={isAdmin} />
+        </Tabs.Panel>
+        {isAdmin && <Tabs.Panel value="users" pt="md"><UsersTab /></Tabs.Panel>}
+        {isAdmin && <Tabs.Panel value="audit" pt="md"><AuditTab /></Tabs.Panel>}
       </Tabs>
     </Stack>
   )
 }
 
-function PendingQueue() {
+function PendingQueue({
+  selfUserId,
+  canReviewSelf,
+}: {
+  selfUserId: number | null
+  canReviewSelf: boolean
+}) {
   const qc = useQueryClient()
   const [reviewing, setReviewing] = useState<number | null>(null)
 
@@ -63,7 +77,12 @@ function PendingQueue() {
   })
 
   if (!subs.data) return null
-  if (subs.data.submissions.length === 0) return <Text c="dimmed">No pending submissions.</Text>
+  // Reviewers (non-admin) can't act on their own submissions; hide them
+  // from the queue entirely so the list isn't full of greyed-out rows.
+  const visible = canReviewSelf
+    ? subs.data.submissions
+    : subs.data.submissions.filter((s) => s.user_id !== selfUserId)
+  if (visible.length === 0) return <Text c="dimmed">No pending submissions.</Text>
 
   const closeReview = () => setReviewing(null)
   const onDecided = () => {
@@ -86,7 +105,7 @@ function PendingQueue() {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {subs.data.submissions.map((s) => (
+          {visible.map((s) => (
             <Table.Tr key={s.id}>
               <Table.Td>{s.id}</Table.Td>
               <Table.Td>#{s.user_id}</Table.Td>

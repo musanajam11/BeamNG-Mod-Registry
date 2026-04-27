@@ -48,19 +48,26 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
 export const api = {
   get:    <T>(p: string) => request<T>('GET', p),
   post:   <T>(p: string, b?: unknown) => request<T>('POST', p, b),
+  patch:  <T>(p: string, b?: unknown) => request<T>('PATCH', p, b),
   delete: <T>(p: string) => request<T>('DELETE', p),
   /** Upload a single file via multipart/form-data. Echoes CSRF token. */
-  upload: async <T>(p: string, file: File, onProgress?: (loaded: number, total: number) => void): Promise<T> => {
+  upload: async <T>(
+    p: string,
+    file: File,
+    onProgress?: (loaded: number, total: number) => void,
+    query?: Record<string, string>,
+  ): Promise<T> => {
     if (!getCookie(CSRF_COOKIE)) {
       await fetch('/api/auth/csrf', { credentials: 'include' })
     }
     const csrf = getCookie(CSRF_COOKIE)
     const form = new FormData()
     form.append('file', file)
+    const qs = query ? '?' + new URLSearchParams(query).toString() : ''
     // Use XHR for upload progress; fetch's body progress is still not standardised.
     return new Promise<T>((resolve, reject) => {
       const xhr = new XMLHttpRequest()
-      xhr.open('POST', `/api${p}`)
+      xhr.open('POST', `/api${p}${qs}`)
       xhr.withCredentials = true
       if (csrf) xhr.setRequestHeader(CSRF_HEADER, csrf)
       xhr.upload.onprogress = (e) => {
@@ -76,6 +83,65 @@ export const api = {
       xhr.send(form)
     })
   },
+
+  /**
+   * Upload a file in sequential chunks of `chunkSize` bytes, each as a raw
+   * application/octet-stream POST. Used to bypass the Cloudflare 100 MB per-
+   * request body cap. The endpoint must accept query params:
+   *   ?upload_id=<token>&chunk_index=<n>&total_chunks=<N>[&...query]
+   * and return the final inspect/result payload on the last chunk.
+   */
+  uploadChunked: async <T>(
+    p: string,
+    file: File,
+    opts?: {
+      chunkSize?: number
+      onProgress?: (loaded: number, total: number) => void
+      query?: Record<string, string>
+    },
+  ): Promise<T> => {
+    const chunkSize = opts?.chunkSize ?? 80 * 1024 * 1024 // 80 MiB (CF cap is 100)
+    const onProgress = opts?.onProgress
+    if (!getCookie(CSRF_COOKIE)) {
+      await fetch('/api/auth/csrf', { credentials: 'include' })
+    }
+    const csrf = getCookie(CSRF_COOKIE)
+    // Random token for the temp file name on the server. Hex-only so it
+    // matches the CHUNK_ID_RE regex.
+    const uploadId = (
+      crypto.randomUUID?.() ?? `${Date.now()}${Math.random().toString(36).slice(2)}`
+    ).replace(/[^A-Za-z0-9_-]/g, '').slice(0, 32)
+    const totalChunks = Math.max(1, Math.ceil(file.size / chunkSize))
+    let lastResult: T | null = null
+    for (let i = 0; i < totalChunks; i++) {
+      const start = i * chunkSize
+      const end = Math.min(file.size, start + chunkSize)
+      const blob = file.slice(start, end)
+      const params = new URLSearchParams({
+        upload_id: uploadId,
+        chunk_index: String(i),
+        total_chunks: String(totalChunks),
+        ...(opts?.query ?? {}),
+      })
+      const headers: Record<string, string> = { 'Content-Type': 'application/octet-stream' }
+      if (csrf) headers[CSRF_HEADER] = csrf
+      const res = await fetch(`/api${p}?${params.toString()}`, {
+        method: 'POST',
+        credentials: 'include',
+        headers,
+        body: blob,
+      })
+      const text = await res.text()
+      let parsed: unknown = null
+      if (text) {
+        try { parsed = JSON.parse(text) } catch { parsed = text }
+      }
+      if (!res.ok) throw new ApiError(res.status, parsed)
+      onProgress?.(end, file.size)
+      if (i === totalChunks - 1) lastResult = parsed as T
+    }
+    return lastResult as T
+  },
 }
 
 export interface User {
@@ -86,6 +152,7 @@ export interface User {
   trust: 'green' | 'yellow' | 'red'
   github_username: string | null
   email_verified: boolean
+  avatar_url: string | null
   created_at: number
 }
 

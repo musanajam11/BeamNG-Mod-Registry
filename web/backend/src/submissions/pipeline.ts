@@ -133,6 +133,19 @@ export async function runPipeline(submissionId: number): Promise<PipelineResult>
       const branch = `submission/${sub.kind}/${sub.identifier}/${Date.now()}`
       await git.checkoutLocalBranch(branch)
       for (const p of stagedPaths) await git.add(p)
+
+      // Short-circuit no-op submissions before we ever talk to GitHub.
+      // If `git status --porcelain` is empty after staging, the payload is
+      // byte-for-byte identical to what's already on `main`, and pushing
+      // would produce an empty PR ("No commits between main and …").
+      const status = await git.status()
+      if (status.files.length === 0) {
+        throw new Error(
+          'No changes detected: the submitted .beammod is identical to the version already in the registry. ' +
+            'Edit at least one field (or bump the version) before resubmitting.'
+        )
+      }
+
       const tmplNote = templateCreated
         ? `\n\nAlso creates netbeammod/${sub.identifier}.netbeammod so the inflator will pick up future releases automatically.`
         : templateUpdated
@@ -159,13 +172,21 @@ export async function runPipeline(submissionId: number): Promise<PipelineResult>
     })
     return { status: 'pr_opened', prUrl: result.prUrl }
   } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err)
+    const raw = err instanceof Error ? err.message : String(err)
+    // Translate GitHub's opaque "No commits between …" 422 into a message
+    // a submitter can act on. This happens when the branch we just pushed
+    // is identical to main — usually because the in-flight submission was
+    // created before the no-op guard above, or because the branch was
+    // pushed but `git commit` produced an empty commit on a quirky tree.
+    const msg = /No commits between/i.test(raw)
+      ? 'GitHub rejected the pull request because the submitted content is identical to what already exists in the registry. Edit at least one field (or bump the version) and resubmit.'
+      : raw
     updateSubmission.run('failed', null, null, msg, Date.now(), submissionId)
     audit({
       actorId: null,
       action: 'pipeline.failed',
       target: `submission:${submissionId}`,
-      details: { error: msg },
+      details: { error: msg, raw: msg === raw ? undefined : raw },
     })
     return { status: 'failed', error: msg }
   }
