@@ -29,5 +29,6 @@
   },
   "download_hash": {
     "sha256": "c140ddec7236374226a5e74aafebb3f0eaa0f14e7e2582a6850a17f86b3c5e0c"
-  }
+  },
+  "x_verified": true
 }
