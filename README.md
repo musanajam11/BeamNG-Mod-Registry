@@ -2,9 +2,177 @@
   <img src="assets/logo.png" alt="BeamNG Mod Registry" width="300">
 </p>
 
+<p align="center">
+  <a href="https://bmr.musanet.xyz">
+    <img src="https://img.shields.io/badge/Visit_the_Registry-bmr.musanet.xyz-1f6feb?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem02Ljk0IDZoLTIuOTVjLS4zMi0xLjI1LS43OC0yLjQ1LTEuMzgtMy41NiAxLjg0LjYzIDMuMzcgMS45MSA0LjMzIDMuNTZ6TTEyIDQuMDRjLjgzIDEuMiAxLjQ4IDIuNTMgMS45MSAzLjk2aC0zLjgyYy40My0xLjQzIDEuMDgtMi43NiAxLjkxLTMuOTZ6TTQuMjYgMTRDNC4xIDEzLjM2IDQgMTIuNjkgNCAxMnMuMS0xLjM2LjI2LTJoMy4zOGMtLjA4LjY2LS4xNCAxLjMyLS4xNCAyIDAgLjY4LjA2IDEuMzQuMTQgMkg0LjI2em0uODIgMmgyLjk1Yy4zMiAxLjI1Ljc4IDIuNDUgMS4zOCAzLjU2LTEuODQtLjYzLTMuMzctMS45LTQuMzMtMy41NnpNNS4wOCA4aC0yLjk1Yy45Ny0xLjY1IDIuNDktMi45MyA0LjMzLTMuNTZDNS44NiA1LjU1IDUuNCA2Ljc1IDUuMDggOHpNMTIgMTkuOTZjLS44My0xLjItMS40OC0yLjUzLTEuOTEtMy45NmgzLjgyYy0uNDMgMS40My0xLjA4IDIuNzYtMS45MSAzLjk2ek0xNC4zNCAxNGgtNC42OGMtLjA5LS42Ni0uMTYtMS4zMi0uMTYtMiAwLS42OC4wNy0xLjM1LjE2LTJoNC42OGMuMDkuNjUuMTYgMS4zMi4xNiAyIDAgLjY4LS4wNyAxLjM0LS4xNiAyem0uMjUgNS41NmMuNi0xLjExIDEuMDYtMi4zMSAxLjM4LTMuNTZoMi45NWMtLjk2IDEuNjUtMi40OSAyLjkzLTQuMzMgMy41NnpNMTYuMzYgMTRjLjA4LS42Ni4xNC0xLjMyLjE0LTIgMC0uNjgtLjA2LTEuMzQtLjE0LTJoMy4zOGMuMTYuNjQuMjYgMS4zMS4yNiAyIDAgLjY5LS4xIDEuMzYtLjI2IDJoLTMuMzh6Ii8+PC9zdmc+&logoColor=white" alt="Visit the Registry">
+  </a>
+</p>
+
+<p align="center">
+  <strong>The hosted submission portal & registry browser</strong><br>
+  <a href="https://bmr.musanet.xyz"><code>bmr.musanet.xyz</code></a>
+</p>
+
 # BeamNG Mod Registry
 
 A CKAN-inspired mod metadata repository for BeamNG.drive and BeamMP mods.
+
+## A Look at the Registry
+
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <a href="assets/registryexpanded.png">
+        <img src="assets/registryexpanded.png" alt="Registry browser with expanded mod detail panel" width="100%">
+      </a>
+      <br><sub><b>Browse & Discover</b><br>Search, filter, rate, and inspect every mod in one place.</sub>
+    </td>
+    <td align="center" width="33%">
+      <a href="assets/submit.png">
+        <img src="assets/submit.png" alt="Submit a mod page with auto-detect and field sections" width="100%">
+      </a>
+      <br><sub><b>Submit in Minutes</b><br>Paste a URL or drop a zip — fields auto-detect from the archive.</sub>
+    </td>
+    <td align="center" width="33%">
+      <a href="assets/faq.png">
+        <img src="assets/faq.png" alt="FAQ page with submission flow visualization" width="100%">
+      </a>
+      <br><sub><b>Transparent Workflow</b><br>Built-in FAQ and visual submission map — no guesswork.</sub>
+    </td>
+  </tr>
+</table>
+
+## Submission Flow
+
+```mermaid
+flowchart TD
+  You([You submit a mod or an edit]) --> Who{Who reviews it?}
+
+  Who -->|Brand-new mod, OR<br/>edit to a mod nobody owns| Reviewers[Registry reviewers<br/>admins + trusted users]
+  Who -->|Edit to a mod<br/>someone else owns| Owner[The mod's owner<br/>has the final say]
+  Who -->|You are a trusted user<br/>editing your own mod| Auto[Auto-approved<br/>goes straight to publishing]
+
+  Reviewers --> Decision
+  Owner --> Decision
+
+  Decision{Decision} -->|Approved| Publish[Published to the registry<br/>via a GitHub PR]
+  Decision -->|Changes requested| Fix[You get feedback<br/>edit and resubmit]
+  Decision -->|Rejected| Stop[Submission closed<br/>you can submit a new one]
+
+  Fix --> You
+  Auto --> Publish
+  Publish --> Live([Live in the registry])
+
+  classDef good fill:#22543d,stroke:#48bb78,color:#c6f6d5
+  classDef bad fill:#742a2a,stroke:#f56565,color:#fed7d7
+  classDef warn fill:#744210,stroke:#ecc94b,color:#fefcbf
+  class Live,Publish,Auto good
+  class Stop bad
+  class Fix warn
+```
+
+> Full breakdown of every state, the ownership model, and trust tiers lives in [docs/submission-flow.md](docs/submission-flow.md).
+
+## Frequently Asked Questions
+
+<details>
+<summary><strong>What is the BeamNG Mod Registry?</strong></summary>
+
+It's a community-curated **metadata index** for BeamNG.drive and BeamMP mods, modeled after the CKAN system used by Kerbal Space Program. Each entry is a small JSON file (a `.beammod`) describing *where* a mod lives, what version is current, what kind of content it is, what it depends on, and how to verify the file (SHA-256 hash + size).
+
+The registry itself does **not** host any mod files — the author keeps full control of where the mod is hosted (BeamNG.com, GitHub releases, their own site, etc.). Think of it as a phone book that points to the original source.
+
+The full index is published as a single compressed JSON artifact to GitHub Releases. Compatible launchers download that artifact and use it to browse, install, update, and resolve dependencies.
+</details>
+
+<details>
+<summary><strong>What's the benefit over just downloading mods manually?</strong></summary>
+
+- **Auto-updates.** Compatible launchers (e.g. BeamMP Content Manager) read the registry and notice when a mod has a new version, then download it for you.
+- **Integrity checks.** Every entry can carry a SHA-256 hash and expected file size, so a launcher verifies the downloaded file hasn't been tampered with.
+- **Dependencies resolved automatically.** Entries declare required, recommended, suggested, and conflicting mods; the launcher installs the whole tree in one go.
+- **Single stable identifier.** Mod packs and BeamMP servers can reference one identifier instead of hard-coded download links that break.
+- **Discoverability.** Browse, search, and filter mods in one place rather than hunting forum threads.
+</details>
+
+<details>
+<summary><strong>How do auto-updates actually work?</strong></summary>
+
+1. A registry entry stores the mod's current `version`, `download` URL, and `download_hash.sha256`.
+2. When the author releases a new version, the entry is updated — either **automatically** (if it has a `$kref` auto-tracking template) or **manually** via a new web submission.
+3. That update is committed to the registry repository, which triggers CI to rebuild and publish a new compressed index to GitHub Releases.
+4. Your launcher periodically fetches the latest index, compares the stored version against your installed version, and if there's a newer one, downloads it from the original URL and verifies the SHA-256 before installing.
+</details>
+
+<details>
+<summary><strong>Do I need to upload my mod file here?</strong></summary>
+
+**No.** The mod file itself is never stored on this server. You submit metadata (name, version, download URL, hash, type, tags, dependencies, etc.) and the file stays on whatever host you already use.
+
+You *can* upload your `.zip` on the submit page, but only so the server can read the archive's table of contents and pre-fill fields for you (file count, mod type detection, server vs client layout, suggested name from `info.json`). Nothing about that upload is kept after inspection.
+</details>
+
+<details>
+<summary><strong>Manual submit vs. auto-tracking — what's the difference?</strong></summary>
+
+There are two ways an entry can stay up to date:
+
+- **Manual.** You submit a fresh metadata entry every time you release a new version. Good if your mod doesn't live on GitHub or you only ship occasional releases.
+- **Auto-tracking (NetBeamMod).** You submit a tiny template that points at a source — either a GitHub repo (`#/github/owner/repo`) or a BeamNG.com resource (`#/beamng/12345`). A scheduled job watches that source, and whenever a new release appears it automatically generates a new `.beammod` entry with the version, download URL, and freshly computed hash. You never have to touch the registry again.
+
+Auto-tracking templates support optional knobs: `$filter_asset` (regex to pick the right release asset), `$version_strip_v`, `$version_transform`, `$include_prerelease`, and `$max_releases`.
+</details>
+
+<details>
+<summary><strong>Should I submit my mod?</strong></summary>
+
+Submit if you want any of these:
+
+- Players to get auto-updates when you release new versions.
+- A stable, hash-verified link you can share or use in mod packs.
+- Your mod listed in tools and servers that read the registry.
+- Dependency resolution to handle prerequisites for you.
+
+If your mod is private, work-in-progress, or you don't want it redistributed via tooling, just don't submit it.
+</details>
+
+<details>
+<summary><strong>How does claiming and ownership work?</strong></summary>
+
+Many mods are auto-imported from BeamNG.com with minimal metadata and appear as **unverified**. If you're the original author, you can claim a mod to gain ownership and the **Registry Verified** badge.
+
+- Claiming requires reviewer approval — reviewers will check the source / repo / forum thread to confirm you're the real author.
+- Once you own a mod, **you become the reviewer** for any edits other users submit to it. They show up in your dashboard's *Mods you own* section with a "pending review" badge.
+- You can give up ownership at any time. Pending reviews on the mod fall back to the registry reviewer queue.
+</details>
+
+<details>
+<summary><strong>Do I need an account to browse the registry?</strong></summary>
+
+No. The registry browser and FAQ are publicly readable. Anyone can search, filter, open mod details, and view the average rating, owner, and edit history without signing in.
+
+Sign-in is required only for actions that change state: rating a mod, claiming a mod, proposing an edit, or submitting a new version.
+</details>
+
+<details>
+<summary><strong>Where do mod files actually live?</strong></summary>
+
+On whatever host the author chose — typically the BeamNG.com repository, GitHub releases, or another file host on the allowlist. This site never stores the binaries themselves. The only data on the server is metadata, accounts, submissions, audit logs, and cached thumbnails.
+</details>
+
+<details>
+<summary><strong>What changes based on my trust level?</strong></summary>
+
+| You are… | New mod or your own mod | Editing someone else's mod | Claiming a mod |
+|---|---|---|---|
+| **New / untrusted user** | Goes to reviewer queue | Goes to the owner's queue (or reviewer queue if unowned) | Goes to reviewer queue |
+| **Trusted user / admin** | Auto-approved, publishes immediately | Still goes to the owner — owners always get final say | Goes to reviewer queue |
+| **Owner of the mod being edited** | Auto-approved (if you're trusted) | n/a — you're the owner | n/a — already yours |
+
+Trust is earned: after a few clean approved submissions, reviewers can upgrade your account so future edits skip the queue.
+</details>
+
+---
 
 ## How It Works
 
