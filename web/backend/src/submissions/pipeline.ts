@@ -55,6 +55,13 @@ export async function runPipeline(submissionId: number): Promise<PipelineResult>
     const result = await withRepoLock(async (git) => {
       const payload = JSON.parse(sub.payload_json) as Record<string, unknown>
 
+      // ─── Deletion: remove mods/<id>/ and netbeammod/<id>.netbeammod ────
+      // Handled inline before the metadata-merge plumbing below, since the
+      // delete flow has none of the .beammod/template propagation logic.
+      if (sub.kind === 'delete') {
+        return runDelete(git, sub, payload)
+      }
+
       // All submissions made through the authenticated web UI go through
       // admin/auto review and CI download verification, so they earn the
       // x_verified blue check by definition. (The inflator separately sets
@@ -202,6 +209,10 @@ interface RenderedFiles {
 
 function renderFiles(sub: SubmissionRow, payload: Record<string, unknown>): RenderedFiles {
   switch (sub.kind) {
+    case 'delete':
+      // Deletion is handled by `runDelete` (below); renderFiles isn't
+      // called for delete submissions, but TS needs an exhaustive switch.
+      throw new Error('renderFiles: delete handled separately by runDelete')
     case 'manual_beammod': {
       const relPath = `mods/${sub.identifier}/${sub.identifier}-${sub.version}.beammod`
       return {
@@ -254,6 +265,79 @@ function prFooter(sub: SubmissionRow): string {
     `- Kind: \`${sub.kind}\``,
     `- Submitter: user #${sub.user_id}`,
   ].join('\n')
+}
+
+/**
+ * Delete-mod pipeline branch. Removes both the per-version `.beammod`
+ * directory (`mods/<id>/`) and the optional netbeammod template
+ * (`netbeammod/<id>.netbeammod`) so the inflator doesn't immediately
+ * regenerate the entries. Either path being absent is fine \u2014 we still
+ * proceed if at least one was actually removed.
+ */
+async function runDelete(
+  git: import('simple-git').SimpleGit,
+  sub: SubmissionRow,
+  payload: Record<string, unknown>,
+): Promise<{ branch: string; prUrl: string }> {
+  const reason = typeof payload.reason === 'string' ? payload.reason.trim() : ''
+  const requestedBy = typeof payload.requested_by === 'string' ? payload.requested_by : ''
+  const isOwnerRequest = payload.is_owner === true
+
+  const modsRel = `mods/${sub.identifier}`
+  const tmplRel = `netbeammod/${sub.identifier}.netbeammod`
+  const modsAbs = join(config.repoWorkdir, modsRel)
+  const tmplAbs = join(config.repoWorkdir, tmplRel)
+
+  const branch = `submission/delete/${sub.identifier}/${Date.now()}`
+  await git.checkoutLocalBranch(branch)
+
+  const removedPaths: string[] = []
+  if (existsSync(modsAbs)) {
+    await git.rm(['-r', modsRel])
+    removedPaths.push(modsRel)
+  }
+  if (existsSync(tmplAbs)) {
+    await git.rm([tmplRel])
+    removedPaths.push(tmplRel)
+  }
+
+  if (removedPaths.length === 0) {
+    throw new Error(
+      `Nothing to delete: neither mods/${sub.identifier}/ nor netbeammod/${sub.identifier}.netbeammod ` +
+        `exist on the default branch. The mod may have already been removed.`
+    )
+  }
+
+  // Defense in depth: confirm the working tree actually has staged removals
+  // before we ever push. Catches the case where `git rm` silently no-ops on
+  // an already-clean path.
+  const status = await git.status()
+  if (status.files.length === 0) {
+    throw new Error(`Delete produced no staged changes for ${sub.identifier}.`)
+  }
+
+  const requesterLabel = isOwnerRequest
+    ? `claimed owner (user #${sub.user_id})`
+    : `non-owner request (user #${sub.user_id}${requestedBy ? `, ${requestedBy}` : ''})`
+  const reasonLine = reason ? `\n\nReason: ${reason}` : ''
+  const commitMessage = `Delete ${sub.identifier}\n\nRequested by ${requesterLabel} via the Registry Web UI.${reasonLine}`
+  const prTitle = `Delete ${sub.identifier}`
+  const prBody = [
+    `Removes \`${sub.identifier}\` from the registry per a Web UI submission.`,
+    ``,
+    `Removed paths:`,
+    ...removedPaths.map((p) => `- \`${p}\``),
+    ``,
+    `Requested by: ${requesterLabel}.`,
+    reason ? `\nReason given by submitter:\n\n> ${reason.replace(/\n/g, '\n> ')}` : '',
+    ``,
+    prFooter(sub),
+  ].join('\n')
+
+  await git.commit(commitMessage)
+  await git.push('origin', branch, ['--set-upstream'])
+  const pr = await openPullRequest({ branch, title: prTitle, body: prBody })
+  return { branch, prUrl: pr.url }
 }
 
 // Fields owned by the inflator (computed per-release). Never copy these

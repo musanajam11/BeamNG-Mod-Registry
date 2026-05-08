@@ -4,6 +4,12 @@ dist/
 # Local Unraid deployment (host-specific compose, secrets, data)
 unraid/
 
+# Accidental nested project copies (created by running install/build with
+# wrong cwd inside web/backend). Real backend/frontend live one level up
+# at web/backend and web/frontend.
+web/backend/backend/
+web/backend/frontend/
+
 # OS
 .DS_Store
 Thumbs.db

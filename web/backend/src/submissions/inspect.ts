@@ -17,9 +17,19 @@ import { stat } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import { Readable } from 'node:stream'
 import yauzl from 'yauzl'
+import {
+  collectLuaSignals, collectPathSignals, decideScope,
+  type ScopeSignal,
+} from './multiplayerScope.js'
 void Readable
 
 const MAX_INFO_JSON_BYTES = 1 * 1024 * 1024 // 1 MB cap per metadata file
+/** Cap how many Lua files we sniff for BeamMP API calls, total. */
+const MAX_LUA_SAMPLE_FILES = 8
+/** Cap how many bytes per Lua file we read while sniffing. */
+const MAX_LUA_SAMPLE_BYTES_PER_FILE = 64 * 1024
+/** Cap total Lua bytes pulled across all sampled files. */
+const MAX_LUA_SAMPLE_BYTES_TOTAL = 256 * 1024
 
 export interface InspectSuggestions {
   name?: string
@@ -27,6 +37,9 @@ export interface InspectSuggestions {
   description?: string
   mod_type?: string
   multiplayer_scope?: 'client' | 'server' | 'both'
+  /** Confidence (0–100) and human-readable reasons for the scope pick. */
+  multiplayer_scope_confidence?: number
+  multiplayer_scope_reasons?: string[]
   has_resources_layout?: boolean
   thumbnail_path?: string
   detected_files?: string[]
@@ -230,9 +243,46 @@ export async function inspectZip(
 
   onProgress({ phase: 'analyzing', detail: `${entries.length.toLocaleString()} entries` })
 
-  const mp = detectMultiplayerScope(filePaths)
-  if (mp.scope) suggestions.multiplayer_scope = mp.scope
-  suggestions.has_resources_layout = mp.hasResources
+  // Multiplayer scope detection: combine path-based signals with a small
+  // sample of Lua source so we can spot BeamMP server/client API calls and
+  // tell apart server-side mods that auto-distribute their client portion.
+  const scopeSignals: ScopeSignal[] = collectPathSignals(filePaths)
+  const mpLegacy = detectMultiplayerScope(filePaths)
+  suggestions.has_resources_layout = mpLegacy.hasResources
+
+  // Pick a handful of small Lua files and read up to a cap each. Prefer
+  // files under Resources/{Server,Client} so the sample is BeamMP-relevant
+  // when those directories exist.
+  const luaCandidates = entries
+    .filter((e) => /\.lua$/i.test(e.fileName) && e.uncompressedSize > 0 && e.uncompressedSize <= MAX_LUA_SAMPLE_BYTES_PER_FILE)
+    .sort((a, b) => {
+      const score = (n: string) => /resources\/(server|client)\//i.test(n) ? 0 : 1
+      return score(a.fileName) - score(b.fileName) || a.uncompressedSize - b.uncompressedSize
+    })
+    .slice(0, MAX_LUA_SAMPLE_FILES)
+  let luaSample = ''
+  for (const e of luaCandidates) {
+    if (luaSample.length >= MAX_LUA_SAMPLE_BYTES_TOTAL) break
+    const text = await readEntry(filePath, e.fileName, MAX_LUA_SAMPLE_BYTES_PER_FILE)
+    if (text) luaSample += '\n' + text
+  }
+  if (luaSample) scopeSignals.push(...collectLuaSignals(luaSample))
+
+  const decision = decideScope(scopeSignals)
+  if (decision.scope) {
+    suggestions.multiplayer_scope = decision.scope
+    suggestions.multiplayer_scope_confidence = decision.confidence
+    // Dedupe reasons so the UI doesn't show the same line twice.
+    suggestions.multiplayer_scope_reasons = Array.from(
+      new Set(decision.signals.map((s) => s.reason))
+    )
+  } else if (decision.is_multiplayer) {
+    // We saw multiplayer hints but couldn't confidently pick a side —
+    // surface that to the user as a hint without committing.
+    suggestions.multiplayer_scope_reasons = Array.from(
+      new Set(decision.signals.map((s) => s.reason))
+    )
+  }
 
   // Mod type from outer file paths.
   const modType = detectModType(filePaths)

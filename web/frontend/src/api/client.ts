@@ -168,3 +168,11 @@ export interface Submission {
   created_at: number
   decided_at: number | null
 }
+
+export interface OwnerInfo {
+  identifier: string
+  user_id: number
+  display_name: string
+  avatar_url: string | null
+  claimed_at: number
+}

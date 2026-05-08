@@ -67,13 +67,27 @@ function cssEscapeUrl(url: string): string {
 }
 
 /** Side-effect hook: applies the theme to :root every time the query
- *  data or personal overrides change. */
+ *  data or personal overrides change.
+ *
+ *  We deliberately depend on the *primitive* fields rather than the merged
+ *  object identity. `mergeTheme` returns a fresh object on every render, so
+ *  using `[merged]` would cause the effect to fire on every parent render
+ *  (and that, in turn, rewrites `--bg-image` / `--bg-blur` / etc., which
+ *  the browser treats as a change worth re-evaluating — producing visible
+ *  flicker on the blurred backdrop). */
 export function useApplyTheme(): ThemeConfig | undefined {
   const q = useTheme()
   const personal = usePersonalTheme()
   const merged = mergeTheme(q.data, personal)
+  const bgUrl = merged?.background_url
+  const bgBlur = merged?.background_blur_px
+  const bgDim = merged?.background_dim_pct
   useEffect(() => {
+    if (!merged) return
     applyThemeVars(merged)
-  }, [merged])
+    // `merged` is intentionally read inside the effect; the deps below are
+    // the primitives that actually drive the CSS variables.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bgUrl, bgBlur, bgDim])
   return merged
 }

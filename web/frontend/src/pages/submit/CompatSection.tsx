@@ -14,14 +14,25 @@ export function CompatSection({ f, update }: { f: FormState; update: Updater }) 
             <TextInput label="Release date" type="date" value={f.release_date}
               onChange={(e) => update('release_date', e.currentTarget.value)} />
           </SimpleGrid>
-          <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="md">
-            <TextInput label="BeamNG version (exact)" value={f.beamng_version}
+          <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="md" verticalSpacing="md">
+            <TextInput
+              label="BeamNG version (exact)"
+              placeholder="e.g. 0.31 or 'any'"
+              value={f.beamng_version}
               onChange={(e) => update('beamng_version', e.currentTarget.value)}
-              description="Or 'any'" />
-            <TextInput label="BeamNG min" value={f.beamng_version_min}
-              onChange={(e) => update('beamng_version_min', e.currentTarget.value)} />
-            <TextInput label="BeamNG max" value={f.beamng_version_max}
-              onChange={(e) => update('beamng_version_max', e.currentTarget.value)} />
+            />
+            <TextInput
+              label="BeamNG min"
+              placeholder="e.g. 0.30"
+              value={f.beamng_version_min}
+              onChange={(e) => update('beamng_version_min', e.currentTarget.value)}
+            />
+            <TextInput
+              label="BeamNG max"
+              placeholder="e.g. 0.32"
+              value={f.beamng_version_max}
+              onChange={(e) => update('beamng_version_max', e.currentTarget.value)}
+            />
           </SimpleGrid>
           <TextInput label="BeamMP min version" value={f.beammp_version_min}
             onChange={(e) => update('beammp_version_min', e.currentTarget.value)} />

@@ -7,32 +7,23 @@
  * button on the identifier.
  */
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
-  ActionIcon, Alert, Anchor, Avatar, Badge, Button, Card, CloseButton, Collapse,
-  Container, CopyButton, Divider, Drawer, Grid, Group, Image, Loader, Paper,
-  Rating, ScrollArea, Select, Stack, Text, TextInput, Title, Tooltip, UnstyledButton,
+  ActionIcon, Alert, Anchor, Autocomplete, Avatar, Badge, Button, Checkbox, CloseButton, Collapse,
+  Container, CopyButton, Divider, Drawer, Grid, Group, Image, Loader, Modal, MultiSelect, Paper,
+  Rating, ScrollArea, SegmentedControl, Select, SimpleGrid, Slider, Stack, Text, Textarea, TextInput,
+  Title, Tooltip, UnstyledButton,
 } from '@mantine/core'
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks'
-import { api } from '../api/client'
+import { api, ApiError, type OwnerInfo, type User } from '../api/client'
 import { useSubmitDraft } from '../state/SubmitDraftContext'
-
-interface LastEdit {
-  identifier: string
-  user_id: number
-  display_name: string
-  avatar_url: string | null
-  kind: string
-  version: string | null
-  decided_at: number | null
-}
-
-interface RatingInfo {
-  avg: number
-  count: number
-  mine: number | null
-}
+import {
+  ClaimedByBadge, formatRelativeTime, initialsOf, isHttpUrl, KIND_LABEL,
+  LastEditedBadge, ModCard, RatingBadge,
+  type LastEdit, type RatingInfo,
+} from '../components/ModCard'
+import { Seo } from '../components/Seo'
 
 interface ModListItem {
   identifier: string
@@ -53,15 +44,50 @@ interface ModListItem {
   versions: string[]
   last_edit: LastEdit | null
   rating: RatingInfo
+  owner: OwnerInfo | null
 }
+
+interface FacetEntry { value: string; count: number }
 
 interface ModListResponse {
   items: ModListItem[]
   total: number
   page: number
   pageSize: number
-  facets: { mod_types: Record<string, number> }
+  facets: {
+    mod_types: Record<string, number>
+    kinds?: Record<string, number>
+    licenses?: Record<string, number>
+    statuses?: Record<string, number>
+    multiplayer?: Record<string, number>
+    verified?: { true: number; false: number }
+    tags?: FacetEntry[]
+    authors?: FacetEntry[]
+  }
 }
+
+/** Fields available to the `has:` presence filter. */
+const HAS_FIELDS: { value: string; label: string }[] = [
+  { value: 'download', label: 'Download URL' },
+  { value: 'thumbnail', label: 'Thumbnail' },
+  { value: 'repository', label: 'Repository link' },
+  { value: 'homepage', label: 'Homepage link' },
+  { value: 'bugtracker', label: 'Bug tracker' },
+  { value: 'beamng_resource', label: 'BeamNG.com page' },
+  { value: 'depends', label: 'Has dependencies' },
+  { value: 'provides', label: 'Provides slot' },
+]
+
+const SORT_OPTIONS = [
+  { value: 'default', label: 'Verified first, then name' },
+  { value: 'name', label: 'Name (A→Z)' },
+  { value: '-name', label: 'Name (Z→A)' },
+  { value: 'identifier', label: 'Identifier (A→Z)' },
+  { value: '-identifier', label: 'Identifier (Z→A)' },
+  { value: '-rating', label: 'Highest rated' },
+  { value: 'rating', label: 'Lowest rated' },
+  { value: 'recent', label: 'Latest version' },
+]
 
 interface ModDetail extends ModListItem {
   raw: Record<string, unknown>
@@ -72,125 +98,125 @@ interface ModDetailResponse {
   watch?: { kref?: string; filter_asset?: string }
   last_edit: LastEdit | null
   rating: RatingInfo
+  owner: OwnerInfo | null
 }
 
 const PAGE_SIZE = 24
 
-function isHttpUrl(s: string | undefined): s is string {
-  return !!s && /^https?:\/\//i.test(s)
-}
-
-function initialsOf(name: string): string {
-  return name.slice(0, 2).toUpperCase()
-}
-
-function formatRelativeTime(ts: number | null | undefined): string {
-  if (!ts) return ''
-  const diff = Date.now() - ts
-  const sec = Math.round(diff / 1000)
-  if (sec < 60) return 'just now'
-  const min = Math.round(sec / 60)
-  if (min < 60) return `${min}\u00a0min ago`
-  const hr = Math.round(min / 60)
-  if (hr < 24) return `${hr}\u00a0hr ago`
-  const day = Math.round(hr / 24)
-  if (day < 30) return `${day}\u00a0day${day === 1 ? '' : 's'} ago`
-  return new Date(ts).toLocaleDateString()
-}
-
-const KIND_LABEL: Record<string, string> = {
-  manual_beammod: 'Manual edit',
-  netbeammod_github: 'GitHub watcher',
-  netbeammod_beamng: 'BeamNG watcher',
-  claim: 'Claimed',
-  new_version: 'New version',
-}
-
-function LastEditedBadge({ edit, compact }: { edit: LastEdit; compact?: boolean }) {
-  const when = formatRelativeTime(edit.decided_at)
-  const label = `${KIND_LABEL[edit.kind] ?? 'Edited'} by ${edit.display_name}${when ? ` — ${when}` : ''}`
-  return (
-    <Tooltip label={label} withArrow openDelay={300}>
-      <Group gap={6} wrap="nowrap" align="center" style={{ minWidth: 0 }}>
-        <Avatar src={edit.avatar_url ?? undefined} size={compact ? 18 : 22} radius="xl">
-          {initialsOf(edit.display_name)}
-        </Avatar>
-        <Text size="xs" c="dimmed" lineClamp={1} style={{ minWidth: 0 }}>
-          edited by {edit.display_name}
-          {when ? ` · ${when}` : ''}
-        </Text>
-      </Group>
-    </Tooltip>
-  )
-}
-
-function RatingBadge({ rating }: { rating: RatingInfo }) {
-  if (rating.count === 0) {
-    return (
-      <Tooltip label="No ratings yet — be the first to rate this mod" withArrow openDelay={300}>
-        <Text size="xs" c="dimmed">
-          ☆ unrated
-        </Text>
-      </Tooltip>
-    )
-  }
-  const label = `Average ${rating.avg.toFixed(1)} from ${rating.count} rating${rating.count === 1 ? '' : 's'}${rating.mine ? ` · you rated ${rating.mine}` : ''}`
-  return (
-    <Tooltip label={label} withArrow openDelay={300}>
-      <Group gap={4} wrap="nowrap" align="center" style={{ minWidth: 0 }}>
-        <Text size="xs" c="yellow.5" lh={1}>★</Text>
-        <Text size="xs" fw={600} lh={1}>{rating.avg.toFixed(1)}</Text>
-        <Text size="xs" c="dimmed" lh={1}>({rating.count})</Text>
-        {rating.mine ? (
-          <Text size="xs" c="blue.4" lh={1} ml={2}>· you: {rating.mine}</Text>
-        ) : null}
-      </Group>
-    </Tooltip>
-  )
-}
-
-function ThumbBox({ src, alt }: { src?: string; alt: string }) {
-  if (isHttpUrl(src)) {
-    return (
-      <Image
-        src={src}
-        alt={alt}
-        h={140}
-        fit="cover"
-        fallbackSrc="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 70'><rect width='100' height='70' fill='%23222'/><text x='50' y='40' text-anchor='middle' fill='%23666' font-size='10' font-family='sans-serif'>no preview</text></svg>"
-      />
-    )
-  }
-  return (
-    <div
-      style={{
-        height: 140,
-        background: 'linear-gradient(135deg,#1f2937,#0f172a)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: '#475569', fontSize: 12, fontFamily: 'monospace',
-      }}
-    >
-      no preview
-    </div>
-  )
-}
-
 export function RegistryBrowserPage() {
-  const [q, setQ] = useState('')
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  // ── Filter state ──────────────────────────────────────────────────────
+  // All filter state is mirrored to the URL so the page is shareable and
+  // bookmarkable. Initialised from the current URL on mount.
+  const [q, setQ] = useState(searchParams.get('q') ?? '')
   const [debouncedQ] = useDebouncedValue(q, 250)
-  const [type, setType] = useState<string | null>(null)
-  const [selected, setSelected] = useState<string | null>(null)
+  const [type, setType] = useState<string | null>(searchParams.get('type'))
+  const [kind, setKind] = useState<string | null>(searchParams.get('kind'))
+  const [status, setStatus] = useState<string | null>(searchParams.get('status'))
+  const [multiplayer, setMultiplayer] = useState<string | null>(searchParams.get('multiplayer'))
+  const [license, setLicense] = useState<string | null>(searchParams.get('license'))
+  const [author, setAuthor] = useState<string>(searchParams.get('author') ?? '')
+  const [debouncedAuthor] = useDebouncedValue(author, 250)
+  const [activeTags, setActiveTags] = useState<string[]>(
+    (searchParams.get('tags') ?? '').split(',').filter(Boolean),
+  )
+  const [tagMode, setTagMode] = useState<'all' | 'any'>(
+    (searchParams.get('tag_mode') as 'all' | 'any') ?? 'all',
+  )
+  const [verified, setVerified] = useState<string>(searchParams.get('verified') ?? 'any')
+  const [hasFields, setHasFields] = useState<string[]>(
+    (searchParams.get('has') ?? '').split(',').filter(Boolean),
+  )
+  const [minRating, setMinRating] = useState<number>(
+    Number(searchParams.get('min_rating') ?? '0') || 0,
+  )
+  const [sort, setSort] = useState<string>(searchParams.get('sort') ?? 'default')
+  const [advancedOpen, advancedToggle] = useDisclosure(
+    // Auto-expand if any advanced filter is already active in the URL.
+    Boolean(
+      searchParams.get('kind') || searchParams.get('status') || searchParams.get('multiplayer') ||
+      searchParams.get('license') || searchParams.get('author') || searchParams.get('tags') ||
+      searchParams.get('verified') || searchParams.get('has') || searchParams.get('min_rating') ||
+      (searchParams.get('sort') && searchParams.get('sort') !== 'default'),
+    ),
+  )
+
+  const [selected, setSelectedState] = useState<string | null>(
+    searchParams.get('selected'),
+  )
+
+  // Reflect current filter state back into the URL whenever any input
+  // changes. Uses replace so back/forward isn't polluted.
+  useEffect(() => {
+    const next = new URLSearchParams(searchParams)
+    const set = (key: string, value: string | null | undefined) => {
+      if (value && value.length > 0) next.set(key, value)
+      else next.delete(key)
+    }
+    set('q', debouncedQ)
+    set('type', type)
+    set('kind', kind)
+    set('status', status)
+    set('multiplayer', multiplayer)
+    set('license', license)
+    set('author', debouncedAuthor)
+    set('tags', activeTags.join(','))
+    set('tag_mode', activeTags.length > 1 && tagMode === 'any' ? 'any' : null)
+    set('verified', verified === 'any' ? null : verified)
+    set('has', hasFields.join(','))
+    set('min_rating', minRating > 0 ? String(minRating) : null)
+    set('sort', sort && sort !== 'default' ? sort : null)
+    setSearchParams(next, { replace: true })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedQ, type, kind, status, multiplayer, license, debouncedAuthor,
+      activeTags, tagMode, verified, hasFields, minRating, sort])
+
+  // Keep ?selected= in sync with the drawer state so external links (e.g. a
+  // card on the dashboard) can deep-link to a specific mod, and so opening
+  // a card here gives users a copyable URL.
+  const setSelected = (id: string | null) => {
+    setSelectedState(id)
+    const next = new URLSearchParams(searchParams)
+    if (id) next.set('selected', id)
+    else next.delete('selected')
+    setSearchParams(next, { replace: true })
+  }
+
+  // Pick up later URL changes (e.g. user pastes a different ?selected= URL)
+  useEffect(() => {
+    const param = searchParams.get('selected')
+    if (param !== selected) setSelectedState(param)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams])
 
   // Infinite scroll: each page returns PAGE_SIZE items; we fetch the next
   // page when the sentinel scrolls into view. Filter changes reset the
   // scroll automatically because the query key changes.
   const list = useInfiniteQuery({
-    queryKey: ['mods', { q: debouncedQ, type }],
+    queryKey: ['mods', {
+      q: debouncedQ, type, kind, status, multiplayer, license,
+      author: debouncedAuthor, tags: activeTags, tagMode, verified,
+      has: hasFields, minRating, sort,
+    }],
     initialPageParam: 1,
     queryFn: ({ pageParam }) => {
       const params = new URLSearchParams()
       if (debouncedQ) params.set('q', debouncedQ)
       if (type) params.set('type', type)
+      if (kind) params.set('kind', kind)
+      if (status) params.set('status', status)
+      if (multiplayer) params.set('multiplayer', multiplayer)
+      if (license) params.set('license', license)
+      if (debouncedAuthor.trim()) params.set('author', debouncedAuthor.trim())
+      if (activeTags.length > 0) {
+        params.set('tags', activeTags.join(','))
+        if (activeTags.length > 1) params.set('tag_mode', tagMode)
+      }
+      if (verified !== 'any') params.set('verified', verified)
+      if (hasFields.length > 0) params.set('has', hasFields.join(','))
+      if (minRating > 0) params.set('min_rating', String(minRating))
+      if (sort && sort !== 'default') params.set('sort', sort)
       params.set('page', String(pageParam))
       params.set('pageSize', String(PAGE_SIZE))
       return api.get<ModListResponse>(`/mods?${params.toString()}`)
@@ -233,14 +259,58 @@ export function RegistryBrowserPage() {
     enabled: !!selected,
   })
 
-  const typeOptions = useMemo(() => {
-    return Object.entries(facets.mod_types ?? {})
+  // Build option lists for each filter dropdown from the server-provided
+  // facet counts, sorted by frequency. Memoised against the latest page so
+  // counts stay fresh as the registry index updates.
+  const facetOptions = (counts: Record<string, number> | undefined) =>
+    Object.entries(counts ?? {})
       .sort((a, b) => b[1] - a[1])
       .map(([value, count]) => ({ value, label: `${value} (${count})` }))
-  }, [facets])
+
+  const typeOptions = useMemo(() => facetOptions(facets.mod_types), [facets])
+  const kindOptions = useMemo(() => facetOptions(facets.kinds), [facets])
+  const statusOptions = useMemo(() => facetOptions(facets.statuses), [facets])
+  const multiplayerOptions = useMemo(() => facetOptions(facets.multiplayer), [facets])
+  const licenseOptions = useMemo(() => facetOptions(facets.licenses), [facets])
+  const tagOptions = useMemo(
+    () => (facets.tags ?? []).map((t) => ({ value: t.value, label: `${t.value} (${t.count})` })),
+    [facets],
+  )
+  const authorSuggestions = useMemo(
+    () => (facets.authors ?? []).map((a) => a.value),
+    [facets],
+  )
+
+  const activeFilterCount =
+    (type ? 1 : 0) + (kind ? 1 : 0) + (status ? 1 : 0) + (multiplayer ? 1 : 0) +
+    (license ? 1 : 0) + (debouncedAuthor.trim() ? 1 : 0) + activeTags.length +
+    (verified !== 'any' ? 1 : 0) + hasFields.length + (minRating > 0 ? 1 : 0) +
+    (sort && sort !== 'default' ? 1 : 0)
+
+  const resetFilters = () => {
+    setQ('')
+    setType(null); setKind(null); setStatus(null); setMultiplayer(null); setLicense(null)
+    setAuthor(''); setActiveTags([]); setTagMode('all'); setVerified('any')
+    setHasFields([]); setMinRating(0); setSort('default')
+  }
+
+  const removeTag = (t: string) => setActiveTags(activeTags.filter((x) => x !== t))
+  const removeHas = (h: string) => setHasFields(hasFields.filter((x) => x !== h))
 
   return (
     <Container size={1200}>
+      <Seo
+        title="BeamNG Mod Registry Browser for BeamMP and CareerMP Servers"
+        description="Search verified BeamNG mods by type, compatibility, and metadata to build reliable BeamMP and CareerMP server-ready mod packs."
+        canonicalPath="/registry"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: 'BeamNG Mod Registry Browser',
+          description: 'Searchable index of BeamNG mods with compatibility metadata for BeamMP and CareerMP server setups.',
+          url: `${window.location.origin}/registry`,
+        }}
+      />
       <Group justify="space-between" align="flex-end" mb="md">
         <Title order={2}>Registry browser</Title>
         {list.data && (
@@ -251,26 +321,255 @@ export function RegistryBrowserPage() {
       </Group>
 
       <Paper withBorder p="md" radius="md" mb="md">
-        <Group wrap="wrap" gap="sm">
-          <TextInput
-            placeholder="Search by name, identifier, author, tag…"
-            value={q}
-            onChange={(e) => setQ(e.currentTarget.value)}
-            style={{ flex: 1, minWidth: 240 }}
-            rightSection={
-              q ? <CloseButton onClick={() => setQ('')} /> : null
-            }
-          />
-          <Select
-            placeholder="All types"
-            value={type}
-            onChange={(v) => setType(v)}
-            data={typeOptions}
-            clearable
-            searchable
-            w={220}
-          />
-        </Group>
+        <Text size="sm">
+          Planning multiplayer? Use this page to assemble compatible packs for a{' '}
+          <Anchor component={Link} to="/faq">BeamMP server</Anchor>
+          {' '}or{' '}
+          <Anchor component={Link} to="/faq">CareerMP server</Anchor>
+          . Install faster with{' '}
+          <Anchor component={Link} to="/content-manager">BeamNG Content Manager</Anchor>.
+        </Text>
+      </Paper>
+
+      <Paper withBorder p="md" radius="md" mb="md">
+        <Stack gap="sm">
+          <Group wrap="wrap" gap="sm" align="flex-end">
+            <TextInput
+              label="Search"
+              placeholder="Name, identifier, author, abstract, tag…"
+              value={q}
+              onChange={(e) => setQ(e.currentTarget.value)}
+              style={{ flex: 1, minWidth: 240 }}
+              rightSection={
+                q ? <CloseButton onClick={() => setQ('')} /> : null
+              }
+            />
+            <Select
+              label="Mod type"
+              placeholder="All types"
+              value={type}
+              onChange={(v) => setType(v)}
+              data={typeOptions}
+              clearable
+              searchable
+              w={200}
+            />
+            <Select
+              label="Sort"
+              value={sort}
+              onChange={(v) => setSort(v ?? 'default')}
+              data={SORT_OPTIONS}
+              w={220}
+              allowDeselect={false}
+            />
+            <Button
+              variant={advancedOpen ? 'filled' : 'light'}
+              onClick={advancedToggle.toggle}
+              color="grape"
+            >
+              Advanced filters
+              {activeFilterCount > 0 && (
+                <Badge ml={6} size="sm" circle color="grape" variant="white">
+                  {activeFilterCount}
+                </Badge>
+              )}
+            </Button>
+            {activeFilterCount > 0 && (
+              <Button variant="subtle" color="gray" onClick={resetFilters}>
+                Reset
+              </Button>
+            )}
+          </Group>
+
+          <Collapse in={advancedOpen}>
+            <Stack gap="sm" pt="xs">
+              <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="sm">
+                <Select
+                  label="Kind"
+                  placeholder="Any"
+                  value={kind}
+                  onChange={setKind}
+                  data={kindOptions}
+                  clearable
+                  searchable
+                />
+                <Select
+                  label="Release status"
+                  placeholder="Any"
+                  value={status}
+                  onChange={setStatus}
+                  data={statusOptions}
+                  clearable
+                />
+                <Select
+                  label="Multiplayer scope"
+                  placeholder="Any"
+                  value={multiplayer}
+                  onChange={setMultiplayer}
+                  data={multiplayerOptions}
+                  clearable
+                />
+                <Select
+                  label="License"
+                  placeholder="Any"
+                  value={license}
+                  onChange={setLicense}
+                  data={licenseOptions}
+                  clearable
+                  searchable
+                />
+                <Autocomplete
+                  label="Author contains"
+                  placeholder="e.g. BeamNG"
+                  value={author}
+                  onChange={setAuthor}
+                  data={authorSuggestions}
+                  limit={10}
+                />
+                <Select
+                  label="Verified"
+                  value={verified}
+                  onChange={(v) => setVerified(v ?? 'any')}
+                  data={[
+                    { value: 'any', label: 'Any' },
+                    {
+                      value: 'true',
+                      label: `Verified only${facets.verified ? ` (${facets.verified.true})` : ''}`,
+                    },
+                    {
+                      value: 'false',
+                      label: `Unverified only${facets.verified ? ` (${facets.verified.false})` : ''}`,
+                    },
+                  ]}
+                  allowDeselect={false}
+                />
+              </SimpleGrid>
+
+              <MultiSelect
+                label="Tags"
+                placeholder={activeTags.length === 0 ? 'Pick or type tags…' : ''}
+                value={activeTags}
+                onChange={setActiveTags}
+                data={tagOptions}
+                searchable
+                clearable
+                hidePickedOptions
+                maxDropdownHeight={280}
+                rightSection={
+                  activeTags.length > 1 ? (
+                    <SegmentedControl
+                      size="xs"
+                      value={tagMode}
+                      onChange={(v) => setTagMode(v as 'all' | 'any')}
+                      data={[
+                        { value: 'all', label: 'All' },
+                        { value: 'any', label: 'Any' },
+                      ]}
+                    />
+                  ) : null
+                }
+                rightSectionWidth={activeTags.length > 1 ? 140 : 36}
+                description={
+                  activeTags.length > 1
+                    ? `Match mods that have ${tagMode === 'all' ? 'all' : 'any'} of these tags`
+                    : undefined
+                }
+              />
+
+              <Stack gap={4}>
+                <Text size="sm" fw={500}>Must include</Text>
+                <Checkbox.Group value={hasFields} onChange={setHasFields}>
+                  <Group gap="md" wrap="wrap">
+                    {HAS_FIELDS.map((f) => (
+                      <Checkbox key={f.value} value={f.value} label={f.label} />
+                    ))}
+                  </Group>
+                </Checkbox.Group>
+              </Stack>
+
+              <Stack gap={4}>
+                <Group justify="space-between">
+                  <Text size="sm" fw={500}>Minimum rating</Text>
+                  <Group gap={6}>
+                    <Rating value={minRating} onChange={setMinRating} fractions={2} />
+                    {minRating > 0 && (
+                      <ActionIcon
+                        size="sm"
+                        variant="subtle"
+                        onClick={() => setMinRating(0)}
+                        title="Clear rating filter"
+                      >
+                        <CloseButton size="xs" />
+                      </ActionIcon>
+                    )}
+                  </Group>
+                </Group>
+              </Stack>
+            </Stack>
+          </Collapse>
+
+          {/* Active filter chips — quick removal of any filter without
+              opening the advanced panel. */}
+          {activeFilterCount > 0 && (
+            <Group gap={6} wrap="wrap">
+              {type && (
+                <Badge color="blue" variant="light" rightSection={<CloseButton size="xs" onClick={() => setType(null)} />}>
+                  type: {type}
+                </Badge>
+              )}
+              {kind && (
+                <Badge color="blue" variant="light" rightSection={<CloseButton size="xs" onClick={() => setKind(null)} />}>
+                  kind: {kind}
+                </Badge>
+              )}
+              {status && (
+                <Badge color="blue" variant="light" rightSection={<CloseButton size="xs" onClick={() => setStatus(null)} />}>
+                  status: {status}
+                </Badge>
+              )}
+              {multiplayer && (
+                <Badge color="blue" variant="light" rightSection={<CloseButton size="xs" onClick={() => setMultiplayer(null)} />}>
+                  mp: {multiplayer}
+                </Badge>
+              )}
+              {license && (
+                <Badge color="blue" variant="light" rightSection={<CloseButton size="xs" onClick={() => setLicense(null)} />}>
+                  license: {license}
+                </Badge>
+              )}
+              {debouncedAuthor.trim() && (
+                <Badge color="blue" variant="light" rightSection={<CloseButton size="xs" onClick={() => setAuthor('')} />}>
+                  author: {debouncedAuthor.trim()}
+                </Badge>
+              )}
+              {verified !== 'any' && (
+                <Badge color="green" variant="light" rightSection={<CloseButton size="xs" onClick={() => setVerified('any')} />}>
+                  {verified === 'true' ? 'verified only' : 'unverified only'}
+                </Badge>
+              )}
+              {activeTags.map((t) => (
+                <Badge key={t} color="grape" variant="light" rightSection={<CloseButton size="xs" onClick={() => removeTag(t)} />}>
+                  #{t}
+                </Badge>
+              ))}
+              {hasFields.map((h) => (
+                <Badge key={h} color="teal" variant="light" rightSection={<CloseButton size="xs" onClick={() => removeHas(h)} />}>
+                  has: {h}
+                </Badge>
+              ))}
+              {minRating > 0 && (
+                <Badge color="yellow" variant="light" rightSection={<CloseButton size="xs" onClick={() => setMinRating(0)} />}>
+                  ≥ {minRating}★
+                </Badge>
+              )}
+              {sort && sort !== 'default' && (
+                <Badge color="gray" variant="light" rightSection={<CloseButton size="xs" onClick={() => setSort('default')} />}>
+                  sort: {SORT_OPTIONS.find((o) => o.value === sort)?.label ?? sort}
+                </Badge>
+              )}
+            </Group>
+          )}
+        </Stack>
       </Paper>
 
       {list.isError && (
@@ -284,53 +583,7 @@ export function RegistryBrowserPage() {
       <Grid>
         {items.map((m) => (
           <Grid.Col key={m.identifier} span={{ base: 12, sm: 6, md: 4, lg: 3 }}>
-            <Card
-              withBorder
-              padding={0}
-              radius="md"
-              style={{ cursor: 'pointer', overflow: 'hidden', height: '100%' }}
-              onClick={() => setSelected(m.identifier)}
-            >
-              <Card.Section style={{ position: 'relative' }}>
-                <ThumbBox src={m.thumbnail} alt={m.name} />
-                {m.verified && (
-                  <Tooltip label="Verified — author-curated entry" withArrow>
-                    <Badge
-                      color="blue"
-                      variant="filled"
-                      size="sm"
-                      leftSection={<span style={{ fontSize: 11, lineHeight: 1 }}>✓</span>}
-                      style={{ position: 'absolute', top: 8, right: 8 }}
-                    >
-                      Verified
-                    </Badge>
-                  </Tooltip>
-                )}
-              </Card.Section>
-              <Stack p="sm" gap={6}>
-                <Group gap={4} wrap="nowrap" align="center">
-                  <Text fw={600} lineClamp={1} style={{ flex: 1 }}>{m.name}</Text>
-                </Group>
-                <Text size="xs" c="dimmed" ff="monospace" lineClamp={1}>
-                  {m.identifier}
-                </Text>
-                {m.author && (
-                  <Text size="xs" c="dimmed" lineClamp={1}>by {m.author}</Text>
-                )}
-                {m.last_edit && <LastEditedBadge edit={m.last_edit} compact />}
-                <RatingBadge rating={m.rating} />
-                {m.abstract && (
-                  <Text size="xs" lineClamp={2}>{m.abstract}</Text>
-                )}
-                <Group gap={4} mt={4}>
-                  {m.mod_type && <Badge size="xs" variant="light">{m.mod_type}</Badge>}
-                  {m.kind && m.kind !== 'package' && (
-                    <Badge size="xs" variant="light" color="grape">{m.kind}</Badge>
-                  )}
-                  <Badge size="xs" variant="outline">v{m.version}</Badge>
-                </Group>
-              </Stack>
-            </Card>
+            <ModCard mod={m} onClick={() => setSelected(m.identifier)} />
           </Grid.Col>
         ))}
       </Grid>
@@ -367,6 +620,7 @@ export function RegistryBrowserPage() {
             watch={detail.data.watch}
             lastEdit={detail.data.last_edit}
             rating={detail.data.rating}
+            owner={detail.data.owner}
             onClose={() => setSelected(null)}
           />
         )}
@@ -375,11 +629,18 @@ export function RegistryBrowserPage() {
   )
 }
 
-function ModDetailView({ mod, watch, lastEdit, rating, onClose }: { mod: ModDetail; watch?: { kref?: string; filter_asset?: string }; lastEdit: LastEdit | null; rating: RatingInfo; onClose: () => void }) {
+function ModDetailView({ mod, watch, lastEdit, rating, owner, onClose }: { mod: ModDetail; watch?: { kref?: string; filter_asset?: string }; lastEdit: LastEdit | null; rating: RatingInfo; owner: OwnerInfo | null; onClose: () => void }) {
   const draft = useSubmitDraft()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const [historyOpen, historyToggle] = useDisclosure(false)
+
+  // Detect signed-in viewer; gates rating + claim + propose-edit actions.
+  const me = useQuery<{ user: User | null }>({
+    queryKey: ['me'],
+    queryFn: () => api.get<{ user: User | null }>('/auth/me'),
+  })
+  const viewer = me.data?.user ?? null
 
   // History is fetched lazily the first time the user expands the dropdown
   // so we don't pay for it on every drawer open.
@@ -493,27 +754,31 @@ function ModDetailView({ mod, watch, lastEdit, rating, onClose }: { mod: ModDeta
       {mod.author && <Text size="sm"><strong>Author:</strong> {mod.author}</Text>}
       {mod.abstract && <Text size="sm">{mod.abstract}</Text>}
 
+      <OwnershipPanel mod={mod} owner={owner} />
+
       <Paper withBorder p="sm" radius="sm">
         <Stack gap={6}>
           <Group justify="space-between" align="center" wrap="wrap">
             <Stack gap={2}>
-              <Text size="sm" fw={600}>Your rating</Text>
+              <Text size="sm" fw={600}>{viewer ? 'Your rating' : 'Ratings'}</Text>
               <Text size="xs" c="dimmed">
                 {localRating.count === 0
-                  ? 'No ratings yet — be the first.'
+                  ? (viewer ? 'No ratings yet — be the first.' : 'No ratings yet.')
                   : `Average ${localRating.avg.toFixed(1)} from ${localRating.count} rating${localRating.count === 1 ? '' : 's'}.`}
               </Text>
             </Stack>
             <Group gap={6} wrap="nowrap" align="center">
               <Rating
-                value={localRating.mine ?? 0}
+                value={viewer ? (localRating.mine ?? 0) : Math.round(localRating.avg)}
                 onChange={(v) => {
+                  if (!viewer) return
                   setLocalRating({ ...localRating, mine: v })
                   setRating.mutate(v)
                 }}
-                readOnly={setRating.isPending || clearRating.isPending}
+                readOnly={!viewer || setRating.isPending || clearRating.isPending}
+                fractions={viewer ? 1 : 2}
               />
-              {localRating.mine ? (
+              {viewer && localRating.mine ? (
                 <Tooltip label="Clear your rating" withArrow>
                   <ActionIcon
                     size="sm"
@@ -529,6 +794,11 @@ function ModDetailView({ mod, watch, lastEdit, rating, onClose }: { mod: ModDeta
               ) : null}
             </Group>
           </Group>
+          {!viewer && (
+            <Text size="xs" c="dimmed">
+              <Anchor component={Link} to="/login">Sign in</Anchor> to rate this mod.
+            </Text>
+          )}
           {(setRating.isError || clearRating.isError) && (
             <Text size="xs" c="red">Failed to save rating. Try again.</Text>
           )}
@@ -639,10 +909,15 @@ function ModDetailView({ mod, watch, lastEdit, rating, onClose }: { mod: ModDeta
             thumbnail, missing tags, broken download links, etc. Edits go through admin
             review before publishing.
           </Text>
-          <Group gap="xs">
-            <Button size="xs" variant="light" onClick={() => proposeEdit(false)}>
+          <Group gap="xs" align="center">
+            <Button size="xs" variant="light" disabled={!viewer} onClick={() => proposeEdit(false)}>
               Propose edit
             </Button>
+            {!viewer && (
+              <Text size="xs" c="dimmed">
+                (<Anchor component={Link} to="/login">sign in</Anchor> to propose edits)
+              </Text>
+            )}
           </Group>
         </Stack>
       </Paper>
@@ -654,10 +929,15 @@ function ModDetailView({ mod, watch, lastEdit, rating, onClose }: { mod: ModDeta
             Publish a new version (bumps the version number and creates a fresh release
             entry). Admin review verifies authorship before publishing.
           </Text>
-          <Group gap="xs">
-            <Button size="xs" onClick={() => proposeEdit(true)}>
+          <Group gap="xs" align="center">
+            <Button size="xs" disabled={!viewer} onClick={() => proposeEdit(true)}>
               Submit new version
             </Button>
+            {!viewer && (
+              <Text size="xs" c="dimmed">
+                (<Anchor component={Link} to="/login">sign in</Anchor> to submit)
+              </Text>
+            )}
           </Group>
         </Stack>
       </Paper>
@@ -683,3 +963,116 @@ function ModDetailView({ mod, watch, lastEdit, rating, onClose }: { mod: ModDeta
     </Stack>
   )
 }
+
+/**
+ * Ownership panel shown in the mod detail drawer. If the mod is unowned and
+ * the viewer is signed in, exposes a "Claim this mod" button that opens a
+ * modal to submit a claim (queued for green-tier reviewer approval).
+ */
+function OwnershipPanel({ mod, owner }: { mod: ModDetail; owner: OwnerInfo | null }) {
+  const me = useQuery<{ user: User | null }>({
+    queryKey: ['me'],
+    queryFn: () => api.get<{ user: User | null }>('/auth/me'),
+  })
+  const queryClient = useQueryClient()
+  const [opened, { open, close }] = useDisclosure(false)
+  const [message, setMessage] = useState('')
+  const [submitError, setSubmitError] = useState<string | null>(null)
+
+  const claim = useMutation({
+    mutationFn: () =>
+      api.post<{ id: number }>('/submissions/claim', {
+        identifier: mod.identifier,
+        message: message.trim() || undefined,
+      }),
+    onSuccess: () => {
+      setMessage('')
+      setSubmitError(null)
+      close()
+      queryClient.invalidateQueries({ queryKey: ['mod', mod.identifier] })
+    },
+    onError: (err: unknown) => {
+      if (err instanceof ApiError) {
+        const body = err.body as { error?: string } | string | null
+        const code = typeof body === 'object' && body && 'error' in body ? body.error : String(body ?? err.message)
+        setSubmitError(code ?? 'claim_failed')
+      } else {
+        setSubmitError('claim_failed')
+      }
+    },
+  })
+
+  const user = me.data?.user ?? null
+  const isOwner = !!owner && !!user && owner.user_id === user.id
+
+  if (owner) {
+    return (
+      <Paper withBorder p="sm" radius="sm">
+        <Stack gap={6}>
+          <Text size="sm" fw={600}>Ownership</Text>
+          <ClaimedByBadge owner={owner} />
+          {isOwner && (
+            <Text size="xs" c="dimmed">
+              You own this mod. Other authors&apos; edits to it will be routed to you for approval.
+            </Text>
+          )}
+        </Stack>
+      </Paper>
+    )
+  }
+
+  return (
+    <Paper withBorder p="sm" radius="sm">
+      <Stack gap={6}>
+        <Text size="sm" fw={600}>Ownership</Text>
+        <Text size="xs" c="dimmed">
+          This mod is unclaimed. If you&apos;re the original author, claim it so future
+          edits route to you for approval before publishing.
+        </Text>
+        <Group gap="xs">
+          <Button
+            size="xs"
+            variant="light"
+            disabled={!user}
+            onClick={open}
+          >
+            Claim this mod
+          </Button>
+          {!user && <Text size="xs" c="dimmed">(sign in to claim)</Text>}
+        </Group>
+      </Stack>
+
+      <Modal opened={opened} onClose={close} title={`Claim ${mod.identifier}`} centered>
+        <Stack gap="sm">
+          <Text size="sm">
+            A green-tier reviewer will be notified and asked to confirm you are the
+            author. Once approved, you will own this mod and any future edits by
+            other users will require your approval before being published.
+          </Text>
+          <Textarea
+            label="Message to reviewer (optional)"
+            description="Anything that helps confirm authorship — links, context, etc."
+            value={message}
+            onChange={(e) => setMessage(e.currentTarget.value)}
+            minRows={3}
+            autosize
+          />
+          {submitError && (
+            <Alert color="red" variant="light">
+              {submitError === 'already_owned' && 'This mod has already been claimed.'}
+              {submitError === 'claim_already_pending' && 'You already have a pending claim for this mod.'}
+              {submitError === 'mod_not_found' && 'This mod is not in the registry yet.'}
+              {!['already_owned','claim_already_pending','mod_not_found'].includes(submitError) && submitError}
+            </Alert>
+          )}
+          <Group justify="flex-end" gap="xs">
+            <Button variant="default" size="xs" onClick={close} disabled={claim.isPending}>Cancel</Button>
+            <Button size="xs" loading={claim.isPending} onClick={() => claim.mutate()}>Submit claim</Button>
+          </Group>
+        </Stack>
+      </Modal>
+    </Paper>
+  )
+}
+
+

@@ -68,7 +68,8 @@ body.app-bg-on .mantine-AppShell-main {
 }
 
 /* Highlight empty required form fields so it's obvious what still needs
- * to be filled. Mantine forwards the equired attribute to the underlying
+ * to be filled. Mantine forwards the 
+equired attribute to the underlying
  * <input>/<textarea>, so :required:invalid matches when the field is empty. */
 .mantine-TextInput-input:required:invalid,
 .mantine-Textarea-input:required:invalid,
@@ -77,4 +78,345 @@ body.app-bg-on .mantine-AppShell-main {
   border-color: var(--mantine-color-yellow-6) !important;
   background-color: rgba(250, 176, 5, 0.06);
   box-shadow: 0 0 0 1px rgba(250, 176, 5, 0.35) inset;
+}
+
+
+/* Registry browser cards: subtle lift + shadow on hover. */
+.registry-card {
+  transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
+  will-change: transform;
+}
+.registry-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+  border-color: var(--mantine-color-blue-5);
+}
+
+/* Thumbnail pan/zoom that follows the cursor while hovering the card.
+ * --mx/--my are set on the card by an onMouseMove handler. The wrapper
+ * clips so the scaled thumb can't bleed into the text section below. */
+.registry-thumb-wrap {
+  overflow: hidden;
+}
+.registry-card .registry-thumb {
+  transition: transform 200ms ease;
+  transform-origin: var(--mx, 50%) var(--my, 50%);
+}
+.registry-card:hover .registry-thumb {
+  transform: scale(1.05);
+}
+
+/* Join page: animated fallback shown when a map thumbnail is unavailable. */
+.map-preview-fallback {
+  --centerline-bottom: -4px;
+  --horizon-y: 120px;
+  --road-height: 220px;
+  --road-bottom: calc(100% - var(--horizon-y) - var(--road-height));
+  --centerline-height: 57px;
+  position: relative;
+  height: 170px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    radial-gradient(circle at 50% 16%, rgba(255, 142, 73, 0.2), transparent 40%),
+    radial-gradient(circle at 80% 72%, rgba(255, 72, 72, 0.16), transparent 48%),
+    linear-gradient(180deg, #1d2330 0%, #10141d 45%, #090c12 100%);
+}
+
+.map-preview-sun {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--horizon-y) - 62px);
+  width: 144px;
+  height: 144px;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(circle at 50% 40%, rgba(255, 252, 227, 0.98) 0 20%, rgba(255, 216, 137, 0.96) 34%, rgba(255, 157, 85, 0.92) 62%, rgba(255, 98, 56, 0.8) 82%, rgba(255, 98, 56, 0) 100%);
+  box-shadow:
+    0 0 26px rgba(255, 162, 92, 0.55),
+    0 0 68px rgba(255, 112, 68, 0.32);
+  opacity: 0.92;
+  pointer-events: none;
+  animation: map-sun-shimmer 3.2s ease-in-out infinite;
+}
+
+.map-preview-road {
+  position: absolute;
+  left: 50%;
+  bottom: var(--road-bottom);
+  width: 170%;
+  height: var(--road-height);
+  transform: translateX(-50%) perspective(560px) rotateX(67deg);
+  transform-origin: center top;
+  background: linear-gradient(180deg, #2d323c 0%, #1d2129 42%, #10131a 100%);
+  border-radius: 50% 50% 0 0;
+  box-shadow: inset 0 26px 48px rgba(0, 0, 0, 0.5);
+  opacity: 0.96;
+}
+
+.map-preview-grid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--horizon-y);
+  bottom: 0;
+  background-image:
+    repeating-conic-gradient(
+      from 90deg at 50% 0%,
+      rgba(247, 194, 132, 0) 0deg,
+      rgba(247, 194, 132, 0) 7deg,
+      rgba(247, 194, 132, 0.18) 7deg,
+      rgba(247, 194, 132, 0.18) 7.5deg,
+      rgba(247, 194, 132, 0) 7.5deg,
+      rgba(247, 194, 132, 0) 14deg
+    ),
+    repeating-linear-gradient(
+      to top,
+      rgba(247, 194, 132, 0.24) 0 1px,
+      rgba(247, 194, 132, 0) 1px 18px
+    );
+  background-size: 100% 100%, 100% 18px;
+  opacity: 0.45;
+  pointer-events: none;
+  animation: map-grid-flow 1.4s linear infinite;
+}
+
+.map-preview-centerline {
+  position: absolute;
+  left: 50%;
+  bottom: var(--centerline-bottom);
+  width: 16px;
+  height: var(--centerline-height);
+  transform: translateX(-50%);
+  clip-path: polygon(48% 0%, 52% 0%, 94% 100%, 6% 100%);
+  background: repeating-linear-gradient(
+    to top,
+    rgba(255, 236, 168, 0.98) 0 12px,
+    rgba(255, 236, 168, 0) 12px 26px
+  );
+  mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.9) 46%,
+    rgba(0, 0, 0, 0.45) 74%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.9) 46%,
+    rgba(0, 0, 0, 0.45) 74%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  filter: drop-shadow(0 0 4px rgba(255, 222, 142, 0.26));
+  opacity: 0.95;
+  pointer-events: none;
+  animation: map-centerline-flow 1.4s linear infinite;
+}
+
+.map-preview-cacti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.map-preview-cactus {
+  position: absolute;
+  left: 50%;
+  top: var(--horizon-y);
+  width: 8px;
+  height: 22px;
+  transform-origin: bottom center;
+  background: linear-gradient(180deg, rgba(183, 225, 132, 0.95), rgba(88, 141, 61, 0.95));
+  border-radius: 6px;
+  opacity: 0;
+  filter: drop-shadow(0 0 4px rgba(132, 193, 92, 0.35));
+}
+
+.map-preview-cactus::before,
+.map-preview-cactus::after {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 11px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(179, 219, 130, 0.95), rgba(85, 137, 60, 0.95));
+}
+
+.map-preview-cactus::before {
+  left: -4px;
+  top: 7px;
+}
+
+.map-preview-cactus::after {
+  right: -4px;
+  top: 4px;
+}
+
+.map-preview-cactus-right {
+  left: 74%;
+  top: calc(var(--horizon-y) - 24px);
+  animation: map-cactus-right-pass 8.4s linear infinite;
+  animation-delay: 0.8s;
+}
+
+.map-preview-rails {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.map-preview-rails::before,
+.map-preview-rails::after {
+  content: '';
+  position: absolute;
+  bottom: 26px;
+  width: 40%;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 209, 143, 0.75), rgba(255, 255, 255, 0));
+  filter: drop-shadow(0 0 6px rgba(255, 186, 109, 0.36));
+  transform-origin: center;
+}
+
+.map-preview-rails::before {
+  left: 2%;
+  transform: rotate(-12deg);
+}
+
+.map-preview-rails::after {
+  right: 2%;
+  transform: rotate(12deg);
+}
+
+.map-preview-glow {
+  position: absolute;
+  inset: -30% -15%;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 173, 92, 0.45), rgba(255, 173, 92, 0)),
+    radial-gradient(circle at 22% 72%, rgba(252, 93, 93, 0.25), rgba(252, 93, 93, 0));
+  filter: blur(24px);
+  opacity: 0.7;
+  animation: map-glow-breathe 3.8s ease-in-out infinite;
+}
+
+.map-preview-label-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+  padding: 16px;
+  background: linear-gradient(to top, rgba(8, 10, 14, 0.72) 0%, rgba(8, 10, 14, 0.25) 45%, rgba(8, 10, 14, 0.08) 100%);
+}
+
+.map-preview-label {
+  color: #f6f8fb;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.map-preview-sub {
+  color: rgba(255, 209, 181, 0.95);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+}
+
+.map-preview-slug {
+  color: rgba(207, 216, 229, 0.78);
+  font-size: 0.72rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, Liberation Mono, monospace;
+}
+
+@keyframes map-grid-flow {
+  0% {
+    background-position: 50% 0, 0 0;
+  }
+  100% {
+    background-position: 50% 0, 0 18px;
+  }
+}
+
+@keyframes map-sun-shimmer {
+  0% {
+    opacity: 0.88;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.98;
+    transform: translateX(-50%) scale(1.03);
+  }
+  100% {
+    opacity: 0.88;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes map-centerline-flow {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 26px;
+  }
+}
+
+@keyframes map-cactus-right-pass {
+  0%,
+  62% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.2);
+  }
+  68% {
+    opacity: 0.9;
+    transform: translate3d(18px, 4px, 0) scale(0.32);
+  }
+  82% {
+    opacity: 1;
+    transform: translate3d(96px, 20px, 0) scale(0.8);
+  }
+  94% {
+    opacity: 1;
+    transform: translate3d(196px, 40px, 0) scale(1.28);
+  }
+  99% {
+    opacity: 1;
+    transform: translate3d(276px, 60px, 0) scale(1.72);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(286px, 64px, 0) scale(1.78);
+  }
+}
+
+@keyframes map-glow-breathe {
+  0% {
+    opacity: 0.48;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 0.74;
+    transform: translateY(-4px) scale(1.04);
+  }
+  100% {
+    opacity: 0.48;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-preview-sun,
+  .map-preview-grid,
+  .map-preview-centerline,
+  .map-preview-cactus-right,
+  .map-preview-glow {
+    animation: none;
+  }
 }

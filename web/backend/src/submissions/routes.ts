@@ -13,11 +13,13 @@ import { db, type SubmissionRow } from '../db.js'
 import { audit } from '../audit.js'
 import { config } from '../config.js'
 import { requireAuth, requireVerifiedAuth } from '../auth/plugin.js'
-import { canSubmit, claimIfUnowned, getOwner } from './ownership.js'
+import { getOwner, listOwnedByUser, releaseOwnership } from './ownership.js'
 import { validateBeammod, validateNetbeammod } from './validate.js'
 import { downloadAndHash, probeUrl, validateDownloadUrl } from './probe.js'
 import { runPipeline } from './pipeline.js'
 import { inspectZip } from './inspect.js'
+import { lookup as lookupSource, parseLookupUrl } from './lookup.js'
+import { findDuplicates } from './duplicateCheck.js'
 import {
   emitInspectProgress,
   isValidInspectId,
@@ -25,7 +27,8 @@ import {
   closeInspectChannel,
   type InspectProgressEvent,
 } from './progress.js'
-import { getRegistry } from '../registry/index.js'
+import { getRegistry, summarize } from '../registry/index.js'
+import { EMPTY_RATING, loadRatings } from './ratings.js'
 
 const ID_RE = /^[A-Za-z0-9_-]{2,128}$/
 
@@ -117,6 +120,70 @@ export async function submissionRoutes(app: FastifyInstance): Promise<void> {
       return reply.code(502).send({ error: 'probe_failed', message: (err as Error).message })
     }
   })
+
+  // ─── Duplicate check ─────────────────────────────────────────────────────
+  // Given any subset of identifying fields the user has filled in so far,
+  // return registry entries that look like the same mod. The submit form
+  // calls this opportunistically (after lookup/inspect, and on debounced
+  // identifier/download edits) so authors can choose to "edit existing"
+  // instead of accidentally creating a parallel entry.
+  const DupSchema = z.object({
+    identifier: z.string().min(1).max(256).optional(),
+    download: z.string().min(1).max(2048).optional(),
+    repository: z.string().min(1).max(2048).optional(),
+    beamng_resource: z.string().min(1).max(2048).optional(),
+  })
+  app.post('/check-duplicate', async (request, reply) => {
+    const ctx = requireAuth(request, reply)
+    if (!ctx) return
+    const body = DupSchema.safeParse(request.body)
+    if (!body.success) return reply.code(400).send({ error: 'invalid_input' })
+    if (
+      !body.data.identifier &&
+      !body.data.download &&
+      !body.data.repository &&
+      !body.data.beamng_resource
+    ) {
+      return { matches: [] }
+    }
+    const reg = await getRegistry()
+    const matches = findDuplicates(body.data, reg.entries, reg.byId)
+    return { matches }
+  })
+
+  // ─── Mod Lookup ──────────────────────────────────────────────────────────
+  // Alternative to uploading a zip: given a public source URL (GitHub repo
+  // or BeamNG.com resource page), fetch rich metadata (name, author,
+  // license, description, latest release/version, tags, thumbnail, …) so
+  // the form can be pre-populated. Hits live external services so it's
+  // rate-limited per user.
+  app.post(
+    '/lookup',
+    {
+      config: {
+        rateLimit: { max: 30, timeWindow: '1 minute' },
+      },
+    },
+    async (request, reply) => {
+      const ctx = requireAuth(request, reply)
+      if (!ctx) return
+      const body = z.object({ url: z.string().min(3).max(2048) }).safeParse(request.body)
+      if (!body.success) return reply.code(400).send({ error: 'invalid_input' })
+      const parsed = parseLookupUrl(body.data.url)
+      if (!parsed) {
+        return reply.code(400).send({
+          error: 'unsupported_url',
+          message: 'Paste a github.com/<owner>/<repo> URL or a beamng.com/resources/… link',
+        })
+      }
+      try {
+        const result = await lookupSource(body.data.url)
+        return { result }
+      } catch (err) {
+        return reply.code(502).send({ error: 'lookup_failed', message: (err as Error).message })
+      }
+    },
+  )
 
   // ─── Auto-detect from URL ─────────────────────────────────────────────────
   // Downloads the zip, hashes it, parses the central directory, and returns
@@ -346,10 +413,8 @@ export async function submissionRoutes(app: FastifyInstance): Promise<void> {
       return reply.code(400).send({ error: 'version_mismatch' })
     }
 
-    // Ownership.
-    if (!canSubmit(identifier, ctx.user.id, isAdmin)) {
-      return reply.code(403).send({ error: 'identifier_owned_by_other_user' })
-    }
+    // Ownership-based routing happens further below — anyone can submit;
+    // the owner (or admin/green for unowned) decides.
 
     // Server-side hash (only for kind=package with a download URL).
     const downloadField = (payload as { download?: string | string[] }).download
@@ -381,24 +446,30 @@ export async function submissionRoutes(app: FastifyInstance): Promise<void> {
       return reply.code(400).send({ error: 'schema_invalid', issues: v.errors })
     }
 
-    // Decide trust-tier branch.
-    // Special case: if the identifier already exists in the on-disk
-    // registry but has no DB owner (i.e. it was auto-scraped or imported
-    // before this user account existed), the submitter is implicitly
-    // claiming authorship. Always route those through admin review,
-    // regardless of trust tier, so a human can verify the claim.
-    let status: 'queued' | 'pending_review' =
-      ctx.user.trust === 'green' || isAdmin ? 'queued' : 'pending_review'
+    // Decide trust-tier branch with ownership in mind.
+    //  - Admin: always queue.
+    //  - Owner of this mod: trust-tier rules apply (green → queued, else pending).
+    //  - Non-owner editing an owned mod: ALWAYS pending_review — the owner
+    //    must approve (or an admin); other reviewers don't see it.
+    //  - Unowned mod already on disk: pending_review (implicit claim review).
+    //  - Brand-new identifier (not on disk, no owner): trust-tier rules.
     const ownerId = getOwner(identifier)
-    if (!isAdmin && ownerId === null) {
-      try {
-        const reg = await getRegistry()
-        if (reg.byId.has(identifier)) {
-          status = 'pending_review'
-        }
-      } catch {
-        /* registry index optional in dev; fall through */
-      }
+    let alreadyOnDisk = false
+    try {
+      const reg = await getRegistry()
+      alreadyOnDisk = reg.byId.has(identifier)
+    } catch {
+      /* registry index optional in dev */
+    }
+    let status: 'queued' | 'pending_review'
+    if (isAdmin) {
+      status = 'queued'
+    } else if (ownerId !== null && ownerId !== ctx.user.id) {
+      status = 'pending_review'
+    } else if (ownerId === null && alreadyOnDisk) {
+      status = 'pending_review'
+    } else {
+      status = ctx.user.trust === 'green' ? 'queued' : 'pending_review'
     }
 
     const result = db
@@ -417,12 +488,10 @@ export async function submissionRoutes(app: FastifyInstance): Promise<void> {
       details: { kind: 'manual_beammod', identifier, version, status },
     })
 
-    // If owned by no one, claim now (so duplicate submissions while pending
-    // can't race). Ownership is harmless if the PR is later rejected — the
-    // claim only governs *who can submit further versions*.
-    if (getOwner(identifier) === null) {
-      claimIfUnowned(identifier, ctx.user.id)
-    }
+    // Ownership is NEVER granted implicitly by submitting/modifying a mod —
+    // even brand-new identifiers. Authors must explicitly claim via the
+    // `/claim` endpoint. This avoids surprising users who only intended to
+    // contribute an edit (e.g. fixing metadata on someone else's mod).
 
     if (status === 'queued') {
       // Fire-and-forget; status is observable via /mine.
@@ -533,8 +602,465 @@ export async function submissionRoutes(app: FastifyInstance): Promise<void> {
     return { submission: publicSubmission(row) }
   })
 
+  // ─── Owner workflow ───────────────────────────────────────────────────────
+  //
+  // Authors can claim mods they wrote (existing entries on disk that have no
+  // DB owner). Once owned, all third-party edits to that mod are routed to
+  // the owner for approval, not the global reviewer queue.
+
+  // List the mods the current user owns. Returns full mod-card data so the
+  // dashboard can render the same tile UI as the registry browser, plus a
+  // `pending_count` for any third-party submissions awaiting the owner's
+  // review on each mod.
+  app.get('/mine/owned', async (request, reply) => {
+    const ctx = requireAuth(request, reply)
+    if (!ctx) return
+    const owned = listOwnedByUser(ctx.user.id)
+    if (owned.length === 0) return { mods: [] }
+
+    const { entries } = await getRegistry()
+    const byId = new Map(entries.map((m) => [m.identifier, m]))
+
+    // One indexed scan for last-edit attribution per owned identifier.
+    const ownedIds = owned.map((o) => o.identifier)
+    const placeholders = ownedIds.map(() => '?').join(',')
+    type LastEditRow = {
+      identifier: string
+      user_id: number
+      display_name: string
+      avatar_url: string | null
+      kind: string
+      version: string | null
+      decided_at: number | null
+    }
+    const lastEditRows = ownedIds.length
+      ? (db
+          .prepare(
+            `SELECT s.identifier, s.user_id, s.kind, s.version, s.decided_at,
+                    u.display_name, u.avatar_url
+               FROM submissions s
+               JOIN users u ON u.id = s.user_id
+              WHERE s.status IN ('pr_opened','merged')
+                AND s.identifier IN (${placeholders})
+              ORDER BY COALESCE(s.decided_at, s.created_at) DESC`,
+          )
+          .all(...ownedIds) as LastEditRow[])
+      : []
+    const lastEdits = new Map<string, LastEditRow>()
+    for (const r of lastEditRows) if (!lastEdits.has(r.identifier)) lastEdits.set(r.identifier, r)
+
+    // Pending submissions per identifier where the submitter is *not* the
+    // owner (i.e. genuine third-party edits the owner needs to action).
+    const pendingRows = ownedIds.length
+      ? (db
+          .prepare(
+            `SELECT identifier, COUNT(*) AS n
+               FROM submissions
+              WHERE status IN ('pending_review','changes_requested')
+                AND user_id != ?
+                AND identifier IN (${placeholders})
+              GROUP BY identifier`,
+          )
+          .all(ctx.user.id, ...ownedIds) as { identifier: string; n: number }[])
+      : []
+    const pending = new Map<string, number>()
+    for (const r of pendingRows) pending.set(r.identifier, r.n)
+
+    // Also surface any pending self-filed delete request per owned mod so
+    // the dashboard can show its status and offer a cancel button.
+    const deleteRows = ownedIds.length
+      ? (db
+          .prepare(
+            `SELECT identifier, id, status FROM submissions
+              WHERE kind = 'delete' AND user_id = ?
+                AND status IN ('pending_review','changes_requested','queued')
+                AND identifier IN (${placeholders})`,
+          )
+          .all(ctx.user.id, ...ownedIds) as { identifier: string; id: number; status: string }[])
+      : []
+    const pendingDelete = new Map<string, { id: number; status: string }>()
+    for (const r of deleteRows) pendingDelete.set(r.identifier, { id: r.id, status: r.status })
+
+    const ratings = loadRatings(ctx.user.id)
+
+    const mods = owned.map((o) => {
+      const entry = byId.get(o.identifier)
+      const base = entry
+        ? summarize(entry)
+        : {
+            // Fallback when an owned mod is no longer present on disk so the
+            // UI still shows *something* clickable rather than vanishing.
+            identifier: o.identifier,
+            name: o.identifier,
+            kind: 'package',
+            version: '0',
+            tags: [] as string[],
+            verified: false,
+            versions: [] as string[],
+          }
+      return {
+        ...base,
+        owner: o,
+        last_edit: lastEdits.get(o.identifier) ?? null,
+        rating: ratings.get(o.identifier) ?? EMPTY_RATING,
+        pending_count: pending.get(o.identifier) ?? 0,
+        pending_delete: pendingDelete.get(o.identifier) ?? null,
+      }
+    })
+
+    return { mods }
+  })
+
+  // Submissions made by other users on mods this user owns and that are
+  // awaiting the owner's decision. Submissions where the owner is also the
+  // submitter are excluded — those go through the normal reviewer queue.
+  app.get('/owner-queue', async (request, reply) => {
+    const ctx = requireAuth(request, reply)
+    if (!ctx) return
+    const rows = db
+      .prepare<[number, number], SubmissionRow & { submitter_name: string; submitter_avatar: string | null }>(
+        `SELECT s.*, u.display_name AS submitter_name, u.avatar_url AS submitter_avatar
+           FROM submissions s
+           JOIN mod_ownership o ON o.identifier = s.identifier
+           JOIN users u ON u.id = s.user_id
+          WHERE o.user_id = ?
+            AND s.user_id != ?
+            AND s.status IN ('pending_review','changes_requested')
+          ORDER BY s.created_at DESC
+          LIMIT 200`
+      )
+      .all(ctx.user.id, ctx.user.id)
+    return {
+      submissions: rows.map((r) => ({
+        ...publicSubmission(r),
+        user_id: r.user_id,
+        submitter: { display_name: r.submitter_name, avatar_url: r.submitter_avatar },
+      })),
+    }
+  })
+
+  // Owner-side detail view of a pending submission on one of their mods.
+  app.get('/owner-queue/:id', async (request, reply) => {
+    const ctx = requireAuth(request, reply)
+    if (!ctx) return
+    const id = Number((request.params as { id: string }).id)
+    if (!id) return reply.code(400).send({ error: 'invalid_input' })
+    const row = db
+      .prepare<[number], SubmissionRow>('SELECT * FROM submissions WHERE id = ?')
+      .get(id)
+    if (!row) return reply.code(404).send({ error: 'not_found' })
+    if (getOwner(row.identifier) !== ctx.user.id) {
+      return reply.code(403).send({ error: 'not_owner' })
+    }
+    let payload: unknown = null
+    try { payload = JSON.parse(row.payload_json) } catch { payload = null }
+    const submitter = db
+      .prepare<[number], { id: number; display_name: string; avatar_url: string | null; trust: string }>(
+        `SELECT id, display_name, avatar_url, trust FROM users WHERE id = ?`
+      )
+      .get(row.user_id)
+    return {
+      submission: { ...publicSubmission(row), branch: row.branch, review_note: row.review_note, payload },
+      submitter,
+    }
+  })
+
+  type OwnerGateResult =
+    | { ok: true; row: SubmissionRow }
+    | { ok: false; error: string; code: number }
+  function ownerGate(id: number, userId: number): OwnerGateResult {
+    const row = db
+      .prepare<[number], SubmissionRow>('SELECT * FROM submissions WHERE id = ?')
+      .get(id)
+    if (!row) return { ok: false, error: 'not_found', code: 404 }
+    if (getOwner(row.identifier) !== userId) return { ok: false, error: 'not_owner', code: 403 }
+    if (row.user_id === userId) return { ok: false, error: 'cannot_review_own', code: 403 }
+    return { ok: true, row }
+  }
+
+  app.post('/owner-queue/:id/approve', async (request, reply) => {
+    const ctx = requireAuth(request, reply)
+    if (!ctx) return
+    const id = Number((request.params as { id: string }).id)
+    if (!id) return reply.code(400).send({ error: 'invalid_input' })
+    const note = (request.body as { note?: string } | null)?.note ?? null
+    const gate = ownerGate(id, ctx.user.id)
+    if (!gate.ok) return reply.code(gate.code).send({ error: gate.error })
+    const row = gate.row
+    if (row.status !== 'pending_review' && row.status !== 'changes_requested') {
+      return reply.code(409).send({ error: 'wrong_status', status: row.status })
+    }
+    db.prepare(
+      `UPDATE submissions SET status = 'queued', reviewer_id = ?, review_note = ? WHERE id = ?`
+    ).run(ctx.user.id, note, id)
+    audit({
+      actorId: ctx.user.id,
+      action: 'owner.submission_approved',
+      target: `submission:${id}`,
+      details: { identifier: row.identifier },
+    })
+    runPipeline(id).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.error('[pipeline] error', err)
+    })
+    return { ok: true }
+  })
+
+  app.post('/owner-queue/:id/reject', async (request, reply) => {
+    const ctx = requireAuth(request, reply)
+    if (!ctx) return
+    const id = Number((request.params as { id: string }).id)
+    if (!id) return reply.code(400).send({ error: 'invalid_input' })
+    const note = (request.body as { note?: string } | null)?.note ?? null
+    const gate = ownerGate(id, ctx.user.id)
+    if (!gate.ok) return reply.code(gate.code).send({ error: gate.error })
+    const row = gate.row
+    const result = db
+      .prepare(
+        `UPDATE submissions
+           SET status = 'rejected', reviewer_id = ?, review_note = ?, decided_at = ?
+         WHERE id = ? AND status IN ('pending_review','changes_requested')`
+      )
+      .run(ctx.user.id, note, Date.now(), id)
+    if (result.changes === 0) return reply.code(409).send({ error: 'wrong_status' })
+    audit({
+      actorId: ctx.user.id,
+      action: 'owner.submission_rejected',
+      target: `submission:${id}`,
+      details: { identifier: row.identifier, note },
+    })
+    return { ok: true }
+  })
+
+  app.post('/owner-queue/:id/request-changes', async (request, reply) => {
+    const ctx = requireAuth(request, reply)
+    if (!ctx) return
+    const id = Number((request.params as { id: string }).id)
+    if (!id) return reply.code(400).send({ error: 'invalid_input' })
+    const body = z.object({ note: z.string().trim().min(1).max(4_000) }).safeParse(request.body)
+    if (!body.success) return reply.code(400).send({ error: 'note_required' })
+    const gate = ownerGate(id, ctx.user.id)
+    if (!gate.ok) return reply.code(gate.code).send({ error: gate.error })
+    const row = gate.row
+    const result = db
+      .prepare(
+        `UPDATE submissions
+           SET status = 'changes_requested', reviewer_id = ?, review_note = ?
+         WHERE id = ? AND status = 'pending_review'`
+      )
+      .run(ctx.user.id, body.data.note, id)
+    if (result.changes === 0) return reply.code(409).send({ error: 'wrong_status' })
+    audit({
+      actorId: ctx.user.id,
+      action: 'owner.submission_changes_requested',
+      target: `submission:${id}`,
+      details: { identifier: row.identifier, note: body.data.note },
+    })
+    return { ok: true }
+  })
+
+  // ─── Claim an existing unowned mod ────────────────────────────────────────
+  // The claimant submits a short justification. The submission is queued for
+  // green-tier reviewers (who DO see all claims, regardless of mod owner —
+  // a claim by definition targets an unowned mod). On approval the claim
+  // does NOT run the pipeline; it transfers ownership atomically.
+  const ClaimSchema = z.object({
+    identifier: z.string().regex(ID_RE),
+    message: z.string().trim().max(2_000).optional(),
+  })
+  app.post('/claim', async (request, reply) => {
+    const ctx = requireVerifiedAuth(request, reply)
+    if (!ctx) return
+    const parsed = ClaimSchema.safeParse(request.body)
+    if (!parsed.success) {
+      return reply.code(400).send({ error: 'invalid_input', issues: parsed.error.issues })
+    }
+    const { identifier, message } = parsed.data
+
+    // The mod must exist on disk (you can't claim a phantom).
+    let onDisk = false
+    try {
+      const reg = await getRegistry()
+      onDisk = reg.byId.has(identifier)
+    } catch {
+      /* in dev, registry might not be ready; fall through to error below */
+    }
+    if (!onDisk) return reply.code(404).send({ error: 'mod_not_found' })
+
+    // Already owned? Either by you (no-op) or by someone else (forbidden).
+    const ownerId = getOwner(identifier)
+    if (ownerId === ctx.user.id) {
+      return reply.code(409).send({ error: 'already_owned_by_you' })
+    }
+    if (ownerId !== null) {
+      return reply.code(409).send({ error: 'already_owned_by_other' })
+    }
+
+    // De-dupe: don't let one user open two pending claims for the same mod.
+    const existing = db
+      .prepare<[number, string], { id: number }>(
+        `SELECT id FROM submissions
+          WHERE user_id = ? AND identifier = ? AND kind = 'claim'
+            AND status IN ('pending_review','changes_requested')
+          LIMIT 1`
+      )
+      .get(ctx.user.id, identifier)
+    if (existing) {
+      return reply.code(409).send({ error: 'claim_already_pending', submission_id: existing.id })
+    }
+
+    const payload = { identifier, message: message ?? '' }
+    const result = db
+      .prepare(
+        `INSERT INTO submissions
+           (user_id, kind, identifier, version, payload_json, status, created_at)
+         VALUES (?, 'claim', ?, NULL, ?, 'pending_review', ?)`
+      )
+      .run(ctx.user.id, identifier, JSON.stringify(payload), Date.now())
+    const id = Number(result.lastInsertRowid)
+
+    audit({
+      actorId: ctx.user.id,
+      action: 'submission.created',
+      target: `submission:${id}`,
+      details: { kind: 'claim', identifier },
+    })
+
+    const row = db
+      .prepare<[number], SubmissionRow>('SELECT * FROM submissions WHERE id = ?')
+      .get(id)!
+    return { submission: publicSubmission(row) }
+  })
+
+  // ─── Relinquish ownership of a mod ────────────────────────────────────────
+  // The current owner can release a mod they own. The mod becomes unclaimed
+  // and future third-party edits route back to the global reviewer queue.
+  // Admins can also use this on any mod.
+  app.post('/mine/owned/:identifier/release', async (request, reply) => {
+    const ctx = requireAuth(request, reply)
+    if (!ctx) return
+    const { identifier } = request.params as { identifier: string }
+    const ownerId = getOwner(identifier)
+    if (ownerId === null) {
+      return reply.code(404).send({ error: 'not_owned' })
+    }
+    if (ownerId !== ctx.user.id && ctx.user.role !== 'admin') {
+      return reply.code(403).send({ error: 'not_owner' })
+    }
+    const removed = releaseOwnership(identifier, ownerId)
+    if (!removed) {
+      return reply.code(409).send({ error: 'release_failed' })
+    }
+    audit({
+      actorId: ctx.user.id,
+      action: 'ownership.released',
+      target: `mod:${identifier}`,
+      details: { identifier, previous_owner: ownerId },
+    })
+    return { ok: true }
+  })
+
+  // ─── Owner-initiated deletion request ────────────────────────────────────
+  // The current owner of a mod can request its removal from the registry.
+  // Final approval is admin-only (enforced in /admin/submissions/:id/approve);
+  // this endpoint just queues a `kind='delete'` submission for review. We
+  // require a non-empty reason so admins have audit context.
+  const RequestDeleteSchema = z.object({
+    reason: z.string().trim().min(10).max(2_000),
+  })
+  app.post('/mine/owned/:identifier/request-delete', async (request, reply) => {
+    const ctx = requireVerifiedAuth(request, reply)
+    if (!ctx) return
+    const { identifier } = request.params as { identifier: string }
+    if (!ID_RE.test(identifier)) return reply.code(400).send({ error: 'invalid_identifier' })
+    const ownerId = getOwner(identifier)
+    if (ownerId === null) return reply.code(404).send({ error: 'not_owned' })
+    if (ownerId !== ctx.user.id) return reply.code(403).send({ error: 'not_owner' })
+    const parsed = RequestDeleteSchema.safeParse(request.body)
+    if (!parsed.success) {
+      return reply.code(400).send({ error: 'invalid_input', issues: parsed.error.issues })
+    }
+
+    // The mod must still exist on disk — otherwise there's nothing to delete.
+    const reg = await getRegistry()
+    if (!reg.byId.has(identifier)) {
+      return reply.code(404).send({ error: 'mod_not_found' })
+    }
+
+    // Don't queue a second pending delete for the same mod.
+    const existing = db
+      .prepare<[string], { id: number; user_id: number }>(
+        `SELECT id, user_id FROM submissions
+          WHERE identifier = ? AND kind = 'delete'
+            AND status IN ('pending_review','changes_requested','queued')
+          LIMIT 1`
+      )
+      .get(identifier)
+    if (existing) {
+      return reply.code(409).send({ error: 'delete_already_pending', submission_id: existing.id })
+    }
+
+    const payload = {
+      identifier,
+      reason: parsed.data.reason,
+      requested_by: ctx.user.display_name ?? `user:${ctx.user.id}`,
+      is_owner: true,
+    }
+    const result = db
+      .prepare(
+        `INSERT INTO submissions
+           (user_id, kind, identifier, version, payload_json, status, created_at)
+         VALUES (?, 'delete', ?, NULL, ?, 'pending_review', ?)`
+      )
+      .run(ctx.user.id, identifier, JSON.stringify(payload), Date.now())
+    const id = Number(result.lastInsertRowid)
+
+    audit({
+      actorId: ctx.user.id,
+      action: 'submission.created',
+      target: `submission:${id}`,
+      details: { kind: 'delete', identifier, reason: parsed.data.reason },
+    })
+
+    const row = db
+      .prepare<[number], SubmissionRow>('SELECT * FROM submissions WHERE id = ?')
+      .get(id)!
+    return { submission: publicSubmission(row) }
+  })
+
+  // Cancel a still-pending delete request the user filed themselves.
+  app.delete('/mine/owned/:identifier/request-delete', async (request, reply) => {
+    const ctx = requireAuth(request, reply)
+    if (!ctx) return
+    const { identifier } = request.params as { identifier: string }
+    const row = db
+      .prepare<[string, number], { id: number; status: string }>(
+        `SELECT id, status FROM submissions
+          WHERE identifier = ? AND kind = 'delete' AND user_id = ?
+            AND status IN ('pending_review','changes_requested')
+          ORDER BY id DESC LIMIT 1`
+      )
+      .get(identifier, ctx.user.id)
+    if (!row) return reply.code(404).send({ error: 'no_pending_delete' })
+    const result = db
+      .prepare(
+        `UPDATE submissions
+           SET status = 'rejected', decided_at = ?, review_note = 'cancelled by submitter'
+         WHERE id = ? AND status IN ('pending_review','changes_requested')`
+      )
+      .run(Date.now(), row.id)
+    if (result.changes === 0) return reply.code(409).send({ error: 'wrong_status' })
+    audit({
+      actorId: ctx.user.id,
+      action: 'submission.cancelled',
+      target: `submission:${row.id}`,
+      details: { kind: 'delete', identifier },
+    })
+    return { ok: true }
+  })
+
   // ─── Stubs for the remaining flows (return 501 until implemented) ─────────
-  for (const path of ['/netbeammod-github', '/netbeammod-beamng', '/claim', '/new-version']) {
+  for (const path of ['/netbeammod-github', '/netbeammod-beamng', '/new-version']) {
     app.post(path, async (request, reply) => {
       const ctx = requireVerifiedAuth(request, reply)
       if (!ctx) return

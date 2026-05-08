@@ -3,7 +3,9 @@ import {
   Alert, Anchor, Badge, Button, Card, Code, Group, List, Loader, Paper,
   SimpleGrid, Stack, Text, ThemeIcon, Title,
 } from '@mantine/core'
+import { Link } from 'react-router-dom'
 import { api } from '../api/client'
+import { Seo } from '../components/Seo'
 
 interface CMAsset {
   name: string
@@ -141,8 +143,29 @@ export function ContentManagerPage() {
   const r = release.data?.release
   const assets = r?.assets ?? {}
 
+  const softwareSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'BeamNG Content Manager',
+    applicationCategory: 'GameApplication',
+    operatingSystem: 'Windows, Linux, macOS',
+    url: `${window.location.origin}/content-manager`,
+    downloadUrl: RELEASES_URL,
+    softwareVersion: r?.version,
+    publisher: {
+      '@type': 'Organization',
+      name: 'BeamNG Mod Registry',
+    },
+  }
+
   return (
     <Stack gap="lg">
+      <Seo
+        title="BeamNG Content Manager Download and Setup | BeamNG Mod Registry"
+        description="Download BeamNG Content Manager, compare platform builds, and use BMR to sync mods for BeamMP and CareerMP server play."
+        canonicalPath="/content-manager"
+        jsonLd={softwareSchema}
+      />
       <div>
         <Group gap="md" align="center" mb={4} wrap="nowrap">
           <img
@@ -164,6 +187,58 @@ export function ContentManagerPage() {
           </div>
         </Group>
       </div>
+
+      <Paper withBorder p="md" radius="md">
+        <Group align="flex-start" gap="xl" wrap="nowrap">
+          {/* Left: guide links */}
+          <Stack gap="xs" style={{ flex: 1, minWidth: 0 }}>
+            <Title order={4}>Quick links for server setup</Title>
+            <Text size="sm">
+              Looking for setup help? Start here:{' '}
+              <Anchor component={Link} to="/faq#beammp-server-guide">
+                create a BeamMP server
+              </Anchor>
+              {' '}and{' '}
+              <Anchor component={Link} to="/faq#careermp-server-guide">
+                set up a CareerMP server
+              </Anchor>
+              .
+            </Text>
+            <Text size="sm" c="dimmed">
+              For curated installable mod packs after setup, browse the{' '}
+              <Anchor component={Link} to="/registry">registry</Anchor>.
+            </Text>
+          </Stack>
+
+          {/* Right: CM + Tailscale = ♥ */}
+          <Stack gap={6} align="center" style={{ flexShrink: 0 }}>
+            <Group gap={8} align="center" wrap="nowrap">
+              <img
+                src={CM_LOGO_URL}
+                alt="BeamNG Content Manager"
+                width={30}
+                height={30}
+                style={{ borderRadius: 7, display: 'block' }}
+              />
+              <Text size="sm" c="dimmed" fw={600}>+</Text>
+              <img
+                src="https://chameth.com/how-i-use-tailscale/logo.png"
+                alt="Tailscale"
+                width={30}
+                height={30}
+                style={{ display: 'block', objectFit: 'contain' }}
+              />
+              <Text size="sm" c="dimmed" fw={600}>=</Text>
+              <Text size="lg">🩷</Text>
+            </Group>
+            <Text size="xs" c="dimmed" ta="center" style={{ maxWidth: 200 }}>
+              No port forwarding needed — just host a server and invite friends over{' '}
+              <Anchor href="https://tailscale.com/download" target="_blank" rel="noreferrer">Tailscale</Anchor>
+              &apos;s secure P2P network.
+            </Text>
+          </Stack>
+        </Group>
+      </Paper>
 
       <Paper withBorder p="md" radius="md">
         <Title order={4} mb="xs">How it integrates with this registry</Title>

@@ -1,5 +1,5 @@
-/**
- * Admin → Settings page. Lets an admin configure the GitHub App credentials
+﻿/**
+ * Admin â†’ Settings page. Lets an admin configure the GitHub App credentials
  * at runtime. Values are stored encrypted-at-rest in SQLite and override
  * the corresponding env vars without a container restart.
  */
@@ -10,7 +10,7 @@ import {
   Switch, Select, Text, TextInput, Textarea, Title,
 } from '@mantine/core'
 import { api, ApiError } from '../api/client'
-import { THEME_QUERY_KEY, type ThemeConfig, applyThemeVars } from '../state/theme'
+import { THEME_QUERY_KEY, type ThemeConfig } from '../state/theme'
 
 interface GithubSettings {
   configured: boolean
@@ -113,7 +113,7 @@ export function AdminSettingsPage() {
             installation. Create an App with <strong>Contents: Read &amp; Write</strong> and{' '}
             <strong>Pull requests: Read &amp; Write</strong>, install it on your registry
             repo, then paste the credentials here. These values override the corresponding
-            env vars and take effect immediately — no restart required.
+            env vars and take effect immediately â€” no restart required.
           </Text>
 
           <form onSubmit={(e) => { e.preventDefault(); save.mutate() }}>
@@ -207,7 +207,7 @@ export function AdminSettingsPage() {
                     </Alert>
                   : <Alert color="red">
                       Test failed: {testResult.error ?? 'unknown error'}
-                      {testResult.message ? ` — ${testResult.message}` : ''}
+                      {testResult.message ? ` â€” ${testResult.message}` : ''}
                     </Alert>
               )}
             </Stack>
@@ -252,10 +252,16 @@ function AppearancePanel() {
     setAuthOnly(themeQ.data.apply_to_auth_only)
   }, [themeQ.data])
 
-  // Live preview: write the in-flight values to :root before saving so the
-  // admin can see the result instantly.
+  // Live preview: write the in-flight admin draft into the *theme query
+  // cache* (not directly to :root). `useApplyTheme()` in <App/> re-merges
+  // this draft with any per-user personal override and then writes the
+  // resulting CSS variables â€” so the admin sees their preview, while a
+  // user with a personal background still sees their own. Writing :root
+  // directly here used to race with App.tsx's effect and overwrite the
+  // user's personal background while this page was open.
   useEffect(() => {
-    applyThemeVars({
+    if (!themeQ.data) return
+    const draft: ThemeConfig = {
       background_url: bgUrl,
       background_blur_px: blurPx,
       background_dim_pct: dimPct,
@@ -263,8 +269,17 @@ function AppearancePanel() {
       color_scheme: scheme,
       app_name: appName,
       apply_to_auth_only: authOnly,
-    })
-  }, [bgUrl, blurPx, dimPct, primary, scheme, appName, authOnly])
+    }
+    qc.setQueryData(THEME_QUERY_KEY, draft)
+  }, [bgUrl, blurPx, dimPct, primary, scheme, appName, authOnly, themeQ.data, qc])
+
+  // When the admin leaves the page (or before unmounting after save), refetch
+  // the canonical theme so any unsaved preview tweaks revert globally.
+  useEffect(() => {
+    return () => {
+      qc.invalidateQueries({ queryKey: THEME_QUERY_KEY })
+    }
+  }, [qc])
 
   const save = useMutation({
     mutationFn: () =>
@@ -439,7 +454,7 @@ function TurnstilePanel() {
           Adds a Cloudflare Turnstile challenge to the login and signup forms to
           deter bots. Create a widget at{' '}
           <a href="https://dash.cloudflare.com/?to=/:account/turnstile" target="_blank" rel="noreferrer">
-            dash.cloudflare.com → Turnstile
+            dash.cloudflare.com â†’ Turnstile
           </a>
           {' '}for this site's hostname, then paste the site key and secret key here.
           When either field is blank the challenge is skipped entirely.
@@ -449,7 +464,7 @@ function TurnstilePanel() {
           <Stack>
             <TextInput
               label="Site key"
-              description="Public key embedded in the login/signup pages (starts with 0x4AAA…)"
+              description="Public key embedded in the login/signup pages (starts with 0x4AAAâ€¦)"
               value={siteKey}
               onChange={(e) => setSiteKey(e.currentTarget.value)}
               placeholder="0x4AAAAAAA..."
@@ -488,7 +503,7 @@ function TurnstilePanel() {
             {save.isSuccess && (
               <Alert color="green">
                 Saved. {save.data.configured
-                  ? 'Turnstile is now enabled — reload the login page to see the widget.'
+                  ? 'Turnstile is now enabled â€” reload the login page to see the widget.'
                   : 'Turnstile is still disabled (site key or secret key missing).'}
               </Alert>
             )}

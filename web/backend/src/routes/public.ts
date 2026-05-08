@@ -10,8 +10,10 @@ import { z } from 'zod'
 import { requireAuth } from '../auth/plugin.js'
 import { config } from '../config.js'
 import { db } from '../db.js'
-import { getRegistry, summarize } from '../registry/index.js'
+import { getRegistry, summarize, type ModEntry } from '../registry/index.js'
 import { getTheme } from '../settings.js'
+import { getOwnerInfo, loadOwners } from '../submissions/ownership.js'
+import { clearRating, EMPTY_RATING, getRating, loadRatings, setRating } from '../submissions/ratings.js'
 
 /**
  * Lightweight per-mod edit attribution: the most recent merged submission
@@ -65,69 +67,61 @@ function loadHistory(identifier: string): LastEditRow[] {
     .all(identifier) as LastEditRow[]
 }
 
-/**
- * Aggregate ratings for every mod identifier that has at least one rating.
- * Used by the listing endpoint to attach `{avg, count}` per card. SQLite
- * AVG returns a float; we round to one decimal at the API boundary so the
- * frontend doesn't have to deal with `4.333333…`.
- */
-interface RatingAggRow {
-  identifier: string
-  avg: number
-  count: number
-}
-function loadRatingAggregates(): Map<string, { avg: number; count: number }> {
-  const rows = db
-    .prepare(
-      `SELECT identifier, AVG(stars) AS avg, COUNT(*) AS count
-         FROM mod_ratings
-        GROUP BY identifier`
-    )
-    .all() as RatingAggRow[]
-  const out = new Map<string, { avg: number; count: number }>()
-  for (const r of rows) {
-    out.set(r.identifier, { avg: Math.round(r.avg * 10) / 10, count: r.count })
-  }
-  return out
-}
-
-function getRatingAggregate(identifier: string): { avg: number; count: number } {
-  const row = db
-    .prepare(
-      `SELECT AVG(stars) AS avg, COUNT(*) AS count
-         FROM mod_ratings
-        WHERE identifier = ?`
-    )
-    .get(identifier) as { avg: number | null; count: number }
-  return {
-    avg: row.avg ? Math.round(row.avg * 10) / 10 : 0,
-    count: row.count,
-  }
-}
-
-function loadUserRatings(userId: number): Map<string, number> {
-  const rows = db
-    .prepare(`SELECT identifier, stars FROM mod_ratings WHERE user_id = ?`)
-    .all(userId) as Array<{ identifier: string; stars: number }>
-  const out = new Map<string, number>()
-  for (const r of rows) out.set(r.identifier, r.stars)
-  return out
-}
-
-function getUserRating(userId: number, identifier: string): number | null {
-  const row = db
-    .prepare(`SELECT stars FROM mod_ratings WHERE user_id = ? AND identifier = ?`)
-    .get(userId, identifier) as { stars: number } | undefined
-  return row ? row.stars : null
-}
-
 const QuerySchema = z.object({
   q: z.string().trim().max(128).optional(),
   type: z.string().trim().max(32).optional(),
   tag: z.string().trim().max(64).optional(),
+  // ── Extended filters ──────────────────────────────────────────────────
+  // Comma-separated for multi-value fields. All filters AND together; for
+  // `tags` the `tag_mode=any` switch flips to OR semantics.
+  tags: z.string().trim().max(512).optional(),
+  tag_mode: z.enum(['all', 'any']).optional(),
+  author: z.string().trim().max(128).optional(),
+  license: z.string().trim().max(64).optional(),
+  kind: z.string().trim().max(32).optional(),
+  status: z.string().trim().max(32).optional(),
+  multiplayer: z.string().trim().max(16).optional(),
+  verified: z.enum(['true', 'false']).optional(),
+  /** Comma list: download,thumbnail,repository,homepage,bugtracker,beamng_resource,depends,provides */
+  has: z.string().trim().max(256).optional(),
+  min_rating: z.coerce.number().min(0).max(5).optional(),
+  /** Sort order. Default: verified-first, then name. */
+  sort: z
+    .enum(['name', '-name', 'identifier', '-identifier', 'rating', '-rating', 'recent'])
+    .optional(),
   page: z.coerce.number().int().min(1).max(1000).optional(),
   pageSize: z.coerce.number().int().min(1).max(100).optional(),
 })
+
+function csv(s: string | undefined): string[] {
+  if (!s) return []
+  return s
+    .split(',')
+    .map((x) => x.trim())
+    .filter(Boolean)
+}
+
+const RESOURCE_FIELDS = new Set(['repository', 'homepage', 'bugtracker', 'beamng_resource', 'beammp_forum'])
+const RAW_PRESENCE_FIELDS = new Set(['depends', 'recommends', 'suggests', 'supports', 'conflicts', 'provides', 'install', 'description'])
+
+/** True if the mod entry has a non-empty value for the given `has:` field. */
+function hasField(m: ReturnType<typeof summarize> & { raw?: Record<string, unknown> }, field: string): boolean {
+  if (field === 'download') return Boolean(m.download)
+  if (field === 'thumbnail') return Boolean(m.thumbnail)
+  if (RESOURCE_FIELDS.has(field)) {
+    const v = (m.resources as Record<string, unknown> | undefined)?.[field]
+    return typeof v === 'string' && v.length > 0
+  }
+  if (RAW_PRESENCE_FIELDS.has(field)) {
+    // `summarize` doesn't include `raw` so we look it up off the original
+    // entry from getRegistry() — callers pass it in.
+    const v = (m as unknown as { raw?: Record<string, unknown> }).raw?.[field]
+    if (Array.isArray(v)) return v.length > 0
+    if (typeof v === 'string') return v.length > 0
+    return Boolean(v)
+  }
+  return false
+}
 
 export async function publicRoutes(app: FastifyInstance): Promise<void> {
   app.get('/health', async () => ({ ok: true }))
@@ -284,18 +278,27 @@ export async function publicRoutes(app: FastifyInstance): Promise<void> {
   })
 
   app.get('/mods', async (request, reply) => {
-    const ctx = requireAuth(request, reply)
-    if (!ctx) return
+    // Public read: blocked-tier (red) accounts are still rejected, but a
+    // signed-out viewer gets the same data minus their own per-mod rating.
+    if (request.ctx?.user.trust === 'red') {
+      return reply.code(403).send({ error: 'account_blocked' })
+    }
+    const viewerId = request.ctx?.user.id ?? null
     const parsed = QuerySchema.safeParse(request.query)
     if (!parsed.success) {
       return reply.code(400).send({ error: 'invalid_query', issues: parsed.error.issues })
     }
-    const { q, type, tag } = parsed.data
+    const {
+      q, type, tag, tags, tag_mode, author, license, kind, status,
+      multiplayer, verified, has, min_rating, sort,
+    } = parsed.data
     const page = parsed.data.page ?? 1
     const pageSize = parsed.data.pageSize ?? 24
 
     const { entries } = await getRegistry()
     let filtered = entries
+
+    // Free-text needle searches name + identifier + author + abstract + tags.
     if (q) {
       const needle = q.toLowerCase()
       filtered = filtered.filter(
@@ -307,51 +310,147 @@ export async function publicRoutes(app: FastifyInstance): Promise<void> {
           m.tags.some((t) => t.toLowerCase().includes(needle))
       )
     }
+
     if (type) filtered = filtered.filter((m) => m.mod_type === type)
     if (tag) filtered = filtered.filter((m) => m.tags.includes(tag))
+
+    // Multi-tag filter (AND by default; OR with tag_mode=any).
+    const tagList = csv(tags).map((t) => t.toLowerCase())
+    if (tagList.length > 0) {
+      const mode = tag_mode ?? 'all'
+      filtered = filtered.filter((m) => {
+        const owned = m.tags.map((t) => t.toLowerCase())
+        return mode === 'any'
+          ? tagList.some((t) => owned.includes(t))
+          : tagList.every((t) => owned.includes(t))
+      })
+    }
+
+    if (author) {
+      const needle = author.toLowerCase()
+      filtered = filtered.filter((m) => (m.author?.toLowerCase().includes(needle)) ?? false)
+    }
+    if (license) {
+      const needle = license.toLowerCase()
+      filtered = filtered.filter((m) => (m.license?.toLowerCase().includes(needle)) ?? false)
+    }
+    if (kind) filtered = filtered.filter((m) => m.kind === kind)
+    if (status) filtered = filtered.filter((m) => m.release_status === status)
+    if (multiplayer) filtered = filtered.filter((m) => m.multiplayer_scope === multiplayer)
+    if (verified === 'true') filtered = filtered.filter((m) => m.verified)
+    else if (verified === 'false') filtered = filtered.filter((m) => !m.verified)
+
+    const hasFields = csv(has)
+    if (hasFields.length > 0) {
+      filtered = filtered.filter((m) => hasFields.every((f) => hasField(m, f)))
+    }
+
+    // Ratings: load once for the full set so we can both filter by minimum
+    // rating and sort the entire result set before paginating.
+    const ratings = loadRatings(viewerId)
+    if (typeof min_rating === 'number' && min_rating > 0) {
+      filtered = filtered.filter((m) => (ratings.get(m.identifier)?.avg ?? 0) >= min_rating)
+    }
+
+    // Sort. Default mirrors getRegistry()'s order (verified-first, name).
+    if (sort) {
+      const cmpName = (a: ModEntry, b: ModEntry) =>
+        a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+      const cmpId = (a: ModEntry, b: ModEntry) =>
+        a.identifier.localeCompare(b.identifier, undefined, { sensitivity: 'base' })
+      const cmpRating = (a: ModEntry, b: ModEntry) => {
+        const ra = ratings.get(a.identifier)?.avg ?? 0
+        const rb = ratings.get(b.identifier)?.avg ?? 0
+        if (ra !== rb) return ra - rb
+        const ca = ratings.get(a.identifier)?.count ?? 0
+        const cb = ratings.get(b.identifier)?.count ?? 0
+        return ca - cb
+      }
+      filtered = [...filtered].sort((a, b) => {
+        switch (sort) {
+          case 'name': return cmpName(a, b)
+          case '-name': return -cmpName(a, b)
+          case 'identifier': return cmpId(a, b)
+          case '-identifier': return -cmpId(a, b)
+          case 'rating': return cmpRating(a, b)
+          case '-rating': return -cmpRating(a, b)
+          case 'recent': {
+            // Best-effort recency: latest version string compare.
+            return b.version.localeCompare(a.version, undefined, { numeric: true })
+          }
+        }
+      })
+    }
 
     const total = filtered.length
     const start = (page - 1) * pageSize
     const slice = filtered.slice(start, start + pageSize)
 
-    // Aggregate facet counts off the *unfiltered* set so users can see what
-    // else is available; cheap because the index is in memory.
+    // ── Facets (computed off the unfiltered set so users can see what
+    // ── else is available across the registry). Cheap because everything
+    // ── lives in memory.
     const typeCounts: Record<string, number> = {}
+    const tagCounts: Record<string, number> = {}
+    const kindCounts: Record<string, number> = {}
+    const licenseCounts: Record<string, number> = {}
+    const statusCounts: Record<string, number> = {}
+    const multiplayerCounts: Record<string, number> = {}
+    const authorCounts: Record<string, number> = {}
+    let verifiedCount = 0
     for (const m of entries) {
       if (m.mod_type) typeCounts[m.mod_type] = (typeCounts[m.mod_type] ?? 0) + 1
+      kindCounts[m.kind] = (kindCounts[m.kind] ?? 0) + 1
+      if (m.license) licenseCounts[m.license] = (licenseCounts[m.license] ?? 0) + 1
+      if (m.release_status) statusCounts[m.release_status] = (statusCounts[m.release_status] ?? 0) + 1
+      if (m.multiplayer_scope) multiplayerCounts[m.multiplayer_scope] = (multiplayerCounts[m.multiplayer_scope] ?? 0) + 1
+      if (m.author) authorCounts[m.author] = (authorCounts[m.author] ?? 0) + 1
+      if (m.verified) verifiedCount++
+      for (const t of m.tags) {
+        if (!t) continue
+        tagCounts[t] = (tagCounts[t] ?? 0) + 1
+      }
     }
+    const topTags = Object.entries(tagCounts)
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .slice(0, 200)
+      .map(([value, count]) => ({ value, count }))
+    const topAuthors = Object.entries(authorCounts)
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .slice(0, 100)
+      .map(([value, count]) => ({ value, count }))
 
-    // Single SQL pass for last-editor attribution; cheap (one indexed scan)
-    // and avoids N+1 lookups from the client.
     const lastEdits = loadLastEdits()
-    const ratings = loadRatingAggregates()
-    const userRatings = loadUserRatings(ctx.user.id)
+    const owners = loadOwners()
 
     return {
-      items: slice.map((m) => {
-        const agg = ratings.get(m.identifier) ?? { avg: 0, count: 0 }
-        return {
-          ...summarize(m),
-          last_edit: lastEdits.get(m.identifier) ?? null,
-          rating: {
-            avg: agg.avg,
-            count: agg.count,
-            mine: userRatings.get(m.identifier) ?? null,
-          },
-        }
-      }),
+      items: slice.map((m) => ({
+        ...summarize(m),
+        last_edit: lastEdits.get(m.identifier) ?? null,
+        owner: owners.get(m.identifier) ?? null,
+        rating: ratings.get(m.identifier) ?? EMPTY_RATING,
+      })),
       total,
       page,
       pageSize,
-      facets: { mod_types: typeCounts },
+      facets: {
+        mod_types: typeCounts,
+        kinds: kindCounts,
+        licenses: licenseCounts,
+        statuses: statusCounts,
+        multiplayer: multiplayerCounts,
+        verified: { true: verifiedCount, false: entries.length - verifiedCount },
+        tags: topTags,
+        authors: topAuthors,
+      },
     }
   })
 
   // Edit history for one mod — every accepted submission, newest first.
   // Used by the registry browser drawer to show who has touched the entry.
   app.get('/mods/:identifier/history', async (request, reply) => {
-    const ctx = requireAuth(request, reply)
-    if (!ctx) return
+    if (request.ctx?.user.trust === 'red') {
+      return reply.code(403).send({ error: 'account_blocked' })
+    }
     const { identifier } = request.params as { identifier: string }
     const { byId } = await getRegistry()
     if (!byId.has(identifier)) return reply.code(404).send({ error: 'not_found' })
@@ -359,8 +458,10 @@ export async function publicRoutes(app: FastifyInstance): Promise<void> {
   })
 
   app.get('/mods/:identifier', async (request, reply) => {
-    const ctx = requireAuth(request, reply)
-    if (!ctx) return
+    if (request.ctx?.user.trust === 'red') {
+      return reply.code(403).send({ error: 'account_blocked' })
+    }
+    const viewerId = request.ctx?.user.id ?? null
     const { identifier } = request.params as { identifier: string }
     const { byId } = await getRegistry()
     const found = byId.get(identifier)
@@ -386,18 +487,16 @@ export async function publicRoutes(app: FastifyInstance): Promise<void> {
       mod: found,
       watch,
       last_edit: lastEdits.get(identifier) ?? null,
-      rating: {
-        ...getRatingAggregate(identifier),
-        mine: getUserRating(ctx.user.id, identifier),
-      },
+      owner: getOwnerInfo(identifier),
+      rating: getRating(identifier, viewerId),
     }
   })
 
-  // ─── Ratings ───────────────────────────────────────────────────────────
-  // 1-5 stars per (user, identifier). PUT upserts; DELETE clears the user's
-  // own rating. Aggregate is returned in the response so the client can
-  // optimistically refresh without a second round-trip.
-  const RatingSchema = z.object({ stars: z.number().int().min(1).max(5) })
+  // ─── Per-mod ratings ─────────────────────────────────────────────────────
+  // Authenticated users can leave one 1–5 star rating per mod identifier.
+  // PUT replaces (idempotent), DELETE clears. Both return the updated
+  // aggregate so the client can patch caches without a refetch.
+  const RatingBodySchema = z.object({ stars: z.number().int().min(1).max(5) })
 
   app.put('/mods/:identifier/rating', async (request, reply) => {
     const ctx = requireAuth(request, reply)
@@ -405,39 +504,21 @@ export async function publicRoutes(app: FastifyInstance): Promise<void> {
     const { identifier } = request.params as { identifier: string }
     const { byId } = await getRegistry()
     if (!byId.has(identifier)) return reply.code(404).send({ error: 'not_found' })
-    const parsed = RatingSchema.safeParse(request.body)
+    const parsed = RatingBodySchema.safeParse(request.body)
     if (!parsed.success) {
       return reply.code(400).send({ error: 'invalid_input', issues: parsed.error.issues })
     }
-    const now = Date.now()
-    db.prepare(
-      `INSERT INTO mod_ratings (user_id, identifier, stars, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?)
-       ON CONFLICT(user_id, identifier) DO UPDATE SET
-         stars = excluded.stars,
-         updated_at = excluded.updated_at`
-    ).run(ctx.user.id, identifier, parsed.data.stars, now, now)
-    return {
-      rating: {
-        ...getRatingAggregate(identifier),
-        mine: parsed.data.stars,
-      },
-    }
+    setRating(identifier, ctx.user.id, parsed.data.stars)
+    return { rating: getRating(identifier, ctx.user.id) }
   })
 
   app.delete('/mods/:identifier/rating', async (request, reply) => {
     const ctx = requireAuth(request, reply)
     if (!ctx) return
     const { identifier } = request.params as { identifier: string }
-    db.prepare(`DELETE FROM mod_ratings WHERE user_id = ? AND identifier = ?`).run(
-      ctx.user.id,
-      identifier,
-    )
-    return {
-      rating: {
-        ...getRatingAggregate(identifier),
-        mine: null,
-      },
-    }
+    const { byId } = await getRegistry()
+    if (!byId.has(identifier)) return reply.code(404).send({ error: 'not_found' })
+    clearRating(identifier, ctx.user.id)
+    return { rating: getRating(identifier, ctx.user.id) }
   })
 }
