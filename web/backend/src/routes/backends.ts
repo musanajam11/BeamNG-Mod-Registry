@@ -60,7 +60,10 @@ const HeartbeatBody = z.object({
   servers: z
     .array(
       z.object({
-        name: z.string().max(128).default(''),
+        // BeamMP server names can carry color/style codes (`^6^l...`)
+        // that inflate the byte count well past the visible length, and
+        // the upstream protocol allows up to ~256 chars. Be generous.
+        name: z.string().max(512).default(''),
         players: z.number().int().min(0).max(10_000).default(0),
         max_players: z.number().int().min(0).max(10_000).default(0),
         map: z.string().max(256).default(''),
