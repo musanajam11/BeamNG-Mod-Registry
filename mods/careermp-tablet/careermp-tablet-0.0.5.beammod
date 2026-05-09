@@ -4,14 +4,18 @@
   "name": "CareerMP-Tablet",
   "abstract": "A tablet for CareerMP",
   "author": "PapiCheesecake",
+  "version": "0.0.5",
   "license": "MIT",
   "mod_type": "ui_app",
+  "download": "https://github.com/PapiCheesecake/CareerMP-Tablet/releases/download/0.0.4/CareerMP-Tablet.zip",
+  "download_size": 34029,
   "thumbnail": "https://media.discordapp.net/attachments/1498396417587155024/1498397171425349642/Screenshot_2026-04-27_195242.png?ex=6a00d49c&is=69ff831c&hm=fe30ad7e41403aadc931a2516830d9bef5862e4bc4b931ff6678fd0ba56f317c&=&format=webp&quality=lossless&width=1217&height=836",
   "tags": [
     "careermp-tablet"
   ],
   "description": "# CareerMP Tablet\n\nCareerMP Tablet is a UI overlay for the CareerMP mod in BeamNG.drive. It provides a unified tablet experience for viewing your career dashboard, selecting jobs, tracking missions, managing vehicles, and handling recovery operations.\n\n## Features\n\n- Home dashboard with active job status, vehicle summary, career progress, and recent activity -- todo\n- Job browser with facility-based work listings and delivery missions -- todo\n- Task and mission overview for goals and objectives -- todo\n- Vehicle management screen for garage and fleet information -- todo\n- Interactive map/navigation page -- in progress\n- Recovery and roadside assistance panel -- done\n- Profile and settings pages for personalization and preferences -- done\n- In-game notification support and persistent UI settings -- done\n\n## Requirements\n\n- BeamMP\n- CareerMP -- todo\n\n## Installation\n\n1. Download latest release.\n2. Copy the `CareerMP-Tablet.zip` zip into your server `Resources/Client/` directory.\n3. Launch BeamMP-Server\n4. Launch BeamMP and join your server and set a bind for the tablet, you might need to manually add the ui also.\n\n## Usage\n\n- Open the CareerMP Tablet app using the bind you set.\n- Use the sidebar to switch between Home, Jobs, Tasks, Vehicles, Map, Recovery, Profile, and Settings.\n- Review your current career status, active jobs, and vehicle information at a glance.\n- Adjust notification preferences and tablet layout in the Settings page.\n- Use the map for quick navigation.\n\n## Standalone Preview\n\nA preview of the tablet UI is available in `standalone-preview`.\nThis isnt going to be functional in any way, it was a way for me to visualise the idea.\n\n## Contributing\n\nContributions are welcome! If you want to add new tablet features, improve the UI, or fix issues:\n\n1. Fork this repository.\n2. Create a feature branch.\n3. Submit a pull request with a clear description of your changes.\n\nPlease include any relevant screenshots or notes for UI changes.\n\n## AI Usage\n\nI have used AI in the making of this mod. However, as i learn more not only will that be used less. I will be going over and re-writing the code to fix any issues this caused.\n\n## License\n\nThis project is licensed under the terms in `LICENSE`. Refer to that file for the full license details.\n",
   "release_status": "testing",
+  "release_date": "2026-05-09",
   "resources": {
     "repository": "https://github.com/PapiCheesecake/CareerMP-Tablet",
     "bugtracker": "https://github.com/PapiCheesecake/CareerMP-Tablet/issues"
@@ -21,7 +25,8 @@
       "identifier": "careermp"
     }
   ],
-  "x_verified": true,
-  "$kref": "#/github/PapiCheesecake/CareerMP-Tablet",
-  "$max_releases": 10
+  "download_hash": {
+    "sha256": "9468f7ceca7fb70c45621b74af5536426428f324014da55837a76ff371e76f2e"
+  },
+  "x_verified": true
 }
