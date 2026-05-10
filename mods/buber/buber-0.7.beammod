@@ -6,7 +6,7 @@
   "author": "DeadEndReece",
   "version": "0.7",
   "license": "GPL-3.0",
-  "mod_type": "vehicle",
+  "mod_type": "scenario",
   "download": "https://github.com/DeadEndReece/Buber/releases/download/V0.7/Buber.zip",
   "download_size": 84415,
   "thumbnail": "https://i.imgur.com/LXgQTD7.png",
