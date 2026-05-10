@@ -5,7 +5,7 @@
   "abstract": "Fixing and syncing BeamNG.drive's citybus displays for BeamMP",
   "author": "StanleyDudek",
   "license": "MIT",
-  "mod_type": "vehicle",
+  "mod_type": "automation",
   "thumbnail": "https://i.imgur.com/yz17mnv.jpeg",
   "description": "# citybusDisplaysSync\nFixing and syncing BeamNG.drive's citybus displays for BeamMP\n",
   "release_status": "testing",
