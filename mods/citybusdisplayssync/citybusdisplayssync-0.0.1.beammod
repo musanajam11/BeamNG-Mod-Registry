@@ -17,6 +17,11 @@
     "repository": "https://github.com/StanleyDudek/citybusDisplaysSync",
     "bugtracker": "https://github.com/StanleyDudek/citybusDisplaysSync/issues"
   },
+  "suggests": [
+    {
+      "identifier": "careermp"
+    }
+  ],
   "supports": [
     {
       "identifier": "buber"
