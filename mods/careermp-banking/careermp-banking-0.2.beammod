@@ -17,6 +17,11 @@
     "repository": "https://github.com/DeadEndReece/CareerMP-Banking",
     "bugtracker": "https://github.com/DeadEndReece/CareerMP-Banking/issues"
   },
+  "depends": [
+    {
+      "identifier": "careermp"
+    }
+  ],
   "download_hash": {
     "sha256": "1ceb1ec8942d06ae179f6a3b4765c00565726777cdb1f5f6f9d887331948ec37"
   },

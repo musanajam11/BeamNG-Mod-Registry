@@ -15,5 +15,10 @@
   },
   "x_verified": true,
   "$kref": "#/github/DeadEndReece/CareerMP-Banking",
-  "$max_releases": 10
+  "$max_releases": 10,
+  "depends": [
+    {
+      "identifier": "careermp"
+    }
+  ]
 }
