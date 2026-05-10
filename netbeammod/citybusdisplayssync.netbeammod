@@ -20,5 +20,10 @@
   ],
   "x_verified": true,
   "$kref": "#/github/StanleyDudek/citybusDisplaysSync",
-  "$max_releases": 10
+  "$max_releases": 10,
+  "suggests": [
+    {
+      "identifier": "careermp"
+    }
+  ]
 }
