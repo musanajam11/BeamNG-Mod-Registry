@@ -6,7 +6,7 @@
   "author": "DeadEndReece",
   "version": "0.2",
   "license": "MIT",
-  "mod_type": "vehicle",
+  "mod_type": "ui_app",
   "download": "https://github.com/DeadEndReece/CareerMP-Banking/releases/download/V0.2/CareerMPBankingV0.2.zip",
   "download_size": 12231,
   "thumbnail": "https://i.imgur.com/adw6jSa.png",
