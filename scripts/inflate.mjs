@@ -17,7 +17,7 @@
  * Environment:
  *   GITHUB_TOKEN — optional, raises rate limit from 60/hr to 5000/hr
  */
-import { readFileSync, readdirSync, writeFileSync, existsSync, mkdirSync } from 'fs'
+import { readFileSync, readdirSync, writeFileSync, existsSync, mkdirSync, unlinkSync, rmSync } from 'fs'
 import { join, dirname, basename } from 'path'
 import { fileURLToPath } from 'url'
 import { createHash } from 'crypto'
@@ -26,6 +26,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(__dirname, '..')
 const NETBEAMMOD_DIR = join(ROOT, 'netbeammod')
 const MODS_DIR = join(ROOT, 'mods')
+const HEALTH_FILE = join(NETBEAMMOD_DIR, '.health.json')
+
+// Number of consecutive failed checks before a template is auto-purged.
+// At the default daily cron schedule this is roughly N days of upstream-gone
+// before we consider the mod permanently dead. Override via env if needed.
+const PURGE_THRESHOLD = Math.max(1, parseInt(process.env.PURGE_THRESHOLD || '5', 10))
 
 // --- CLI ---
 const args = process.argv.slice(2)
@@ -253,6 +259,13 @@ async function inflateTemplate(templatePath) {
       releases = await fetchBeamNGResource(kref.resourceId)
     }
   } catch (err) {
+    // Treat upstream 404 (resource removed/unpublished) as a warning, not a fatal error.
+    // Surface a `gone: true` flag so the main loop can track consecutive failures
+    // and eventually auto-purge the template after PURGE_THRESHOLD streaks.
+    if (/\b404\b/.test(err.message)) {
+      console.warn(`  ⚠ ${err.message} — upstream resource gone, skipping`)
+      return { id, skipped: true, newVersions: 0, warning: err.message, gone: true }
+    }
     console.error(`  ✗ ${err.message}`)
     return { id, skipped: false, newVersions: 0, error: err.message }
   }
@@ -356,6 +369,64 @@ async function inflateTemplate(templatePath) {
   return { id, skipped: false, newVersions, warning }
 }
 
+// ─── Health tracking (self-healing) ──────────────────────────────────────────
+
+/**
+ * Load the persisted health-state map from `netbeammod/.health.json`.
+ * Keyed by template basename (e.g. "etk-c-series-2004-2011.netbeammod").
+ * Each entry: { identifier, kref, consecutiveFailures, firstFailure, lastFailure, lastError }.
+ */
+function loadHealth() {
+  if (!existsSync(HEALTH_FILE)) return {}
+  try {
+    return JSON.parse(readFileSync(HEALTH_FILE, 'utf-8'))
+  } catch (err) {
+    console.warn(`⚠ Could not parse ${HEALTH_FILE}: ${err.message} — starting fresh`)
+    return {}
+  }
+}
+
+/** Persist health state, omitting entries with no active failure streak. */
+function saveHealth(state) {
+  const clean = {}
+  for (const [k, v] of Object.entries(state)) {
+    if (v && v.consecutiveFailures > 0) clean[k] = v
+  }
+  if (Object.keys(clean).length === 0) {
+    if (existsSync(HEALTH_FILE)) {
+      try { unlinkSync(HEALTH_FILE) } catch {}
+    }
+    return
+  }
+  writeFileSync(HEALTH_FILE, JSON.stringify(clean, null, 2) + '\n', 'utf-8')
+}
+
+/**
+ * Permanently remove a template and its generated mod artefacts.
+ * Used after PURGE_THRESHOLD consecutive 404s confirm the upstream is dead.
+ */
+function purgeTemplate(templatePath, identifier) {
+  const removed = []
+  try {
+    if (existsSync(templatePath)) {
+      unlinkSync(templatePath)
+      removed.push(`netbeammod/${basename(templatePath)}`)
+    }
+  } catch (err) {
+    console.warn(`  ⚠ Failed to remove ${templatePath}: ${err.message}`)
+  }
+  const modDir = join(MODS_DIR, identifier)
+  if (existsSync(modDir)) {
+    try {
+      rmSync(modDir, { recursive: true, force: true })
+      removed.push(`mods/${identifier}/`)
+    } catch (err) {
+      console.warn(`  ⚠ Failed to remove ${modDir}: ${err.message}`)
+    }
+  }
+  return removed
+}
+
 // ─── Main ────────────────────────────────────────────────────────────────────
 
 const templates = findTemplates()
@@ -395,24 +466,79 @@ if (!GITHUB_TOKEN) console.log('(tip: set GITHUB_TOKEN to avoid API rate limits)
 let totalNew = 0
 let totalErrors = 0
 let totalWarnings = 0
+let totalPurged = 0
+const purgedSummary = []
+
+const health = loadHealth()
+const nowIso = new Date().toISOString()
+// Map identifier -> template path so we can purge by id later.
+const idToPath = new Map()
+for (const [id, v] of byId.entries()) idToPath.set(id, v.path)
 
 for (const tpl of deduped) {
+  const tplKey = basename(tpl)
   try {
     const result = await inflateTemplate(tpl)
     totalNew += result.newVersions
     if (result.error) totalErrors++
     if (result.warning) totalWarnings++
+
+    if (result.gone) {
+      // Upstream returned 404 — record (or extend) the failure streak.
+      const prev = health[tplKey] || { consecutiveFailures: 0, firstFailure: nowIso }
+      health[tplKey] = {
+        identifier: result.id,
+        consecutiveFailures: prev.consecutiveFailures + 1,
+        firstFailure: prev.firstFailure || nowIso,
+        lastFailure: nowIso,
+        lastError: result.warning || result.error || '404'
+      }
+      const streak = health[tplKey].consecutiveFailures
+      console.log(`  ↳ failure streak: ${streak}/${PURGE_THRESHOLD}`)
+    } else if (!result.error) {
+      // Successful contact (even if no new versions / no releases) — clear any prior streak.
+      if (health[tplKey]) {
+        console.log(`  ↳ recovered — clearing previous failure streak`)
+        delete health[tplKey]
+      }
+    }
+    // result.error (non-404) does NOT reset the streak but also doesn't extend
+    // the gone-counter; transient errors are simply reported and retried tomorrow.
   } catch (err) {
     console.error(`\n✗ Fatal error processing ${tpl}: ${err.message}`)
     totalErrors++
   }
 }
 
+// ─── Self-heal: purge templates that have been gone for PURGE_THRESHOLD runs ──
+for (const [tplKey, entry] of Object.entries(health)) {
+  if (entry.consecutiveFailures < PURGE_THRESHOLD) continue
+  const tplPath = idToPath.get(entry.identifier) || join(NETBEAMMOD_DIR, tplKey)
+  console.log(`\n☠ Purging "${entry.identifier}" — upstream gone for ${entry.consecutiveFailures} consecutive runs (since ${entry.firstFailure})`)
+  if (DRY_RUN) {
+    console.log(`  (dry-run — would remove netbeammod/${tplKey} and mods/${entry.identifier}/)`)
+    totalPurged++
+    purgedSummary.push(entry.identifier)
+    continue
+  }
+  const removed = purgeTemplate(tplPath, entry.identifier)
+  for (const r of removed) console.log(`  ✗ removed ${r}`)
+  delete health[tplKey]
+  totalPurged++
+  purgedSummary.push(entry.identifier)
+}
+
+if (!DRY_RUN) saveHealth(health)
+
 console.log(`\n━━━ Summary ━━━`)
 console.log(`Templates: ${templates.length}`)
 console.log(`New versions: ${totalNew}`)
 if (totalWarnings > 0) console.log(`Warnings: ${totalWarnings}`)
 if (totalErrors > 0) console.log(`Errors: ${totalErrors}`)
+if (totalPurged > 0) {
+  console.log(`Purged (upstream gone): ${totalPurged}`)
+  for (const id of purgedSummary) console.log(`  - ${id}`)
+}
 if (DRY_RUN) console.log('(dry-run — nothing was written)')
 
 process.exit(totalErrors > 0 ? 1 : 0)

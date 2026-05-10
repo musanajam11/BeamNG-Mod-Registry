@@ -45,18 +45,29 @@ jobs:
       - name: Check for new .beammod files
         id: changes
         run: |
-          git add mods/
+          # Stage additions (new .beammod files) AND removals (purged templates,
+          # deleted mods/<id>/ trees, and updated health-state file).
+          git add -A mods/ netbeammod/
           if git diff --cached --quiet; then
             echo "has_changes=false" >> "$GITHUB_OUTPUT"
           else
             echo "has_changes=true" >> "$GITHUB_OUTPUT"
-            # Collect new version list for PR body
-            NEW_FILES=$(git diff --cached --name-only)
-            echo "new_files<<EOF" >> "$GITHUB_OUTPUT"
-            echo "$NEW_FILES" >> "$GITHUB_OUTPUT"
-            echo "EOF" >> "$GITHUB_OUTPUT"
-            echo "### New versions detected" >> "$GITHUB_STEP_SUMMARY"
-            echo "$NEW_FILES" >> "$GITHUB_STEP_SUMMARY"
+            ADDED=$(git diff --cached --name-only --diff-filter=A)
+            REMOVED=$(git diff --cached --name-only --diff-filter=D)
+            MODIFIED=$(git diff --cached --name-only --diff-filter=M)
+            HAS_REMOVALS=false
+            if [ -n "$REMOVED" ]; then HAS_REMOVALS=true; fi
+            echo "has_removals=$HAS_REMOVALS" >> "$GITHUB_OUTPUT"
+            {
+              echo "added<<EOF"; echo "$ADDED"; echo "EOF"
+              echo "removed<<EOF"; echo "$REMOVED"; echo "EOF"
+              echo "modified<<EOF"; echo "$MODIFIED"; echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+            {
+              if [ -n "$ADDED" ]; then echo "### Added"; echo '```'; echo "$ADDED"; echo '```'; fi
+              if [ -n "$REMOVED" ]; then echo "### Removed (upstream gone)"; echo '```'; echo "$REMOVED"; echo '```'; fi
+              if [ -n "$MODIFIED" ]; then echo "### Modified"; echo '```'; echo "$MODIFIED"; echo '```'; fi
+            } >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: Validate generated files
@@ -71,17 +82,36 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: auto/inflate-${{ github.run_number }}
-          commit-message: "auto: inflate new mod versions"
-          title: "auto: new upstream mod versions detected"
+          commit-message: |
+            auto: inflate mod registry
+            ${{ steps.changes.outputs.has_removals == 'true' && '(includes purges of upstream-gone mods)' || '' }}
+          title: ${{ steps.changes.outputs.has_removals == 'true' && 'auto: inflate + purge upstream-gone mods' || 'auto: new upstream mod versions detected' }}
           body: |
-            The inflator detected new releases upstream and generated updated `.beammod` files.
+            The inflator processed all `.netbeammod` templates against their upstream sources.
 
-            ### New files
+            ### Added
             ```
-            ${{ steps.changes.outputs.new_files }}
+            ${{ steps.changes.outputs.added }}
             ```
 
-            This PR was created automatically by the [inflate workflow](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
-            Review the generated metadata and merge when ready.
+            ### Removed (auto-purge: 5 consecutive 404 streaks)
+            ```
+            ${{ steps.changes.outputs.removed }}
+            ```
+
+            ### Modified
+            ```
+            ${{ steps.changes.outputs.modified }}
+            ```
+
+            **Auto-purge policy:** when `scripts/inflate.mjs` sees an upstream `404`
+            for a template, it increments a counter in `netbeammod/.health.json`.
+            After `PURGE_THRESHOLD` consecutive failed runs (default **5**, ≈5 days
+            on the daily cron), the template, its `mods/<id>/` directory, and the
+            health entry are removed. Any successful contact resets the counter,
+            so transient outages do not cause data loss.
+
+            Created automatically by the [inflate workflow](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+            Review the diff and merge when ready.
           labels: automated,inflate
           delete-branch: true
