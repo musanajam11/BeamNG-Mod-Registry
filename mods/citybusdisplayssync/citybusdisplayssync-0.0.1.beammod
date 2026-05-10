@@ -6,7 +6,7 @@
   "author": "StanleyDudek",
   "version": "0.0.1",
   "license": "MIT",
-  "mod_type": "vehicle",
+  "mod_type": "automation",
   "download": "https://github.com/StanleyDudek/citybusDisplaysSync/releases/download/v0.0.1/citybusDisplaysSync_v0.0.1.zip",
   "download_size": 5636,
   "thumbnail": "https://i.imgur.com/yz17mnv.jpeg",
