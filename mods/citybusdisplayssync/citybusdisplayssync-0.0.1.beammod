@@ -1,0 +1,29 @@
+{
+  "spec_version": 1,
+  "identifier": "citybusdisplayssync",
+  "name": "citybusDisplaysSync",
+  "abstract": "Fixing and syncing BeamNG.drive's citybus displays for BeamMP",
+  "author": "StanleyDudek",
+  "version": "0.0.1",
+  "license": "MIT",
+  "mod_type": "vehicle",
+  "download": "https://github.com/StanleyDudek/citybusDisplaysSync/releases/download/v0.0.1/citybusDisplaysSync_v0.0.1.zip",
+  "download_size": 5636,
+  "thumbnail": "https://i.imgur.com/yz17mnv.jpeg",
+  "description": "# citybusDisplaysSync\nFixing and syncing BeamNG.drive's citybus displays for BeamMP\n",
+  "release_status": "testing",
+  "release_date": "2026-04-26",
+  "resources": {
+    "repository": "https://github.com/StanleyDudek/citybusDisplaysSync",
+    "bugtracker": "https://github.com/StanleyDudek/citybusDisplaysSync/issues"
+  },
+  "supports": [
+    {
+      "identifier": "buber"
+    }
+  ],
+  "download_hash": {
+    "sha256": "a5939c24ded2a5e48762641ac11291b158d7dfbc6a9cba2c2888693d58c61207"
+  },
+  "x_verified": true
+}
