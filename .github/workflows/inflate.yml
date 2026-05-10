@@ -82,10 +82,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: auto/inflate-${{ github.run_number }}
-          commit-message: |
-            auto: inflate mod registry
-            ${{ steps.changes.outputs.has_removals == 'true' && '(includes purges of upstream-gone mods)' || '' }}
-          title: ${{ steps.changes.outputs.has_removals == 'true' && 'auto: inflate + purge upstream-gone mods' || 'auto: new upstream mod versions detected' }}
+          commit-message: "${{ steps.changes.outputs.has_removals == 'true' && 'auto: inflate mod registry (includes purges of upstream-gone mods)' || 'auto: inflate mod registry' }}"
+          title: "${{ steps.changes.outputs.has_removals == 'true' && 'auto: inflate + purge upstream-gone mods' || 'auto: new upstream mod versions detected' }}"
           body: |
             The inflator processed all `.netbeammod` templates against their upstream sources.
 
