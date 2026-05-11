@@ -1,0 +1,16 @@
+{
+  "etk-900-series-18-24.netbeammod": {
+    "identifier": "etk-900-series-18-24",
+    "consecutiveFailures": 1,
+    "firstFailure": "2026-05-11T07:12:16.500Z",
+    "lastFailure": "2026-05-11T07:12:16.500Z",
+    "lastError": "BeamNG.com 404 for resource 34546"
+  },
+  "etk-c-series-2004-2011.netbeammod": {
+    "identifier": "etk-c-series-2004-2011",
+    "consecutiveFailures": 1,
+    "firstFailure": "2026-05-11T07:12:16.500Z",
+    "lastFailure": "2026-05-11T07:12:16.500Z",
+    "lastError": "BeamNG.com 404 for resource 23752"
+  }
+}
