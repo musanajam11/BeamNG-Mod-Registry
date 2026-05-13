@@ -17,6 +17,7 @@ import { api, ApiError, type Submission } from '../api/client'
 import { buildPayload, buildWatchFields, type FormState } from './submit/formState'
 import { AutoUpdateSection } from './submit/AutoUpdateSection'
 import { useSubmitDraft, type InspectResult } from '../state/SubmitDraftContext'
+import { applyLookup, type LookupResult } from './submit/applyLookup'
 import { BasicsSection } from './submit/BasicsSection'
 import { DownloadSection } from './submit/DownloadSection'
 import { MultiplayerSection } from './submit/MultiplayerSection'
@@ -26,6 +27,7 @@ import { ResourcesSection } from './submit/ResourcesSection'
 import { RelationshipsSection } from './submit/RelationshipsSection'
 import { InstallSection } from './submit/InstallSection'
 import { AdvancedSection } from './submit/AdvancedSection'
+import { useDuplicateCheck } from './submit/useDuplicateCheck'
 
 export function SubmitManualPage() {
   const draft = useSubmitDraft()
@@ -41,6 +43,14 @@ export function SubmitManualPage() {
 
   const [uploadProgress, setUploadProgress] = useState<number | null>(null)
   const [autoError, setAutoError] = useState<string | null>(null)
+
+  // ── Mod Lookup (alternative to zip upload) ──────────────────────
+  // Fetches public metadata from a GitHub repo or BeamNG.com resource page
+  // and pre-fills the form. Empty fields only — never overwrites user input
+  // unless the user clicks "Overwrite all" on the result alert.
+  const [lookupUrl, setLookupUrl] = useState('')
+  const [lookupResult, setLookupResult] = useState<LookupResult | null>(null)
+  const [lookupError, setLookupError] = useState<string | null>(null)
 
   // Live backend phase from the SSE channel.
   type ServerPhase =
@@ -97,7 +107,11 @@ export function SubmitManualPage() {
         next.abstract = r.suggestions.description.split('\n')[0]?.slice(0, 512) ?? next.abstract
       }
       if (r.suggestions.mod_type) next.mod_type = r.suggestions.mod_type
-      if (r.suggestions.multiplayer_scope) next.multiplayer_scope = r.suggestions.multiplayer_scope
+      if (r.suggestions.multiplayer_scope) {
+        next.multiplayer_scope = r.suggestions.multiplayer_scope
+        // Inspector autofill never auto-confirms — user must acknowledge.
+        next.multiplayer_scope_confirmed = false
+      }
       next.download_size = r.size
       return next
     })
@@ -137,6 +151,55 @@ export function SubmitManualPage() {
     onSettled: () => { setUploadProgress(null); closeProgressStream() },
     onSuccess: (r) => { setAutoError(null); applySuggestions(r) },
     onError: (err) => setAutoError(extractErrorMessage(err, 'upload failed')),
+  })
+
+  const lookupMut = useMutation({
+    mutationFn: () => api.post<{ result: LookupResult }>('/submissions/lookup', { url: lookupUrl }),
+    onSuccess: ({ result }) => {
+      setLookupError(null)
+      setLookupResult(result)
+      setF((s: FormState) => applyLookup(s, result))
+    },
+    onError: (err) => {
+      setLookupResult(null)
+      setLookupError(extractErrorMessage(err, 'lookup failed'))
+    },
+  })
+
+  const overwriteFromLookup = () => {
+    if (!lookupResult) return
+    setF((s: FormState) => applyLookup(s, lookupResult, { overwrite: true }))
+  }
+
+  // Duplicate detection — runs (debounced) whenever any of the
+  // identifying fields change. Suppressed while editing/resubmitting an
+  // existing entry, since matching the existing identifier IS the point.
+  const duplicates = useDuplicateCheck(
+    {
+      identifier: f.identifier,
+      download: f.download,
+      repository: f.repository,
+      beamng_resource: f.beamng_resource,
+    },
+    !draft.editingExisting && !draft.resubmittingId,
+  )
+
+  // Load an existing registry entry into the form so the user can
+  // propose an edit instead of accidentally creating a parallel entry.
+  // Mirrors what RegistryBrowserPage's "Propose edit" flow does.
+  type ModDetail = {
+    mod: { raw: Record<string, unknown> }
+    watch?: { kref?: string; filter_asset?: string }
+  }
+  const loadExistingMut = useMutation({
+    mutationFn: (identifier: string) =>
+      api.get<ModDetail>(`/mods/${encodeURIComponent(identifier)}`),
+    onSuccess: (data) => {
+      draft.loadFromExisting(data.mod.raw, {
+        bumpVersion: false,
+        watch: data.watch,
+      })
+    },
   })
 
   const submitMut = useMutation({
@@ -190,6 +253,164 @@ export function SubmitManualPage() {
           </Text>
         </Alert>
       )}
+
+      {duplicates.matches.length > 0 && (
+        <Alert color="orange" mb="md" title="This mod looks like it's already in the registry">
+          <Stack gap="xs">
+            <Text size="sm">
+              We found {duplicates.matches.length === 1 ? 'an existing entry' : 'existing entries'} that
+              match what you've entered so far. Submitting a new entry would create a duplicate —
+              load the existing one instead and propose an edit (or bump the version).
+            </Text>
+            <Stack gap={4}>
+              {duplicates.matches.map((m) => (
+                <Group key={m.identifier} gap="xs" wrap="wrap" align="center">
+                  <Badge color="orange" variant="light">
+                    {m.kind === 'identifier_exact' && 'identifier'}
+                    {m.kind === 'download_exact' && 'download URL'}
+                    {m.kind === 'repository_exact' && 'repository'}
+                    {m.kind === 'beamng_resource_exact' && 'BeamNG resource'}
+                    {' match'}
+                  </Badge>
+                  <Text size="sm" fw={600}>{m.name}</Text>
+                  <Text size="xs" c="dimmed">
+                    <code>{m.identifier}</code> · v{m.version}
+                    {m.author && ` · ${m.author}`}
+                    {m.multiplayer_scope && m.multiplayer_scope !== 'client' && ` · MP: ${m.multiplayer_scope}`}
+                  </Text>
+                  <Button
+                    size="xs"
+                    variant="light"
+                    color="orange"
+                    loading={loadExistingMut.isPending && loadExistingMut.variables === m.identifier}
+                    onClick={() => loadExistingMut.mutate(m.identifier)}
+                  >
+                    Load &amp; edit this entry
+                  </Button>
+                </Group>
+              ))}
+            </Stack>
+            <Group gap="xs">
+              <Button size="xs" variant="subtle" color="gray" onClick={duplicates.dismiss}>
+                Dismiss — this really is a different mod
+              </Button>
+            </Group>
+            {loadExistingMut.isError && (
+              <Text size="xs" c="red">
+                Failed to load existing entry: {extractErrorMessage(loadExistingMut.error, 'unknown error')}
+              </Text>
+            )}
+          </Stack>
+        </Alert>
+      )}
+
+      <Paper withBorder p="md" radius="md" mb="md">
+        <Stack gap="sm">
+          <Group justify="space-between" align="flex-end">
+            <div>
+              <Text fw={600} size="sm">Mod Lookup</Text>
+              <Text size="xs" c="dimmed">
+                Paste a GitHub repo or BeamNG.com resource URL — we'll fetch
+                rich metadata (name, author, license, latest version, tags,
+                description, thumbnail) and pre-fill the form.
+              </Text>
+            </div>
+            <Badge variant="light" color="grape">no download required</Badge>
+          </Group>
+          <Group align="flex-end" gap="sm" wrap="nowrap">
+            <TextInput
+              style={{ flex: 1 }}
+              label="Source URL"
+              placeholder="https://github.com/owner/repo  or  https://www.beamng.com/resources/my-mod.12345/"
+              value={lookupUrl}
+              onChange={(e) => setLookupUrl(e.currentTarget.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && lookupUrl && !lookupMut.isPending) {
+                  e.preventDefault()
+                  lookupMut.mutate()
+                }
+              }}
+            />
+            <Button
+              onClick={() => lookupMut.mutate()}
+              disabled={!lookupUrl}
+              loading={lookupMut.isPending}
+              variant="filled"
+              color="grape"
+            >
+              Look up
+            </Button>
+          </Group>
+          {lookupError && <Alert color="red">{lookupError}</Alert>}
+          {lookupResult && (
+            <Alert color="grape" title={`Found on ${lookupResult.source === 'github' ? 'GitHub' : 'BeamNG.com'}`}>
+              <Stack gap={4}>
+                <Group gap="xs" wrap="wrap">
+                  {lookupResult.name && <Badge>{lookupResult.name}</Badge>}
+                  {lookupResult.author && <Badge variant="light">by {lookupResult.author}</Badge>}
+                  {lookupResult.release?.version && (
+                    <Badge color="blue" variant="light">v{lookupResult.release.version}</Badge>
+                  )}
+                  {lookupResult.mod_type && (
+                    <Badge color="cyan" variant="light">{lookupResult.mod_type}</Badge>
+                  )}
+                  {lookupResult.license && (
+                    <Badge color="gray" variant="light">{lookupResult.license}</Badge>
+                  )}
+                </Group>
+                {lookupResult.tags.length > 0 && (
+                  <Group gap={4} wrap="wrap">
+                    {lookupResult.tags.slice(0, 8).map((t) => (
+                      <Badge key={t} size="xs" variant="outline">{t}</Badge>
+                    ))}
+                  </Group>
+                )}
+                {lookupResult.release?.download_url && (
+                  <Text size="xs" c="dimmed" style={{ wordBreak: 'break-all' }}>
+                    Download: {lookupResult.release.download_url}
+                  </Text>
+                )}
+                {lookupResult.multiplayer_scope && (
+                  <Stack gap={2}>
+                    <Group gap={6}>
+                      <Badge
+                        color={lookupResult.multiplayer_scope === 'server' ? 'orange'
+                          : lookupResult.multiplayer_scope === 'both' ? 'violet' : 'teal'}
+                        variant="filled"
+                      >
+                        Multiplayer: {lookupResult.multiplayer_scope}
+                      </Badge>
+                      {typeof lookupResult.multiplayer_scope_confidence === 'number' && (
+                        <Text size="xs" c="dimmed">
+                          {lookupResult.multiplayer_scope_confidence}% confidence
+                        </Text>
+                      )}
+                    </Group>
+                    {lookupResult.multiplayer_scope_reasons && lookupResult.multiplayer_scope_reasons.length > 0 && (
+                      <Text size="xs" c="dimmed">
+                        Why: {lookupResult.multiplayer_scope_reasons.slice(0, 5).join(' · ')}
+                        {lookupResult.multiplayer_scope_reasons.length > 5 &&
+                          ` · +${lookupResult.multiplayer_scope_reasons.length - 5} more`}
+                      </Text>
+                    )}
+                  </Stack>
+                )}
+                {lookupResult.warnings.length > 0 && (
+                  <Text size="xs" c="orange">{lookupResult.warnings.join(' · ')}</Text>
+                )}
+                <Group gap="xs" mt={4}>
+                  <Button size="xs" variant="light" color="grape" onClick={overwriteFromLookup}>
+                    Overwrite all fields
+                  </Button>
+                  <Text size="xs" c="dimmed">
+                    Empty fields were already filled. Use overwrite to replace your edits too.
+                  </Text>
+                </Group>
+              </Stack>
+            </Alert>
+          )}
+        </Stack>
+      </Paper>
 
       <Paper withBorder p="md" radius="md" mb="md">
         <Stack gap="sm">
@@ -266,6 +487,30 @@ export function SubmitManualPage() {
                   Size: {(inspectInfo.size / 1_048_576).toFixed(2)} MiB · Files: {inspectInfo.file_count}
                   {inspectInfo.suggestions.has_resources_layout && ' · Resources/ layout detected'}
                 </Text>
+                {inspectInfo.suggestions.multiplayer_scope && (
+                  <Group gap={6}>
+                    <Badge
+                      color={inspectInfo.suggestions.multiplayer_scope === 'server' ? 'orange'
+                        : inspectInfo.suggestions.multiplayer_scope === 'both' ? 'violet' : 'teal'}
+                      variant="filled"
+                    >
+                      Multiplayer: {inspectInfo.suggestions.multiplayer_scope}
+                    </Badge>
+                    {typeof inspectInfo.suggestions.multiplayer_scope_confidence === 'number' && (
+                      <Text size="xs" c="dimmed">
+                        {inspectInfo.suggestions.multiplayer_scope_confidence}% confidence
+                      </Text>
+                    )}
+                  </Group>
+                )}
+                {inspectInfo.suggestions.multiplayer_scope_reasons &&
+                  inspectInfo.suggestions.multiplayer_scope_reasons.length > 0 && (
+                  <Text size="xs" c="dimmed">
+                    Why: {inspectInfo.suggestions.multiplayer_scope_reasons.slice(0, 5).join(' · ')}
+                    {inspectInfo.suggestions.multiplayer_scope_reasons.length > 5 &&
+                      ` · +${inspectInfo.suggestions.multiplayer_scope_reasons.length - 5} more`}
+                  </Text>
+                )}
                 {inspectInfo.warnings.length > 0 && (
                   <Text size="xs" c="orange">{inspectInfo.warnings.join(' · ')}</Text>
                 )}
@@ -312,12 +557,21 @@ export function SubmitManualPage() {
                 isEditing &&
                 draft.originalSnapshot !== null &&
                 draft.originalSnapshot === JSON.stringify(f)
-              const blocked = missing.length > 0 || noChanges
+              const scopeUnconfirmed = !f.multiplayer_scope_confirmed
+              const blocked = missing.length > 0 || noChanges || scopeUnconfirmed
               return (
                 <>
                   {missing.length > 0 && (
                     <Alert color="yellow" title="Required fields missing">
                       Please fill in: {missing.map((m) => m.label).join(', ')}.
+                    </Alert>
+                  )}
+                  {scopeUnconfirmed && (
+                    <Alert color="yellow" title="Confirm multiplayer scope">
+                      Open the <strong>Multiplayer (BeamMP)</strong> section and confirm
+                      that <strong>{f.multiplayer_scope}</strong> is the correct scope for
+                      this mod. We require explicit confirmation because mis-tagged scopes
+                      break BeamMP server installs.
                     </Alert>
                   )}
                   {noChanges && missing.length === 0 && (

@@ -25,7 +25,7 @@ function ThemedApp() {
   return (
     <MantineProvider
       theme={mantineTheme}
-      defaultColorScheme="auto"
+      defaultColorScheme="dark"
       forceColorScheme={t.data?.color_scheme === 'auto' ? undefined : t.data?.color_scheme}
     >
       <Notifications position="top-right" />

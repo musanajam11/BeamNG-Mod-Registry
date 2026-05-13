@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Anchor, Button, Container, Image, Paper, PasswordInput, Stack, TextInput, Alert } from '@mantine/core'
 import { api, ApiError, type User } from '../api/client'
 import { Turnstile } from '../components/Turnstile'
+import { DiscordLink } from '../components/DiscordLink'
 
 interface AuthConfig {
   turnstile_site_key: string | null
@@ -76,9 +77,16 @@ export function LoginPage({ onSuccess }: { onSuccess: () => void }) {
               <Anchor component={Link} to="/signup" ta="center" size="sm">
                 Don't have an account? Sign up
               </Anchor>
+              <Anchor component={Link} to="/registry" ta="center" size="sm">
+                Browse the registry without signing in
+              </Anchor>
+              <Anchor component={Link} to="/faq" ta="center" size="sm">
+                Read the FAQ / wiki
+              </Anchor>
               <Anchor component={Link} to="/content-manager" ta="center" size="sm" c="dimmed">
                 Get the BeamNG Content Manager desktop app
               </Anchor>
+              <DiscordLink label="Questions? Join the Discord" fullWidth />
             </Stack>
           </form>
         </Paper>

@@ -8,8 +8,18 @@ import { db, type SubmissionRow, type UserRow } from '../db.js'
 import { audit } from '../audit.js'
 import { requireAdmin, requireReviewer } from '../auth/plugin.js'
 import { runPipeline } from '../submissions/pipeline.js'
+import { transferOwnership, getOwner } from '../submissions/ownership.js'
 import { getGithubConfig, isGithubReady, setSetting, GITHUB_KEYS, getTheme, THEME_KEYS, getTurnstileConfig, isTurnstileReady, TURNSTILE_KEYS } from '../settings.js'
 import { invalidateGithubCache, getInstallationOctokit } from '../github/app.js'
+import {
+  listBackendTokens,
+  mintBackendToken,
+  revokeBackendToken,
+  approveBackendTokenRequest,
+  denyBackendTokenRequest,
+  listAllBackendTokenRequests,
+  type BackendTokenRequestStatus,
+} from '../backends/index.js'
 
 const TrustEnum = z.enum(['green', 'yellow', 'red'])
 const RoleEnum = z.enum(['user', 'admin'])
@@ -92,17 +102,38 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
     const ctx = requireReviewer(request, reply)
     if (!ctx) return
     const status = (request.query as { status?: string } | undefined)?.status
-    const rows = status
-      ? db
-          .prepare<[string], SubmissionRow>(
+    const isAdmin = ctx.user.role === 'admin'
+    // Visibility: admins see everything. Non-admin reviewers see submissions
+    // where the mod is unowned, the submitter IS the owner, the reviewer
+    // themselves owns it, or the kind is `claim` (claims target unowned
+    // mods by definition and any reviewer can decide). Third-party edits
+    // to mods owned by someone else are hidden — only that owner reviews.
+    let rows: SubmissionRow[]
+    if (isAdmin) {
+      rows = status
+        ? db.prepare<[string], SubmissionRow>(
             `SELECT * FROM submissions WHERE status = ? ORDER BY created_at DESC LIMIT 500`
-          )
-          .all(status)
-      : db
-          .prepare<[], SubmissionRow>(
+          ).all(status)
+        : db.prepare<[], SubmissionRow>(
             `SELECT * FROM submissions ORDER BY created_at DESC LIMIT 500`
-          )
-          .all()
+          ).all()
+    } else {
+      const filter =
+        `LEFT JOIN mod_ownership o ON o.identifier = s.identifier
+          WHERE (o.user_id IS NULL
+                 OR o.user_id = s.user_id
+                 OR o.user_id = ?
+                 OR s.kind = 'claim')`
+      rows = status
+        ? db.prepare<[number, string], SubmissionRow>(
+            `SELECT s.* FROM submissions s ${filter} AND s.status = ?
+             ORDER BY s.created_at DESC LIMIT 500`
+          ).all(ctx.user.id, status)
+        : db.prepare<[number], SubmissionRow>(
+            `SELECT s.* FROM submissions s ${filter}
+             ORDER BY s.created_at DESC LIMIT 500`
+          ).all(ctx.user.id)
+    }
     return { submissions: rows }
   })
 
@@ -167,6 +198,50 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
     if (sub.status !== 'pending_review' && sub.status !== 'changes_requested') {
       return reply.code(409).send({ error: 'wrong_status', status: sub.status })
     }
+    // Deletes are destructive and admin-only — even green-tier reviewers
+    // cannot approve them. Owners initiate the request via the dashboard;
+    // an admin must sign off before the pipeline runs.
+    if (sub.kind === 'delete' && ctx.user.role !== 'admin') {
+      return reply.code(403).send({ error: 'admin_only' })
+    }
+    // Owner-only enforcement: if a third-party submitted an edit on an
+    // owned mod, only that owner (or an admin) may approve it. This is
+    // belt-and-braces — the queue listing already hides these from
+    // non-owner reviewers, but a direct POST shouldn't bypass the rule.
+    if (ctx.user.role !== 'admin' && sub.kind !== 'claim') {
+      const ownerId = getOwner(sub.identifier)
+      if (ownerId !== null && ownerId !== sub.user_id && ownerId !== ctx.user.id) {
+        return reply.code(403).send({ error: 'owner_only_approval' })
+      }
+    }
+
+    // Special case: claim approvals don't run the pipeline. Approving a
+    // claim just transfers ownership atomically.
+    if (sub.kind === 'claim') {
+      const ownerId = getOwner(sub.identifier)
+      if (ownerId !== null) {
+        // Race: someone else's claim was approved while this was pending.
+        db.prepare(
+          `UPDATE submissions
+             SET status = 'rejected', reviewer_id = ?, review_note = ?, decided_at = ?
+           WHERE id = ?`
+        ).run(ctx.user.id, note ?? 'mod was claimed by another user during review', Date.now(), id)
+        return reply.code(409).send({ error: 'already_owned' })
+      }
+      transferOwnership(sub.identifier, sub.user_id)
+      db.prepare(
+        `UPDATE submissions
+           SET status = 'merged', reviewer_id = ?, review_note = ?, decided_at = ?
+         WHERE id = ?`
+      ).run(ctx.user.id, note, Date.now(), id)
+      audit({
+        actorId: ctx.user.id,
+        action: 'admin.claim_approved',
+        target: `submission:${id}`,
+        details: { identifier: sub.identifier, new_owner: sub.user_id },
+      })
+      return { ok: true }
+    }
 
     db.prepare(
       `UPDATE submissions SET status = 'queued', reviewer_id = ?, review_note = ? WHERE id = ?`
@@ -189,12 +264,19 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
     const id = Number((request.params as { id: string }).id)
     const note = (request.body as { note?: string } | null)?.note ?? null
     if (!id) return reply.code(400).send({ error: 'invalid_input' })
+    const sub = db
+      .prepare<[number], SubmissionRow>('SELECT * FROM submissions WHERE id = ?')
+      .get(id)
+    if (!sub) return reply.code(404).send({ error: 'not_found' })
     if (ctx.user.role !== 'admin') {
-      const owner = db
-        .prepare<[number], { user_id: number }>('SELECT user_id FROM submissions WHERE id = ?')
-        .get(id)
-      if (owner && owner.user_id === ctx.user.id) {
+      if (sub.user_id === ctx.user.id) {
         return reply.code(403).send({ error: 'cannot_review_own' })
+      }
+      if (sub.kind !== 'claim') {
+        const ownerId = getOwner(sub.identifier)
+        if (ownerId !== null && ownerId !== sub.user_id && ownerId !== ctx.user.id) {
+          return reply.code(403).send({ error: 'owner_only_approval' })
+        }
       }
     }
     const result = db
@@ -229,11 +311,18 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
       return reply.code(400).send({ error: 'note_required', issues: body.error.issues })
     }
     if (ctx.user.role !== 'admin') {
-      const owner = db
-        .prepare<[number], { user_id: number }>('SELECT user_id FROM submissions WHERE id = ?')
+      const sub = db
+        .prepare<[number], SubmissionRow>('SELECT * FROM submissions WHERE id = ?')
         .get(id)
-      if (owner && owner.user_id === ctx.user.id) {
+      if (!sub) return reply.code(404).send({ error: 'not_found' })
+      if (sub.user_id === ctx.user.id) {
         return reply.code(403).send({ error: 'cannot_review_own' })
+      }
+      if (sub.kind !== 'claim') {
+        const ownerId = getOwner(sub.identifier)
+        if (ownerId !== null && ownerId !== sub.user_id && ownerId !== ctx.user.id) {
+          return reply.code(403).send({ error: 'owner_only_approval' })
+        }
       }
     }
     const result = db
@@ -258,7 +347,14 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
     if (!ctx) return
     const rows = db
       .prepare(
-        `SELECT * FROM audit_log ORDER BY created_at DESC LIMIT 500`
+        `SELECT a.id, a.actor_id, a.action, a.target, a.details_json, a.created_at,
+                u.display_name AS actor_display_name,
+                u.email        AS actor_email,
+                u.avatar_url   AS actor_avatar_url
+           FROM audit_log a
+           LEFT JOIN users u ON u.id = a.actor_id
+          ORDER BY a.created_at DESC
+          LIMIT 500`
       )
       .all()
     return { entries: rows }
@@ -486,5 +582,104 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
       details: { keys: changed },
     })
     return { ok: true, configured: isTurnstileReady() }
+  })
+
+  // -------------------------------------------------------------------------
+  // Backend tokens (issued to operators of alternative BeamMP backends so
+  // they can POST /api/backends/heartbeat to the public directory).
+  // -------------------------------------------------------------------------
+
+  app.get('/backend-tokens', async (request, reply) => {
+    const ctx = requireAdmin(request, reply)
+    if (!ctx) return
+    return { tokens: listBackendTokens() }
+  })
+
+  app.post('/backend-tokens', async (request, reply) => {
+    const ctx = requireAdmin(request, reply)
+    if (!ctx) return
+    const body = z
+      .object({ label: z.string().trim().min(1).max(80) })
+      .safeParse(request.body)
+    if (!body.success) return reply.code(400).send({ error: 'invalid_input' })
+    const { id, token } = mintBackendToken(body.data.label, ctx.user.id)
+    audit({
+      actorId: ctx.user.id,
+      action: 'admin.backend_token.minted',
+      target: `backend_token:${id}`,
+      details: { label: body.data.label },
+    })
+    // Plaintext is shown ONCE; clients must persist it immediately.
+    return { id, label: body.data.label, token }
+  })
+
+  app.delete('/backend-tokens/:id', async (request, reply) => {
+    const ctx = requireAdmin(request, reply)
+    if (!ctx) return
+    const id = Number((request.params as { id: string }).id)
+    if (!Number.isFinite(id) || id <= 0) {
+      return reply.code(400).send({ error: 'invalid_input' })
+    }
+    const ok = revokeBackendToken(id)
+    if (!ok) return reply.code(404).send({ error: 'not_found_or_already_revoked' })
+    audit({
+      actorId: ctx.user.id,
+      action: 'admin.backend_token.revoked',
+      target: `backend_token:${id}`,
+    })
+    return { ok: true }
+  })
+
+  // -------------------------------------------------------------------------
+  // Backend token REQUESTS — user-submitted, admin-reviewed.
+  // -------------------------------------------------------------------------
+
+  app.get('/backend-token-requests', async (request, reply) => {
+    const ctx = requireAdmin(request, reply)
+    if (!ctx) return
+    const q = z
+      .object({ status: z.enum(['pending', 'approved', 'denied']).optional() })
+      .safeParse(request.query)
+    const status: BackendTokenRequestStatus | undefined = q.success ? q.data.status : undefined
+    return { requests: listAllBackendTokenRequests(status) }
+  })
+
+  app.post('/backend-token-requests/:id/approve', async (request, reply) => {
+    const ctx = requireAdmin(request, reply)
+    if (!ctx) return
+    const id = Number((request.params as { id: string }).id)
+    if (!Number.isFinite(id) || id <= 0) {
+      return reply.code(400).send({ error: 'invalid_input' })
+    }
+    const out = approveBackendTokenRequest(id, ctx.user.id)
+    if (!out) return reply.code(404).send({ error: 'not_found_or_not_pending' })
+    audit({
+      actorId: ctx.user.id,
+      action: 'admin.backend_token_request.approved',
+      target: `backend_token_request:${id}`,
+      details: { token_id: out.tokenId, label: out.label },
+    })
+    return { ok: true, token_id: out.tokenId }
+  })
+
+  app.post('/backend-token-requests/:id/deny', async (request, reply) => {
+    const ctx = requireAdmin(request, reply)
+    if (!ctx) return
+    const id = Number((request.params as { id: string }).id)
+    const body = z
+      .object({ reason: z.string().trim().max(500).optional() })
+      .safeParse(request.body)
+    if (!Number.isFinite(id) || id <= 0 || !body.success) {
+      return reply.code(400).send({ error: 'invalid_input' })
+    }
+    const ok = denyBackendTokenRequest(id, ctx.user.id, body.data.reason ?? '')
+    if (!ok) return reply.code(404).send({ error: 'not_found_or_not_pending' })
+    audit({
+      actorId: ctx.user.id,
+      action: 'admin.backend_token_request.denied',
+      target: `backend_token_request:${id}`,
+      details: { reason: body.data.reason ?? '' },
+    })
+    return { ok: true }
   })
 }

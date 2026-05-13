@@ -8,6 +8,12 @@
  * primaryColor into MantineProvider.
  */
 import { useSyncExternalStore } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '../api/client'
+
+interface MeUser {
+  id: number
+}
 
 export interface PersonalThemeOverrides {
   background_url: string | null
@@ -87,5 +93,24 @@ function subscribe(cb: () => void): () => void {
 }
 
 export function usePersonalTheme(): PersonalThemeOverrides {
+  const stored = useSyncExternalStore(subscribe, getPersonalTheme, getPersonalTheme)
+  // Personal overrides only apply when the viewer is actually signed in.
+  // Anonymous viewers (and signed-out sessions in the same browser) always
+  // see the admin-configured theme, so personal preferences never leak to
+  // visitors who didn't opt in. We piggy-back on the shared `['me']` query
+  // populated by <App/> rather than re-fetching here; while it's loading we
+  // conservatively treat the viewer as anonymous.
+  const me = useQuery({
+    queryKey: ['me'],
+    queryFn: () => api.get<{ user: MeUser | null }>('/auth/me'),
+  })
+  if (!me.data?.user) return EMPTY
+  return stored
+}
+
+/** Read the raw localStorage overrides regardless of sign-in state. The
+ *  Profile page uses this so an admin (or any user) can configure their
+ *  preferences without first being recognised as signed in by the merger. */
+export function usePersonalThemeRaw(): PersonalThemeOverrides {
   return useSyncExternalStore(subscribe, getPersonalTheme, getPersonalTheme)
 }

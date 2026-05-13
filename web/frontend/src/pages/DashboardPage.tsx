@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
-  Alert, Anchor, Badge, Button, Divider, Drawer, Group, Loader, Paper,
-  ScrollArea, Stack, Table, Text, Title,
+  ActionIcon, Alert, Anchor, Avatar, Badge, Button, Divider, Drawer, Grid, Group, Loader, Menu, Modal,
+  Paper, ScrollArea, Stack, Table, Text, Textarea, Title,
 } from '@mantine/core'
-import { api, type Submission, type User } from '../api/client'
+import { api, ApiError, type Submission, type User } from '../api/client'
 import { useSubmitDraft } from '../state/SubmitDraftContext'
+import { ModCard, type ModCardData } from '../components/ModCard'
 
 interface AuthConfig {
   turnstile_site_key: string | null
@@ -146,6 +147,8 @@ export function DashboardPage() {
     <Stack>
       <Title order={2}>Your submissions</Title>
       <EmailVerificationBanner />
+      <OwnedModsSection />
+      <OwnerQueueSection />
       {subs.isLoading && <Loader />}
       {subs.data && subs.data.submissions.length === 0 && (
         <Text c="dimmed">
@@ -366,6 +369,444 @@ function SubmissionDetailView({ id, onClose }: { id: number; onClose: () => void
           </Button>
         </Group>
       )}
+    </Stack>
+  )
+}
+
+
+// --- Owned mods + owner-review queue ------------------------------------
+interface OwnedMod extends ModCardData {
+  pending_count: number
+  pending_delete: { id: number; status: string } | null
+}
+
+function OwnedModsSection() {
+  const navigate = useNavigate()
+  const qc = useQueryClient()
+  const owned = useQuery({
+    queryKey: ['owned'],
+    queryFn: () => api.get<{ mods: OwnedMod[] }>('/submissions/mine/owned'),
+    refetchInterval: 30000,
+  })
+  const release = useMutation({
+    mutationFn: (identifier: string) =>
+      api.post(`/submissions/mine/owned/${encodeURIComponent(identifier)}/release`),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['owned'] })
+      qc.invalidateQueries({ queryKey: ['owner-queue'] })
+    },
+  })
+  // Modal state for the "Request deletion" flow. Tracks which mod the
+  // user is requesting deletion for; null = closed.
+  const [deleteTarget, setDeleteTarget] = useState<OwnedMod | null>(null)
+  const [deleteReason, setDeleteReason] = useState('')
+  const requestDelete = useMutation({
+    mutationFn: ({ identifier, reason }: { identifier: string; reason: string }) =>
+      api.post(`/submissions/mine/owned/${encodeURIComponent(identifier)}/request-delete`, {
+        reason,
+      }),
+    onSuccess: () => {
+      setDeleteTarget(null)
+      setDeleteReason('')
+      qc.invalidateQueries({ queryKey: ['owned'] })
+      qc.invalidateQueries({ queryKey: ['submissions', 'mine'] })
+    },
+  })
+  const cancelDelete = useMutation({
+    mutationFn: (identifier: string) =>
+      api.delete(`/submissions/mine/owned/${encodeURIComponent(identifier)}/request-delete`),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['owned'] })
+      qc.invalidateQueries({ queryKey: ['submissions', 'mine'] })
+    },
+  })
+
+  if (!owned.data || owned.data.mods.length === 0) return null
+  const totalPending = owned.data.mods.reduce((acc, m) => acc + (m.pending_count ?? 0), 0)
+  return (
+    <Paper withBorder p="md" radius="md">
+      <Group justify="space-between" mb="sm" wrap="wrap">
+        <Group gap="xs">
+          <Text size="sm" fw={600}>Mods you own ({owned.data.mods.length})</Text>
+          {totalPending > 0 && (
+            <Badge color="orange" variant="filled" size="sm">
+              {totalPending} pending review
+            </Badge>
+          )}
+        </Group>
+        <Text size="xs" c="dimmed">You approve all third-party edits to these.</Text>
+      </Group>
+      {release.isError && (
+        <Alert color="red" mb="sm">
+          {release.error instanceof ApiError
+            ? JSON.stringify(release.error.body)
+            : 'Failed to release ownership.'}
+        </Alert>
+      )}
+      {cancelDelete.isError && (
+        <Alert color="red" mb="sm">
+          {cancelDelete.error instanceof ApiError
+            ? JSON.stringify(cancelDelete.error.body)
+            : 'Failed to cancel delete request.'}
+        </Alert>
+      )}
+      <Grid>
+        {owned.data.mods.map((m) => (
+          <Grid.Col key={m.identifier} span={{ base: 12, sm: 6, md: 4, lg: 3 }}>
+            <ModCard
+              mod={m}
+              pendingCount={m.pending_count}
+              onClick={() =>
+                navigate(`/registry?selected=${encodeURIComponent(m.identifier)}`)
+              }
+              actions={
+                <Menu shadow="md" position="bottom-end" withinPortal>
+                  <Menu.Target>
+                    <ActionIcon
+                      variant="filled"
+                      color="dark"
+                      size="sm"
+                      aria-label="Mod actions"
+                      title="Mod actions"
+                    >
+                      ⋮
+                    </ActionIcon>
+                  </Menu.Target>
+                  <Menu.Dropdown>
+                    <Menu.Item
+                      onClick={() =>
+                        navigate(`/registry?selected=${encodeURIComponent(m.identifier)}`)
+                      }
+                    >
+                      Open in registry
+                    </Menu.Item>
+                    <Menu.Divider />
+                    {m.pending_delete ? (
+                      <Menu.Item
+                        color="red"
+                        disabled={cancelDelete.isPending}
+                        onClick={() => {
+                          if (window.confirm(
+                            `Cancel the pending deletion request for ${m.identifier}?`
+                          )) {
+                            cancelDelete.mutate(m.identifier)
+                          }
+                        }}
+                      >
+                        Cancel deletion request (#{m.pending_delete.id})
+                      </Menu.Item>
+                    ) : (
+                      <Menu.Item
+                        color="red"
+                        onClick={() => {
+                          setDeleteTarget(m)
+                          setDeleteReason('')
+                        }}
+                      >
+                        Request deletion…
+                      </Menu.Item>
+                    )}
+                    <Menu.Divider />
+                    <Menu.Item
+                      color="red"
+                      disabled={release.isPending}
+                      onClick={() => {
+                        const msg = m.pending_count > 0
+                          ? `${m.identifier} has ${m.pending_count} pending change${m.pending_count === 1 ? '' : 's'} that will route back to the global reviewer queue. Relinquish ownership?`
+                          : `Relinquish ownership of ${m.identifier}? Future third-party edits will go to the global reviewer queue, not you.`
+                        if (window.confirm(msg)) release.mutate(m.identifier)
+                      }}
+                    >
+                      Relinquish ownership
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
+              }
+              footer={
+                m.pending_delete ? (
+                  <Badge size="xs" color="red" variant="light">
+                    deletion pending admin review
+                  </Badge>
+                ) : undefined
+              }
+            />
+          </Grid.Col>
+        ))}
+      </Grid>
+
+      <Modal
+        opened={deleteTarget !== null}
+        onClose={() => {
+          if (!requestDelete.isPending) {
+            setDeleteTarget(null)
+            setDeleteReason('')
+          }
+        }}
+        title={deleteTarget ? `Request deletion of ${deleteTarget.identifier}` : 'Request deletion'}
+        centered
+      >
+        <Stack gap="sm">
+          <Alert color="red" variant="light" title="Final approval is admin-only">
+            <Text size="sm">
+              Deletion is permanent and removes <code>mods/{deleteTarget?.identifier}/</code> plus
+              the auto-update template (if any). An admin reviews every request before the mod
+              is removed; you can cancel until they decide.
+            </Text>
+          </Alert>
+          <Textarea
+            label="Reason"
+            description="Required. Shown to the admin reviewer and recorded in the deletion PR."
+            placeholder="e.g. Replaced by a new entry under a different identifier; original upload was broken; author requested removal…"
+            value={deleteReason}
+            onChange={(e) => setDeleteReason(e.currentTarget.value)}
+            autosize
+            minRows={3}
+            maxRows={8}
+            required
+            error={
+              deleteReason.trim().length > 0 && deleteReason.trim().length < 10
+                ? 'Please provide at least 10 characters of context.'
+                : undefined
+            }
+          />
+          {requestDelete.isError && (
+            <Alert color="red">
+              {requestDelete.error instanceof ApiError
+                ? JSON.stringify(requestDelete.error.body)
+                : 'Failed to file delete request.'}
+            </Alert>
+          )}
+          <Group justify="flex-end">
+            <Button
+              variant="subtle"
+              onClick={() => {
+                setDeleteTarget(null)
+                setDeleteReason('')
+              }}
+              disabled={requestDelete.isPending}
+            >
+              Cancel
+            </Button>
+            <Button
+              color="red"
+              loading={requestDelete.isPending}
+              disabled={deleteReason.trim().length < 10 || !deleteTarget}
+              onClick={() => {
+                if (!deleteTarget) return
+                requestDelete.mutate({
+                  identifier: deleteTarget.identifier,
+                  reason: deleteReason.trim(),
+                })
+              }}
+            >
+              File deletion request
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
+    </Paper>
+  )
+}
+
+interface OwnerQueueRow extends Submission {
+  user_id: number
+  submitter: { display_name: string; avatar_url: string | null }
+}
+
+function OwnerQueueSection() {
+  const [reviewing, setReviewing] = useState<number | null>(null)
+  const queue = useQuery({
+    queryKey: ['owner-queue'],
+    queryFn: () => api.get<{ submissions: OwnerQueueRow[] }>('/submissions/owner-queue'),
+    refetchInterval: 5000,
+  })
+  if (!queue.data || queue.data.submissions.length === 0) return null
+  return (
+    <Paper withBorder p="md" radius="md">
+      <Group justify="space-between" mb="xs">
+        <Text size="sm" fw={600}>
+          Pending changes to your mods ({queue.data.submissions.length})
+        </Text>
+        <Text size="xs" c="dimmed">Only you (and admins) can approve these.</Text>
+      </Group>
+      <Table withTableBorder striped highlightOnHover>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>From</Table.Th>
+            <Table.Th>Identifier</Table.Th>
+            <Table.Th>Version</Table.Th>
+            <Table.Th>Kind</Table.Th>
+            <Table.Th>Status</Table.Th>
+            <Table.Th>Created</Table.Th>
+            <Table.Th></Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
+          {queue.data.submissions.map((s) => (
+            <Table.Tr key={s.id}>
+              <Table.Td>
+                <Group gap={6} wrap="nowrap">
+                  <Avatar src={s.submitter.avatar_url ?? undefined} size={20} radius="xl">
+                    {s.submitter.display_name.slice(0, 2).toUpperCase()}
+                  </Avatar>
+                  <Text size="xs">{s.submitter.display_name}</Text>
+                </Group>
+              </Table.Td>
+              <Table.Td><code>{s.identifier}</code></Table.Td>
+              <Table.Td>{s.version ?? '�'}</Table.Td>
+              <Table.Td>{s.kind}</Table.Td>
+              <Table.Td>
+                <Badge color={s.status === 'changes_requested' ? 'orange' : 'yellow'}>
+                  {s.status}
+                </Badge>
+              </Table.Td>
+              <Table.Td>{new Date(s.created_at).toLocaleString()}</Table.Td>
+              <Table.Td>
+                <Button size="xs" variant="light" onClick={() => setReviewing(s.id)}>
+                  Review
+                </Button>
+              </Table.Td>
+            </Table.Tr>
+          ))}
+        </Table.Tbody>
+      </Table>
+      <Drawer
+        opened={reviewing !== null}
+        onClose={() => setReviewing(null)}
+        position="right"
+        size="xl"
+        title={reviewing !== null ? `Review submission #${reviewing}` : 'Review'}
+        scrollAreaComponent={ScrollArea.Autosize}
+      >
+        {reviewing !== null && (
+          <OwnerReviewPanel id={reviewing} onDone={() => setReviewing(null)} />
+        )}
+      </Drawer>
+    </Paper>
+  )
+}
+
+interface OwnerSubmissionDetail extends Submission {
+  branch: string | null
+  review_note: string | null
+  payload: Record<string, unknown> | null
+}
+
+function OwnerReviewPanel({ id, onDone }: { id: number; onDone: () => void }) {
+  const qc = useQueryClient()
+  const [note, setNote] = useState('')
+  const detail = useQuery({
+    queryKey: ['owner-queue', id],
+    queryFn: () =>
+      api.get<{
+        submission: OwnerSubmissionDetail
+        submitter: { id: number; display_name: string; avatar_url: string | null; trust: string } | null
+      }>(`/submissions/owner-queue/${id}`),
+  })
+  const finish = () => {
+    qc.invalidateQueries({ queryKey: ['owner-queue'] })
+    qc.invalidateQueries({ queryKey: ['submissions', 'mine'] })
+    onDone()
+  }
+  const approve = useMutation({
+    mutationFn: () =>
+      api.post(`/submissions/owner-queue/${id}/approve`, note ? { note } : undefined),
+    onSuccess: finish,
+  })
+  const reject = useMutation({
+    mutationFn: () =>
+      api.post(`/submissions/owner-queue/${id}/reject`, { note: note || 'rejected by owner' }),
+    onSuccess: finish,
+  })
+  const requestChanges = useMutation({
+    mutationFn: () => api.post(`/submissions/owner-queue/${id}/request-changes`, { note }),
+    onSuccess: finish,
+  })
+  if (detail.isLoading) return <Text c="dimmed">Loading�</Text>
+  if (detail.isError || !detail.data) return <Alert color="red">Failed to load.</Alert>
+  const { submission: s, submitter } = detail.data
+  const payload = s.payload ?? {}
+  const get = (k: string): string | undefined => {
+    const v = (payload as Record<string, unknown>)[k]
+    return typeof v === 'string' && v.length > 0 ? v : undefined
+  }
+  const noteRequired = !note.trim()
+  return (
+    <Stack>
+      <Group gap="xs" wrap="wrap">
+        <Badge color={s.status === 'changes_requested' ? 'orange' : 'yellow'}>{s.status}</Badge>
+        <Badge variant="outline">{s.kind}</Badge>
+        <Text size="xs" c="dimmed">created {new Date(s.created_at).toLocaleString()}</Text>
+      </Group>
+      {submitter && (
+        <Paper withBorder p="sm" radius="sm">
+          <Group gap="sm">
+            <Avatar src={submitter.avatar_url ?? undefined} size={28} radius="xl">
+              {submitter.display_name.slice(0, 2).toUpperCase()}
+            </Avatar>
+            <Text size="sm">Submitted by <strong>{submitter.display_name}</strong></Text>
+            <Badge size="xs" color={submitter.trust === 'green' ? 'green' : submitter.trust === 'red' ? 'red' : 'yellow'}>
+              {submitter.trust}
+            </Badge>
+          </Group>
+        </Paper>
+      )}
+      <Paper withBorder p="sm" radius="sm">
+        <Stack gap={4}>
+          <Text size="sm"><strong>Identifier:</strong> <code>{s.identifier}</code></Text>
+          <Text size="sm"><strong>Version:</strong> {s.version ?? '�'}</Text>
+          {get('name') && <Text size="sm"><strong>Name:</strong> {get('name')}</Text>}
+          {get('author') && <Text size="sm"><strong>Author:</strong> {get('author')}</Text>}
+          {get('abstract') && <Text size="sm">{get('abstract')}</Text>}
+        </Stack>
+      </Paper>
+      {get('description') && (
+        <Paper withBorder p="sm" radius="sm">
+          <Text size="xs" c="dimmed" mb={4}>Description</Text>
+          <Text size="sm" style={{ whiteSpace: 'pre-wrap' }}>{get('description')}</Text>
+        </Paper>
+      )}
+      <details>
+        <summary style={{ cursor: 'pointer', fontSize: 12, color: '#94a3b8' }}>
+          Raw payload
+        </summary>
+        <pre style={{
+          background: '#0b1220', color: '#cbd5e1', padding: 12, borderRadius: 6,
+          fontSize: 11, overflow: 'auto', maxHeight: 320, marginTop: 8,
+        }}>{JSON.stringify(payload, null, 2)}</pre>
+      </details>
+      <Textarea
+        label="Note"
+        description="Required for Reject and Request changes. Optional for Approve."
+        value={note}
+        onChange={(e) => setNote(e.currentTarget.value)}
+        autosize minRows={2} maxRows={6}
+      />
+      {(approve.isError || reject.isError || requestChanges.isError) && (
+        <Alert color="red">
+          {(approve.error ?? reject.error ?? requestChanges.error) instanceof ApiError
+            ? JSON.stringify(((approve.error ?? reject.error ?? requestChanges.error) as ApiError).body)
+            : 'Decision failed'}
+        </Alert>
+      )}
+      <Group justify="flex-end">
+        <Button color="red" variant="light" onClick={() => reject.mutate()}
+                loading={reject.isPending}
+                disabled={approve.isPending || requestChanges.isPending}>
+          Reject
+        </Button>
+        <Button color="orange" variant="light" onClick={() => requestChanges.mutate()}
+                loading={requestChanges.isPending}
+                disabled={approve.isPending || reject.isPending || noteRequired}
+                title={noteRequired ? 'A note is required to request changes' : undefined}>
+          Request changes
+        </Button>
+        <Button color="green" onClick={() => approve.mutate()}
+                loading={approve.isPending}
+                disabled={reject.isPending || requestChanges.isPending}>
+          Approve &amp; queue
+        </Button>
+      </Group>
     </Stack>
   )
 }

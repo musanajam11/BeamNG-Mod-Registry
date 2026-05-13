@@ -59,6 +59,13 @@ export const authPlugin = fp(async (app: FastifyInstance) => {
 
   app.addHook('preHandler', async (request, reply) => {
     if (SAFE_METHODS.has(request.method)) return
+    // Bearer-token requests are server-to-server (e.g. backend heartbeats at
+    // /api/backends/heartbeat). CSRF is a cookie-only attack vector — the
+    // browser can't be tricked into auto-attaching an Authorization header,
+    // so requiring a CSRF token on these would just block legitimate API
+    // clients. Skip the check whenever a Bearer token is presented.
+    const authz = request.headers.authorization
+    if (typeof authz === 'string' && /^Bearer\s+\S/i.test(authz)) return
     // Allow login/signup CSRF-free? No — the cookie is set on first GET so
     // even unauthenticated POSTs must echo the CSRF token. The frontend
     // performs a GET /api/auth/csrf on boot to guarantee the cookie exists.

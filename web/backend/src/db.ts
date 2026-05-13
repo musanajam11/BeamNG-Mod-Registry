@@ -173,6 +173,125 @@ const MIGRATIONS: Migration[] = [
       CREATE INDEX idx_mod_ratings_identifier ON mod_ratings(identifier);
     `,
   },
+  {
+    id: '006-submission-kind-delete',
+    // Add 'delete' to the kind CHECK constraint so the registry can accept
+    // mod-removal submissions (owner self-delete or non-owner takedown
+    // request, both gated on admin approval). Same table-rebuild dance as
+    // 003 since SQLite can't ALTER a CHECK in place.
+    up: `
+      CREATE TABLE submissions_new (
+        id            INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id       INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        kind          TEXT NOT NULL CHECK (kind IN
+                        ('manual_beammod','netbeammod_github','netbeammod_beamng',
+                         'claim','new_version','delete')),
+        identifier    TEXT NOT NULL,
+        version       TEXT,
+        payload_json  TEXT NOT NULL,
+        status        TEXT NOT NULL CHECK (status IN
+                        ('pending_review','changes_requested','queued','processing',
+                         'pr_opened','merged','rejected','failed')),
+        pr_url        TEXT,
+        branch        TEXT,
+        reviewer_id   INTEGER REFERENCES users(id) ON DELETE SET NULL,
+        review_note   TEXT,
+        error         TEXT,
+        created_at    INTEGER NOT NULL,
+        decided_at    INTEGER
+      );
+      INSERT INTO submissions_new
+        SELECT id, user_id, kind, identifier, version, payload_json, status,
+               pr_url, branch, reviewer_id, review_note, error, created_at, decided_at
+          FROM submissions;
+      DROP TABLE submissions;
+      ALTER TABLE submissions_new RENAME TO submissions;
+      CREATE INDEX idx_submissions_user ON submissions(user_id);
+      CREATE INDEX idx_submissions_status ON submissions(status);
+      CREATE INDEX idx_submissions_identifier ON submissions(identifier);
+    `,
+  },
+  {
+    id: '007-invite-links',
+    up: `
+      CREATE TABLE invite_links (
+        code       TEXT PRIMARY KEY,
+        ip         TEXT NOT NULL,
+        port       INTEGER NOT NULL,
+        created_at INTEGER NOT NULL
+      );
+      CREATE INDEX idx_invite_links_created ON invite_links(created_at);
+    `,
+  },
+  {
+    id: '008-backends',
+    // Public directory of alternative BeamMP backends. Each registered backend
+    // (a Decentralized-BMP-V2 instance, etc.) holds a `backend_tokens` row
+    // and POSTs heartbeats to /api/backends/heartbeat to keep its `backends`
+    // entry alive. Content Manager pulls GET /api/backends to populate its
+    // backend-selection dropdown. Stale entries (no heartbeat for >3 min) are
+    // filtered out at read time; a janitor can hard-delete them later.
+    up: `
+      CREATE TABLE backend_tokens (
+        id           INTEGER PRIMARY KEY AUTOINCREMENT,
+        label        TEXT NOT NULL,
+        token_hash   TEXT NOT NULL UNIQUE,
+        created_at   INTEGER NOT NULL,
+        created_by   INTEGER REFERENCES users(id) ON DELETE SET NULL,
+        revoked_at   INTEGER,
+        last_used_at INTEGER
+      );
+      CREATE INDEX idx_backend_tokens_revoked ON backend_tokens(revoked_at);
+
+      CREATE TABLE backends (
+        id                INTEGER PRIMARY KEY AUTOINCREMENT,
+        token_id          INTEGER NOT NULL REFERENCES backend_tokens(id) ON DELETE CASCADE,
+        url               TEXT NOT NULL UNIQUE,
+        name              TEXT NOT NULL,
+        region            TEXT NOT NULL DEFAULT '',
+        description       TEXT NOT NULL DEFAULT '',
+        launcher_version  TEXT NOT NULL DEFAULT '',
+        server_version    TEXT NOT NULL DEFAULT '',
+        active_servers    INTEGER NOT NULL DEFAULT 0,
+        active_players    INTEGER NOT NULL DEFAULT 0,
+        servers_json      TEXT NOT NULL DEFAULT '[]',
+        builds_json       TEXT NOT NULL DEFAULT '{}',
+        first_seen_at     INTEGER NOT NULL,
+        last_seen_at      INTEGER NOT NULL
+      );
+      CREATE INDEX idx_backends_token ON backends(token_id);
+      CREATE INDEX idx_backends_last_seen ON backends(last_seen_at);
+    `,
+  },
+  {
+    id: '009-backend-token-requests',
+    // User-submitted requests to be issued a backend operator token. Lets
+    // anyone with an account ask for a key from the public "Backends"
+    // surface; admins approve / deny in the admin panel. On approval we
+    // mint a backend_tokens row and link it here so the requester can
+    // reveal the plaintext exactly once.
+    up: `
+      CREATE TABLE backend_token_requests (
+        id              INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id         INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        label           TEXT NOT NULL,
+        url             TEXT NOT NULL,
+        region          TEXT NOT NULL DEFAULT '',
+        description     TEXT NOT NULL DEFAULT '',
+        message         TEXT NOT NULL DEFAULT '',
+        status          TEXT NOT NULL DEFAULT 'pending',
+        deny_reason     TEXT NOT NULL DEFAULT '',
+        token_id        INTEGER REFERENCES backend_tokens(id) ON DELETE SET NULL,
+        token_revealed  INTEGER NOT NULL DEFAULT 0,
+        token_plaintext TEXT,
+        requested_at    INTEGER NOT NULL,
+        reviewed_by     INTEGER REFERENCES users(id) ON DELETE SET NULL,
+        reviewed_at     INTEGER
+      );
+      CREATE INDEX idx_btr_user ON backend_token_requests(user_id);
+      CREATE INDEX idx_btr_status ON backend_token_requests(status);
+    `,
+  },
 ]
 
 function runMigrations(): void {
@@ -208,6 +327,7 @@ export type SubmissionKind =
   | 'netbeammod_beamng'
   | 'claim'
   | 'new_version'
+  | 'delete'
 export type SubmissionStatus =
   | 'pending_review'
   | 'changes_requested'

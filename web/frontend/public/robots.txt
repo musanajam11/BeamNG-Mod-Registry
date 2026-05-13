@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Keep auth/API endpoints out of search results.
+Disallow: /api/
+Disallow: /login
+Disallow: /signup
+Disallow: /verify-email
+Disallow: /j/
+
+Sitemap: https://bmr.musanet.xyz/sitemap.xml

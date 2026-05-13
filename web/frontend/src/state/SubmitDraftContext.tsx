@@ -25,6 +25,10 @@ export interface InspectResult {
     description?: string
     mod_type?: string
     multiplayer_scope?: 'client' | 'server' | 'both'
+    /** 0–100 confidence the scope guess is right; surfaced in the UI. */
+    multiplayer_scope_confidence?: number
+    /** Human-readable signals (deduped) backing the scope decision. */
+    multiplayer_scope_reasons?: string[]
     has_resources_layout?: boolean
     thumbnail_path?: string
     detected_files?: string[]

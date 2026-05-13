@@ -47,6 +47,13 @@ export interface FormState {
   beamng_version_max: string
   beammp_version_min: string
   multiplayer_scope: typeof MULTIPLAYER_SCOPES[number]
+  /**
+   * UI-only flag (not part of the .beammod payload). The submit form
+   * requires the user to actively confirm or pick the multiplayer scope
+   * before submission, even if it was auto-filled — getting this wrong
+   * has real consequences for BeamMP server admins.
+   */
+  multiplayer_scope_confirmed: boolean
   server_download: string
   homepage: string
   repository: string
@@ -77,7 +84,7 @@ export const DEFAULT_FORM: FormState = {
   thumbnail: '', tags: [], description: '',
   release_status: 'stable', release_date: '',
   beamng_version: '', beamng_version_min: '', beamng_version_max: '', beammp_version_min: '',
-  multiplayer_scope: 'client', server_download: '',
+  multiplayer_scope: 'client', multiplayer_scope_confirmed: false, server_download: '',
   homepage: '', repository: '', bugtracker: '', beamng_resource: '', beammp_forum: '',
   depends: [], recommends: [], suggests: [], supports: [], conflicts: [], provides: [],
   install: [], kref: '',

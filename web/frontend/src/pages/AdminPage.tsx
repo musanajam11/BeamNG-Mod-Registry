@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
-  Alert, Anchor, Badge, Button, Drawer, Group, Paper, ScrollArea,
+  Alert, Anchor, Avatar, Badge, Button, Drawer, Group, Paper, ScrollArea,
   SegmentedControl, Stack, Table, Tabs, Text, Textarea, Title,
 } from '@mantine/core'
 import { api, ApiError, type User } from '../api/client'
+import { BackendTokenRequestsPanel, BackendTokensPanel } from '../components/AdminBackendsPanels'
 
 interface AdminUser {
   id: number; email: string; display_name: string
@@ -48,12 +49,21 @@ export function AdminPage() {
         <Tabs.List>
           <Tabs.Tab value="queue">Pending queue</Tabs.Tab>
           {isAdmin && <Tabs.Tab value="users">Users</Tabs.Tab>}
+          {isAdmin && <Tabs.Tab value="backends">Backends</Tabs.Tab>}
           {isAdmin && <Tabs.Tab value="audit">Audit log</Tabs.Tab>}
         </Tabs.List>
         <Tabs.Panel value="queue" pt="md">
-          <PendingQueue selfUserId={myUserId} canReviewSelf={isAdmin} />
+          <PendingQueue selfUserId={myUserId} canReviewSelf={isAdmin} isAdmin={isAdmin} />
         </Tabs.Panel>
         {isAdmin && <Tabs.Panel value="users" pt="md"><UsersTab /></Tabs.Panel>}
+        {isAdmin && (
+          <Tabs.Panel value="backends" pt="md">
+            <Stack>
+              <BackendTokenRequestsPanel />
+              <BackendTokensPanel />
+            </Stack>
+          </Tabs.Panel>
+        )}
         {isAdmin && <Tabs.Panel value="audit" pt="md"><AuditTab /></Tabs.Panel>}
       </Tabs>
     </Stack>
@@ -63,9 +73,11 @@ export function AdminPage() {
 function PendingQueue({
   selfUserId,
   canReviewSelf,
+  isAdmin,
 }: {
   selfUserId: number | null
   canReviewSelf: boolean
+  isAdmin: boolean
 }) {
   const qc = useQueryClient()
   const [reviewing, setReviewing] = useState<number | null>(null)
@@ -131,13 +143,13 @@ function PendingQueue({
         title={reviewing !== null ? `Review submission #${reviewing}` : 'Review'}
         scrollAreaComponent={ScrollArea.Autosize}
       >
-        {reviewing !== null && <ReviewPanel id={reviewing} onDecided={onDecided} />}
+        {reviewing !== null && <ReviewPanel id={reviewing} onDecided={onDecided} isAdmin={isAdmin} />}
       </Drawer>
     </>
   )
 }
 
-function ReviewPanel({ id, onDecided }: { id: number; onDecided: () => void }) {
+function ReviewPanel({ id, onDecided, isAdmin }: { id: number; onDecided: () => void; isAdmin: boolean }) {
   const [note, setNote] = useState('')
 
   const detail = useQuery({
@@ -172,6 +184,10 @@ function ReviewPanel({ id, onDecided }: { id: number; onDecided: () => void }) {
     return typeof v === 'string' && v.length > 0 ? v : undefined
   }
   const tags = Array.isArray(payload.tags) ? (payload.tags as unknown[]).map(String) : []
+  const isDelete = s.kind === 'delete'
+  const deleteReason = isDelete ? get('reason') : undefined
+  const deleteRequestedBy = isDelete ? get('requested_by') : undefined
+  const deleteByOwner = isDelete && payload.is_owner === true
 
   return (
     <Stack>
@@ -179,9 +195,38 @@ function ReviewPanel({ id, onDecided }: { id: number; onDecided: () => void }) {
         <Badge color={isChangesRequested ? 'orange' : 'yellow'} variant="light">
           {isChangesRequested ? 'changes requested (resubmitted)' : 'pending'}
         </Badge>
-        <Badge variant="outline">{s.kind}</Badge>
+        <Badge variant="outline" color={isDelete ? 'red' : undefined}>{s.kind}</Badge>
         <Text size="xs" c="dimmed">created {new Date(s.created_at).toLocaleString()}</Text>
       </Group>
+
+      {isDelete && (
+        <Alert color="red" variant="filled" title="⚠ Permanent deletion request">
+          <Stack gap={4}>
+            <Text size="sm">
+              Approving this submission will <strong>permanently remove</strong>{' '}
+              <code>mods/{s.identifier}/</code> and any matching auto-update template via PR.
+              This action is admin-only and cannot be undone after the PR merges.
+            </Text>
+            {deleteRequestedBy && (
+              <Text size="sm">
+                <strong>Requested by:</strong> {deleteRequestedBy}
+                {deleteByOwner && ' (current owner)'}
+              </Text>
+            )}
+            {deleteReason && (
+              <Paper p="xs" radius="sm" bg="rgba(0,0,0,0.25)">
+                <Text size="xs" c="gray.2" mb={2}><strong>Reason</strong></Text>
+                <Text size="sm" style={{ whiteSpace: 'pre-wrap' }}>{deleteReason}</Text>
+              </Paper>
+            )}
+            {!isAdmin && (
+              <Text size="xs" fs="italic">
+                You can leave a reviewer note or reject, but only an admin can approve a deletion.
+              </Text>
+            )}
+          </Stack>
+        </Alert>
+      )}
 
       {isChangesRequested && s.review_note && (
         <Alert color="orange" title="Previous reviewer note">
@@ -309,12 +354,20 @@ function ReviewPanel({ id, onDecided }: { id: number; onDecided: () => void }) {
           Request changes
         </Button>
         <Button
-          color="green"
-          onClick={() => approve.mutate()}
+          color={isDelete ? 'red' : 'green'}
+          onClick={() => {
+            if (isDelete) {
+              if (!window.confirm(
+                `Permanently delete '${s.identifier}'? A PR will be opened that removes the mod folder and any auto-update template.`
+              )) return
+            }
+            approve.mutate()
+          }}
           loading={approve.isPending}
-          disabled={reject.isPending || requestChanges.isPending}
+          disabled={reject.isPending || requestChanges.isPending || (isDelete && !isAdmin)}
+          title={isDelete && !isAdmin ? 'Only admins can approve a deletion request' : undefined}
         >
-          Approve &amp; queue
+          {isDelete ? 'Approve & DELETE permanently' : 'Approve & queue'}
         </Button>
       </Group>
     </Stack>
@@ -390,6 +443,9 @@ function UsersTab() {
 interface AuditEntry {
   id: number; actor_id: number | null; action: string;
   target: string | null; details_json: string | null; created_at: number
+  actor_display_name: string | null
+  actor_email: string | null
+  actor_avatar_url: string | null
 }
 
 function AuditTab() {
@@ -413,7 +469,21 @@ function AuditTab() {
         {audit.data.entries.map((e) => (
           <Table.Tr key={e.id}>
             <Table.Td>{new Date(e.created_at).toLocaleString()}</Table.Td>
-            <Table.Td>{e.actor_id ?? '—'}</Table.Td>
+            <Table.Td>
+              {e.actor_id === null ? (
+                <Text size="sm" c="dimmed">—</Text>
+              ) : (
+                <Group gap="xs" wrap="nowrap">
+                  <Avatar src={e.actor_avatar_url ?? undefined} size={24} radius="xl">
+                    {(e.actor_display_name ?? '?').slice(0, 2).toUpperCase()}
+                  </Avatar>
+                  <Stack gap={0}>
+                    <Text size="sm">{e.actor_display_name ?? `user #${e.actor_id}`}</Text>
+                    <Text size="xs" c="dimmed">#{e.actor_id}</Text>
+                  </Stack>
+                </Group>
+              )}
+            </Table.Td>
             <Table.Td><code>{e.action}</code></Table.Td>
             <Table.Td><code>{e.target ?? ''}</code></Table.Td>
             <Table.Td><code style={{ fontSize: 11 }}>{e.details_json ?? ''}</code></Table.Td>
